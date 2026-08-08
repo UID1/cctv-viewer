@@ -1,7 +1,6 @@
 name: cctv-viewer
 version: '0.1.9+git'
 license: GPL-3.0
-
 icon: images/cctv-viewer.svg
 title: CCTV Viewer
 summary: Viewer and mounter video streams
@@ -16,23 +15,23 @@ source-code: https://github.com/iEvgeny/cctv-viewer
 
 grade: stable
 confinement: strict
-base: core22
+base: core24
 compression: lzo
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
-  - build-on: ppc64el
+platforms:
+  amd64:
+  arm64:
+  armhf:
+  ppc64el:
 
 environment:
   ARCH_TRIPLET: $CRAFT_ARCH_TRIPLET_BUILD_FOR
 
 plugs:
-  graphics-core22:
+  gpu-2404:
     interface: content
-    target: $SNAP/graphics
-    default-provider: mesa-core22
+    target: $SNAP/gpu-2404
+    default-provider: mesa-2404
   # Support for common GTK themes
   # https://forum.snapcraft.io/t/how-to-use-the-system-gtk-theme-via-the-gtk-common-themes-snap/6235
   gtk-3-themes:
@@ -49,19 +48,15 @@ plugs:
     default-provider: gtk-common-themes
 
 layout:
-  /usr/share/libdrm:
-    bind: $SNAP/graphics/libdrm
-  /usr/share/drirc.d:
-    symlink: $SNAP/graphics/drirc.d
   /usr/share/X11/XErrorDB:
-    symlink: $SNAP/graphics/X11/XErrorDB
+    symlink: $SNAP/gpu-2404/X11/XErrorDB
   /usr/share/X11/locale:
-    symlink: $SNAP/graphics/X11/locale
+    symlink: $SNAP/gpu-2404/X11/locale
 
 apps:
   cctv-viewer:
     command-chain:
-      - bin/graphics-core22-wrapper
+      - bin/gpu-2404-wrapper
       - bin/desktop-launch
     command: usr/bin/cctv-viewer
     desktop: usr/share/applications/cctv-viewer.desktop
@@ -81,16 +76,18 @@ apps:
       - x11
 
 parts:
-  # https://mir-server.io/docs/the-graphics-core22-snap-interface
-  graphics-core22:
+  # https://ubuntu.com/frame/docs/24/how-to/use-snap-graphics/
+  gpu-2404:
     after: [cctv-viewer]
     plugin: dump
-    source: https://github.com/MirServer/graphics-core22.git
+    source: https://github.com/canonical/gpu-snap.git
     override-prime: |
       craftctl default
-      ${CRAFT_PART_SRC}/bin/graphics-core22-cleanup mesa-core22 nvidia-core22
+      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
+      # Workaround for https://bugs.launchpad.net/snapd/+bug/2055273
+      mkdir -p "${CRAFT_PRIME}/gpu-2404"
     prime:
-      - bin/graphics-core22-wrapper
+      - bin/gpu-2404-wrapper
 
   desktop-qt5:
     plugin: dump
@@ -99,16 +96,14 @@ parts:
       - libxkbcommon0
       - fonts-ubuntu
       - dmz-cursor-theme
-      - light-themes
       - adwaita-icon-theme
-      - gnome-themes-standard
       - shared-mime-info
-      #- libqt5gui5
+      # - libqt5gui5
       - libgdk-pixbuf2.0-0
       - libqt5svg5 # For loading icon themes which are svg
       - locales-all
       - xdg-user-dirs
-      - fcitx-frontend-qt5
+      - fcitx5-frontend-qt5
     organize:
       desktop-launch: bin/
 
@@ -127,11 +122,12 @@ parts:
     plugin: cmake
     cmake-parameters:
       - -DPACKAGER=SNAP
+      - -DCMAKE_BUILD_TYPE=Release
     source: .
     override-pull: |
-      snapcraftctl pull
+      craftctl default
       # Point icon to the correct location
-      sed -i.bak -i -e 's|Icon=cctv-viewer|Icon=/usr/share/pixmaps/cctv-viewer.svg|g' cctv-viewer.desktop
+      sed -i.bak -e 's|Icon=cctv-viewer|Icon=/usr/share/pixmaps/cctv-viewer.svg|g' cctv-viewer.desktop
     build-packages:
       - build-essential
       - libva-dev
@@ -142,6 +138,7 @@ parts:
       - libswscale-dev
       - libswresample-dev
       - libavdevice-dev
+      - libavfilter-dev # ДОБАВЛЕНО: в Noble libavdevice тянет libavfilter, нужен dev пакет для сборки
       - qtdeclarative5-dev
       - qtmultimedia5-dev
       - qttools5-dev
@@ -149,21 +146,24 @@ parts:
       - git
       - pkg-config
     stage-packages:
-      # Debian package dependencies
-      - libavcodec58
-      - libavdevice58
-      - libavformat58
-      - libavutil56
+      # Debian package dependencies (TODO: Check and update)
+      - libavcodec60
+      - libavdevice60
+      - libavfilter9
+      - libavformat60
+      - libavutil58
       - libc6
       - libgcc-s1
       - libgl1
-      - libqt5core5a
-      - libqt5gui5 # libqt5gui5-gles
+      - libqt5core5t64
+      - libqt5gui5t64
       - libqt5multimedia5
-      - libqt5qml5
+      - libqt5qmlmodels5
+      - libqt5quick5
+      - libqt5quickcontrols2-5
       - libstdc++6
-      - libswresample3
-      - libswscale5
+      - libswresample4
+      - libswscale7
       - libva-x11-2
       - libva2
       - libx11-6
@@ -177,6 +177,12 @@ parts:
       - qml-module-qtquick-dialogs
       - qml-module-qt-labs-settings
       - qml-module-qtmultimedia
+      # For Wayland and DRM:
+      - libdrm2
+      - libva-drm2
+      - libva-wayland2
+      - libvdpau1
+      - va-driver-all
     organize:
       usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/blas/*: usr/lib/
       usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/lapack/*: usr/lib/
