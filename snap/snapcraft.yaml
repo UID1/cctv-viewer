@@ -132,13 +132,16 @@ parts:
       - build-essential
       - libva-dev
       - libglx-dev
+      - libegl-dev
+      - libgles-dev
+      - libdrm-dev
       - libavformat-dev
       - libavcodec-dev
       - libavutil-dev
       - libswscale-dev
       - libswresample-dev
       - libavdevice-dev
-      - libavfilter-dev # ДОБАВЛЕНО: в Noble libavdevice тянет libavfilter, нужен dev пакет для сборки
+      - libavfilter-dev
       - qtdeclarative5-dev
       - qtmultimedia5-dev
       - qttools5-dev
