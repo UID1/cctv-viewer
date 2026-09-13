@@ -1,10 +1,10 @@
-Start testing: Sep 13 21:05 MSK
+Start testing: Sep 13 21:32 MSK
 ----------------------------------------------------------
 1/20 Testing: QmlAVThread.RunGenericFunction
 1/20 Test: QmlAVThread.RunGenericFunction
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -13,9 +13,9 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffee3f89360] QmlAVThreadLiveController(thread=0x5a2b86edc380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffee3f89360] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffee3f89360] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcdfc7d1c0] QmlAVThreadLiveController(thread=0x623e755ae380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcdfc7d1c0] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcdfc7d1c0] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -23,10 +23,10 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffee3f89360] requestInterrupt(wait=1
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.21 sec
+Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunGenericFunction" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -34,7 +34,7 @@ Test Passed.
 2/20 Test: QmlAVThread.RunGenericFunction_RefArgTest
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction_RefArgTest"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction_RefArgTest" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_RefArgTest" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -43,9 +43,9 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction_RefArgTest
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction_RefArgTest
-qmlav: [QmlAVThreadLiveController<int> @ 0x7fff1a62e720] QmlAVThreadLiveController(thread=0x59eebc745df0)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7fff1a62e720] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7fff1a62e720] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe8a7a7fc0] QmlAVThreadLiveController(thread=0x5a1c3f612df0)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe8a7a7fc0] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe8a7a7fc0] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction_RefArgTest (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -53,10 +53,10 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7fff1a62e720] requestInterrupt(wait=1
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.05 sec
+Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction_RefArgTest" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_RefArgTest" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunGenericFunction_RefArgTest" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -64,7 +64,7 @@ Test Passed.
 3/20 Test: QmlAVThread.RunGenericFunction_ConstRefArgTest
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction_ConstRefArgTest"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction_ConstRefArgTest" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_ConstRefArgTest" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -73,9 +73,9 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction_ConstRefArgTest
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction_ConstRefArgTest
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcd704cdc0] QmlAVThreadLiveController(thread=0x58588e141380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcd704cdc0] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcd704cdc0] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffde358ff10] QmlAVThreadLiveController(thread=0x640ec0152380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffde358ff10] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffde358ff10] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction_ConstRefArgTest (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -83,10 +83,10 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcd704cdc0] requestInterrupt(wait=1
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.05 sec
+Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction_ConstRefArgTest" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_ConstRefArgTest" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunGenericFunction_ConstRefArgTest" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -94,7 +94,7 @@ Test Passed.
 4/20 Test: QmlAVThread.RunGenericFunction_RefRefArgTest
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction_RefRefArgTest"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction_RefRefArgTest" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_RefRefArgTest" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -103,9 +103,9 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction_RefRefArgTest
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction_RefRefArgTest
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc480e8950] QmlAVThreadLiveController(thread=0x55a246babdf0)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc480e8950] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc480e8950] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7fffe7ccc960] QmlAVThreadLiveController(thread=0x646ac825bdf0)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7fffe7ccc960] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7fffe7ccc960] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction_RefRefArgTest (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -113,10 +113,10 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc480e8950] requestInterrupt(wait=1
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.04 sec
+Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction_RefRefArgTest" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_RefRefArgTest" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunGenericFunction_RefRefArgTest" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -124,7 +124,7 @@ Test Passed.
 5/20 Test: QmlAVThread.RunGenericFunction_RefRefArgTest2
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction_RefRefArgTest2"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction_RefRefArgTest2" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_RefRefArgTest2" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -133,12 +133,12 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction_RefRefArgTest2
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction_RefRefArgTest2
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa830] QmlAVThreadLiveController(thread=0x60dd8987c380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa850] QmlAVThreadLiveController(thread=0x60dd8987e280)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa850] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa850] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa830] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa830] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcac3bbd60] QmlAVThreadLiveController(thread=0x652b6c20e380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcac3bbd80] QmlAVThreadLiveController(thread=0x652b6c210280)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcac3bbd80] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcac3bbd80] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcac3bbd60] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcac3bbd60] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction_RefRefArgTest2 (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -149,7 +149,7 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffca0bfa830] requestInterrupt(wait=1
 Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction_RefRefArgTest2" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_RefRefArgTest2" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunGenericFunction_RefRefArgTest2" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -157,7 +157,7 @@ Test Passed.
 6/20 Test: QmlAVThread.RunGenericFunction_WithoutArgsTest
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction_WithoutArgsTest"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction_WithoutArgsTest" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_WithoutArgsTest" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -166,9 +166,9 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction_WithoutArgsTest
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction_WithoutArgsTest
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcb3381090] QmlAVThreadLiveController(thread=0x5b3939864380)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcb3381090] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcb3381090] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffce177bc50] QmlAVThreadLiveController(thread=0x64a286746380)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffce177bc50] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffce177bc50] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction_WithoutArgsTest (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -179,7 +179,7 @@ qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcb3381090] requestInterrupt(wait=
 Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction_WithoutArgsTest" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_WithoutArgsTest" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunGenericFunction_WithoutArgsTest" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -187,7 +187,7 @@ Test Passed.
 7/20 Test: QmlAVThread.RunGenericFunction_WithoutArgsTest2
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunGenericFunction_WithoutArgsTest2"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunGenericFunction_WithoutArgsTest2" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunGenericFunction_WithoutArgsTest2" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -196,10 +196,40 @@ Note: Google Test filter = QmlAVThread.RunGenericFunction_WithoutArgsTest2
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunGenericFunction_WithoutArgsTest2
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc30ca8ae0] QmlAVThreadLiveController(thread=0x5cea9e2ad380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc30ca8ae0] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc30ca8ae0] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe59ae95d0] QmlAVThreadLiveController(thread=0x606168139380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe59ae95d0] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe59ae95d0] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunGenericFunction_WithoutArgsTest2 (0 ms)
+[----------] 1 test from QmlAVThread (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"QmlAVThread.RunGenericFunction_WithoutArgsTest2" end time: Sep 13 21:32 MSK
+"QmlAVThread.RunGenericFunction_WithoutArgsTest2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/20 Testing: QmlAVThread.RunClassMember
+8/20 Test: QmlAVThread.RunClassMember
+Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunClassMember"
+Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
+"QmlAVThread.RunClassMember" start time: Sep 13 21:32 MSK
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+Note: Google Test filter = QmlAVThread.RunClassMember
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from QmlAVThread
+[ RUN      ] QmlAVThread.RunClassMember
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffdb607edb0] QmlAVThreadLiveController(thread=0x5b4f83e4d380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffdb607edb0] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffdb607edb0] requestInterrupt(wait=1)
+[       OK ] QmlAVThread.RunClassMember (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
 [----------] Global test environment tear-down
@@ -209,37 +239,7 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc30ca8ae0] requestInterrupt(wait=1
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunGenericFunction_WithoutArgsTest2" end time: Sep 13 21:05 MSK
-"QmlAVThread.RunGenericFunction_WithoutArgsTest2" time elapsed: 00:00:00
-----------------------------------------------------------
-
-8/20 Testing: QmlAVThread.RunClassMember
-8/20 Test: QmlAVThread.RunClassMember
-Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunClassMember"
-Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunClassMember" start time: Sep 13 21:05 MSK
-Output:
-----------------------------------------------------------
-Running main() from ./googletest/src/gtest_main.cc
-Note: Google Test filter = QmlAVThread.RunClassMember
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from QmlAVThread
-[ RUN      ] QmlAVThread.RunClassMember
-qmlav: [QmlAVThreadLiveController<int> @ 0x7fffb3aa2270] QmlAVThreadLiveController(thread=0x57a850170380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7fffb3aa2270] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7fffb3aa2270] requestInterrupt(wait=1)
-[       OK ] QmlAVThread.RunClassMember (0 ms)
-[----------] 1 test from QmlAVThread (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.03 sec
-----------------------------------------------------------
-Test Passed.
-"QmlAVThread.RunClassMember" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunClassMember" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunClassMember" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -247,7 +247,7 @@ Test Passed.
 9/20 Test: QmlAVThread.RunFunctor
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunFunctor"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunFunctor" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunFunctor" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -256,9 +256,9 @@ Note: Google Test filter = QmlAVThread.RunFunctor
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunFunctor
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5701fd10] QmlAVThreadLiveController(thread=0x606a9bbb4380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5701fd10] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5701fd10] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc777d6120] QmlAVThreadLiveController(thread=0x59136bb9c380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc777d6120] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc777d6120] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunFunctor (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -266,10 +266,10 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5701fd10] requestInterrupt(wait=1
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.03 sec
+Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunFunctor" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunFunctor" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunFunctor" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -277,7 +277,7 @@ Test Passed.
 10/20 Test: QmlAVThread.RunLambda
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.RunLambda"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.RunLambda" start time: Sep 13 21:05 MSK
+"QmlAVThread.RunLambda" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -286,9 +286,9 @@ Note: Google Test filter = QmlAVThread.RunLambda
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.RunLambda
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd41288c70] QmlAVThreadLiveController(thread=0x611259b2c380)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd41288c70] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd41288c70] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffda7ba04f0] QmlAVThreadLiveController(thread=0x647c159ce380)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffda7ba04f0] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffda7ba04f0] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.RunLambda (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -299,7 +299,7 @@ qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd41288c70] requestInterrupt(wait=
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.RunLambda" end time: Sep 13 21:05 MSK
+"QmlAVThread.RunLambda" end time: Sep 13 21:32 MSK
 "QmlAVThread.RunLambda" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -307,7 +307,7 @@ Test Passed.
 11/20 Test: QmlAVThread.LoopLambda
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.LoopLambda"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.LoopLambda" start time: Sep 13 21:05 MSK
+"QmlAVThread.LoopLambda" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -316,9 +316,9 @@ Note: Google Test filter = QmlAVThread.LoopLambda
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.LoopLambda
-qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffd42d87a60] QmlAVThreadLiveController(thread=0x64b790ff0380)
-qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffd42d87a60] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffd42d87a60] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffcfed3f880] QmlAVThreadLiveController(thread=0x5b0854dcf380)
+qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffcfed3f880] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffcfed3f880] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.LoopLambda (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -326,10 +326,10 @@ qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffd42d87a60] request
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.04 sec
+Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.LoopLambda" end time: Sep 13 21:05 MSK
+"QmlAVThread.LoopLambda" end time: Sep 13 21:32 MSK
 "QmlAVThread.LoopLambda" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -337,7 +337,7 @@ Test Passed.
 12/20 Test: QmlAVThread.QmlAVTask_GenericFunction
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_GenericFunction"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_GenericFunction" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_GenericFunction" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -346,73 +346,11 @@ Note: Google Test filter = QmlAVThread.QmlAVTask_GenericFunction
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVTask_GenericFunction
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe00a96ba0] QmlAVThreadLiveController(thread=0x5e7489220df0)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe00a96ba0] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe00a96ba0] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffe00a96ba0] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffed2840d80] QmlAVThreadLiveController(thread=0x6299f6691df0)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffed2840d80] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffed2840d80] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffed2840d80] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVTask_GenericFunction (0 ms)
-[----------] 1 test from QmlAVThread (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.03 sec
-----------------------------------------------------------
-Test Passed.
-"QmlAVThread.QmlAVTask_GenericFunction" end time: Sep 13 21:05 MSK
-"QmlAVThread.QmlAVTask_GenericFunction" time elapsed: 00:00:00
-----------------------------------------------------------
-
-13/20 Testing: QmlAVThread.QmlAVTask_ClassMember
-13/20 Test: QmlAVThread.QmlAVTask_ClassMember
-Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_ClassMember"
-Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_ClassMember" start time: Sep 13 21:05 MSK
-Output:
-----------------------------------------------------------
-Running main() from ./googletest/src/gtest_main.cc
-Note: Google Test filter = QmlAVThread.QmlAVTask_ClassMember
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from QmlAVThread
-[ RUN      ] QmlAVThread.QmlAVTask_ClassMember
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc00e94550] QmlAVThreadLiveController(thread=0x63661a3dd380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc00e94550] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc00e94550] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc00e94550] requestInterrupt(wait=1)
-[       OK ] QmlAVThread.QmlAVTask_ClassMember (0 ms)
-[----------] 1 test from QmlAVThread (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.03 sec
-----------------------------------------------------------
-Test Passed.
-"QmlAVThread.QmlAVTask_ClassMember" end time: Sep 13 21:05 MSK
-"QmlAVThread.QmlAVTask_ClassMember" time elapsed: 00:00:00
-----------------------------------------------------------
-
-14/20 Testing: QmlAVThread.QmlAVTask_Functor
-14/20 Test: QmlAVThread.QmlAVTask_Functor
-Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_Functor"
-Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_Functor" start time: Sep 13 21:05 MSK
-Output:
-----------------------------------------------------------
-Running main() from ./googletest/src/gtest_main.cc
-Note: Google Test filter = QmlAVThread.QmlAVTask_Functor
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from QmlAVThread
-[ RUN      ] QmlAVThread.QmlAVTask_Functor
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5a3b4d20] QmlAVThreadLiveController(thread=0x5b330b949380)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5a3b4d20] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5a3b4d20] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5a3b4d20] requestInterrupt(wait=1)
-[       OK ] QmlAVThread.QmlAVTask_Functor (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
 [----------] Global test environment tear-down
@@ -422,7 +360,69 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffd5a3b4d20] requestInterrupt(wait=1
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVTask_Functor" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_GenericFunction" end time: Sep 13 21:32 MSK
+"QmlAVThread.QmlAVTask_GenericFunction" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/20 Testing: QmlAVThread.QmlAVTask_ClassMember
+13/20 Test: QmlAVThread.QmlAVTask_ClassMember
+Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_ClassMember"
+Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
+"QmlAVThread.QmlAVTask_ClassMember" start time: Sep 13 21:32 MSK
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+Note: Google Test filter = QmlAVThread.QmlAVTask_ClassMember
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from QmlAVThread
+[ RUN      ] QmlAVThread.QmlAVTask_ClassMember
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc54bf4230] QmlAVThreadLiveController(thread=0x592085e73380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc54bf4230] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc54bf4230] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc54bf4230] requestInterrupt(wait=1)
+[       OK ] QmlAVThread.QmlAVTask_ClassMember (0 ms)
+[----------] 1 test from QmlAVThread (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"QmlAVThread.QmlAVTask_ClassMember" end time: Sep 13 21:32 MSK
+"QmlAVThread.QmlAVTask_ClassMember" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/20 Testing: QmlAVThread.QmlAVTask_Functor
+14/20 Test: QmlAVThread.QmlAVTask_Functor
+Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_Functor"
+Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
+"QmlAVThread.QmlAVTask_Functor" start time: Sep 13 21:32 MSK
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+Note: Google Test filter = QmlAVThread.QmlAVTask_Functor
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from QmlAVThread
+[ RUN      ] QmlAVThread.QmlAVTask_Functor
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc1cb47a80] QmlAVThreadLiveController(thread=0x63cf8923d380)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc1cb47a80] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc1cb47a80] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffc1cb47a80] requestInterrupt(wait=1)
+[       OK ] QmlAVThread.QmlAVTask_Functor (0 ms)
+[----------] 1 test from QmlAVThread (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"QmlAVThread.QmlAVTask_Functor" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVTask_Functor" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -430,7 +430,7 @@ Test Passed.
 15/20 Test: QmlAVThread.QmlAVTask_Retry
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_Retry"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_Retry" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_Retry" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -439,9 +439,9 @@ Note: Google Test filter = QmlAVThread.QmlAVTask_Retry
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVTask_Retry
-qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffe7c34fc00] QmlAVThreadLiveController(thread=0x5acf9622d380)
-qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffe7c34fc00] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffe7c34fc00] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffdfed04be0] QmlAVThreadLiveController(thread=0x59bef2079380)
+qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffdfed04be0] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffdfed04be0] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVTask_Retry (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -452,7 +452,7 @@ qmlav: [QmlAVThreadLiveController<QmlAVLoopController> @ 0x7ffe7c34fc00] request
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVTask_Retry" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_Retry" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVTask_Retry" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -460,7 +460,7 @@ Test Passed.
 16/20 Test: QmlAVThread.QmlAVTask_VoidResult
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_VoidResult"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_VoidResult" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_VoidResult" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -469,10 +469,10 @@ Note: Google Test filter = QmlAVThread.QmlAVTask_VoidResult
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVTask_VoidResult
-qmlav: [QmlAVThreadLiveController<void> @ 0x7fff87023700] QmlAVThreadLiveController(thread=0x5c3a530b7380)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7fff87023700] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7fff87023700] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7fff87023700] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe1e33ba70] QmlAVThreadLiveController(thread=0x636a4f670380)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe1e33ba70] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe1e33ba70] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe1e33ba70] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVTask_VoidResult (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -483,7 +483,7 @@ qmlav: [QmlAVThreadLiveController<void> @ 0x7fff87023700] requestInterrupt(wait=
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVTask_VoidResult" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_VoidResult" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVTask_VoidResult" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -491,7 +491,7 @@ Test Passed.
 17/20 Test: QmlAVThread.QmlAVTask_NoArgs
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_NoArgs"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_NoArgs" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_NoArgs" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -500,10 +500,10 @@ Note: Google Test filter = QmlAVThread.QmlAVTask_NoArgs
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVTask_NoArgs
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc23f37ac0] QmlAVThreadLiveController(thread=0x65276de23380)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc23f37ac0] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc23f37ac0] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc23f37ac0] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff50add820] QmlAVThreadLiveController(thread=0x60b151041380)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff50add820] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff50add820] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff50add820] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVTask_NoArgs (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -511,10 +511,10 @@ qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc23f37ac0] requestInterrupt(wait=
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.03 sec
+Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVTask_NoArgs" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_NoArgs" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVTask_NoArgs" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -522,7 +522,7 @@ Test Passed.
 18/20 Test: QmlAVThread.QmlAVThreadRun_MoveOnlyCallable
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVThreadRun_MoveOnlyCallable"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVThreadRun_MoveOnlyCallable" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVThreadRun_MoveOnlyCallable" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -531,9 +531,9 @@ Note: Google Test filter = QmlAVThread.QmlAVThreadRun_MoveOnlyCallable
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVThreadRun_MoveOnlyCallable
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe342f82c0] QmlAVThreadLiveController(thread=0x636dfb6bedf0)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe342f82c0] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe342f82c0] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff2c7ff770] QmlAVThreadLiveController(thread=0x6151202e6df0)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff2c7ff770] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7fff2c7ff770] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVThreadRun_MoveOnlyCallable (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -541,10 +541,10 @@ qmlav: [QmlAVThreadLiveController<void> @ 0x7ffe342f82c0] requestInterrupt(wait=
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.03 sec
+Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVThreadRun_MoveOnlyCallable" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVThreadRun_MoveOnlyCallable" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVThreadRun_MoveOnlyCallable" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -552,7 +552,7 @@ Test Passed.
 19/20 Test: QmlAVThread.QmlAVTask_MoveOnlyCallable
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_MoveOnlyCallable"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_MoveOnlyCallable" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_MoveOnlyCallable" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -561,10 +561,10 @@ Note: Google Test filter = QmlAVThread.QmlAVTask_MoveOnlyCallable
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVTask_MoveOnlyCallable
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc5ce14bf0] QmlAVThreadLiveController(thread=0x5c3f3c5aedf0)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc5ce14bf0] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc5ce14bf0] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc5ce14bf0] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd98000240] QmlAVThreadLiveController(thread=0x5a04a4b9adf0)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd98000240] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd98000240] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffd98000240] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVTask_MoveOnlyCallable (0 ms)
 [----------] 1 test from QmlAVThread (0 ms total)
 
@@ -575,7 +575,7 @@ qmlav: [QmlAVThreadLiveController<void> @ 0x7ffc5ce14bf0] requestInterrupt(wait=
 Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVTask_MoveOnlyCallable" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_MoveOnlyCallable" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVTask_MoveOnlyCallable" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -583,7 +583,7 @@ Test Passed.
 20/20 Test: QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel
 Command: "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests" "--gtest_filter=QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel"
 Directory: /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests
-"QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel" start time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel" start time: Sep 13 21:32 MSK
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -592,13 +592,13 @@ Note: Google Test filter = QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel
 [----------] Global test environment set-up.
 [----------] 1 test from QmlAVThread
 [ RUN      ] QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcf84c3c20] QmlAVThreadLiveController(thread=0x60e016f7b380)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcf84c3c40] QmlAVThreadLiveController(thread=0x60e016f7d5b0)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcf84c3c20] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcf84c3c40] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcf84c3c40] requestInterrupt(wait=1)
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcf84c3c20] ~QmlAVThreadLiveController()
-qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcf84c3c20] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcbe5b4960] QmlAVThreadLiveController(thread=0x648a70f0f380)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcbe5b4980] QmlAVThreadLiveController(thread=0x648a70f115b0)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcbe5b4960] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcbe5b4980] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<void> @ 0x7ffcbe5b4980] requestInterrupt(wait=1)
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcbe5b4960] ~QmlAVThreadLiveController()
+qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcbe5b4960] requestInterrupt(wait=1)
 [       OK ] QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel (1 ms)
 [----------] 1 test from QmlAVThread (1 ms total)
 
@@ -609,8 +609,8 @@ qmlav: [QmlAVThreadLiveController<int> @ 0x7ffcf84c3c20] requestInterrupt(wait=1
 Test time =   0.04 sec
 ----------------------------------------------------------
 Test Passed.
-"QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel" end time: Sep 13 21:05 MSK
+"QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel" end time: Sep 13 21:32 MSK
 "QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Sep 13 21:05 MSK
+End testing: Sep 13 21:32 MSK

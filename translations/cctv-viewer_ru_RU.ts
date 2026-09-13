@@ -97,28 +97,28 @@
         <translation>CCTV Viewer</translation>
     </message>
     <message>
-        <location filename="../src/RootWindow.qml" line="89"/>
-        <location filename="../src/RootWindow.qml" line="211"/>
-        <location filename="../src/RootWindow.qml" line="89"/>
-        <location filename="../src/RootWindow.qml" line="211"/>
+        <location filename="../src/RootWindow.qml" line="90"/>
+        <location filename="../src/RootWindow.qml" line="212"/>
+        <location filename="../src/RootWindow.qml" line="90"/>
+        <location filename="../src/RootWindow.qml" line="212"/>
         <source>Error reading configuration!</source>
         <translation>Ошибка чтения конфигурации!</translation>
     </message>
     <message>
-        <location filename="../src/RootWindow.qml" line="302"/>
-        <location filename="../src/RootWindow.qml" line="302"/>
+        <location filename="../src/RootWindow.qml" line="303"/>
+        <location filename="../src/RootWindow.qml" line="303"/>
         <source>Already running!</source>
         <translation>Уже запущено!</translation>
     </message>
     <message>
-        <location filename="../src/RootWindow.qml" line="304"/>
-        <location filename="../src/RootWindow.qml" line="304"/>
+        <location filename="../src/RootWindow.qml" line="305"/>
+        <location filename="../src/RootWindow.qml" line="305"/>
         <source>The application is already running!</source>
         <translation>Приложение уже запущено!</translation>
     </message>
     <message>
-        <location filename="../src/RootWindow.qml" line="305"/>
-        <location filename="../src/RootWindow.qml" line="305"/>
+        <location filename="../src/RootWindow.qml" line="306"/>
+        <location filename="../src/RootWindow.qml" line="306"/>
         <source>Go to the first instance and allow multiple instances of the app to run in Settings.</source>
         <translation>Перейдите к первому экземпляру и разрешите запуск нескольких экземпляров приложения в настройках.</translation>
     </message>
@@ -152,54 +152,60 @@
     <message>
         <location filename="../src/SettingsDialog.qml" line="46"/>
         <location filename="../src/SettingsDialog.qml" line="46"/>
+        <source>Enable edit mode (unlock layout settings in sidebar)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.qml" line="52"/>
+        <location filename="../src/SettingsDialog.qml" line="52"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="56"/>
-        <location filename="../src/SettingsDialog.qml" line="56"/>
+        <location filename="../src/SettingsDialog.qml" line="62"/>
+        <location filename="../src/SettingsDialog.qml" line="62"/>
         <source>Show preset indicator</source>
         <translation>Показать индикатор текущего пресета</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="62"/>
-        <location filename="../src/SettingsDialog.qml" line="62"/>
+        <location filename="../src/SettingsDialog.qml" line="68"/>
+        <location filename="../src/SettingsDialog.qml" line="68"/>
         <source>Hide cursor in full screen mode</source>
         <translation>Скрывать курсор в полноэкранном режиме</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="68"/>
-        <location filename="../src/SettingsDialog.qml" line="68"/>
+        <location filename="../src/SettingsDialog.qml" line="74"/>
+        <location filename="../src/SettingsDialog.qml" line="74"/>
         <source>Viewport</source>
         <translation>Вьюпорт</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="78"/>
-        <location filename="../src/SettingsDialog.qml" line="78"/>
+        <location filename="../src/SettingsDialog.qml" line="84"/>
+        <location filename="../src/SettingsDialog.qml" line="84"/>
         <source>Unmute when the viewport is in full screen mode</source>
         <translation>Включить звук, когда вьюпорт находится в полноэкранном режиме</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="84"/>
-        <location filename="../src/SettingsDialog.qml" line="84"/>
+        <location filename="../src/SettingsDialog.qml" line="90"/>
+        <location filename="../src/SettingsDialog.qml" line="90"/>
         <source>Keep streams running between preset switches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="88"/>
-        <location filename="../src/SettingsDialog.qml" line="88"/>
+        <location filename="../src/SettingsDialog.qml" line="94"/>
+        <location filename="../src/SettingsDialog.qml" line="94"/>
         <source>Default FFmpeg options</source>
         <translation>Опции FFmpeg по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="102"/>
-        <location filename="../src/SettingsDialog.qml" line="102"/>
+        <location filename="../src/SettingsDialog.qml" line="108"/>
+        <location filename="../src/SettingsDialog.qml" line="108"/>
         <source>Presets</source>
         <translation>Пресеты</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.qml" line="115"/>
-        <location filename="../src/SettingsDialog.qml" line="115"/>
+        <location filename="../src/SettingsDialog.qml" line="121"/>
+        <location filename="../src/SettingsDialog.qml" line="121"/>
         <source>Run presets carousel with interval (sec.):</source>
         <translation>Запустить карусель пресетов с интервалом (сек.):</translation>
     </message>
@@ -228,9 +234,9 @@
     </message>
     <message>
         <location filename="../src/SideBar.qml" line="322"/>
-        <location filename="../src/SideBar.qml" line="469"/>
+        <location filename="../src/SideBar.qml" line="474"/>
         <location filename="../src/SideBar.qml" line="322"/>
-        <location filename="../src/SideBar.qml" line="469"/>
+        <location filename="../src/SideBar.qml" line="474"/>
         <source>Press and hold to enter edit mode</source>
         <translation>Нажмите и удерживайте,
 чтобы войти в режим редактирования</translation>
@@ -248,57 +254,63 @@
         <translation>Геметрия</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="516"/>
-        <location filename="../src/SideBar.qml" line="516"/>
+        <location filename="../src/SideBar.qml" line="474"/>
+        <location filename="../src/SideBar.qml" line="474"/>
+        <source>Enable edit mode in Settings to modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/SideBar.qml" line="521"/>
+        <location filename="../src/SideBar.qml" line="521"/>
         <source>Full Screen</source>
         <translation>Полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="528"/>
-        <location filename="../src/SideBar.qml" line="528"/>
+        <location filename="../src/SideBar.qml" line="533"/>
+        <location filename="../src/SideBar.qml" line="533"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="537"/>
-        <location filename="../src/SideBar.qml" line="537"/>
+        <location filename="../src/SideBar.qml" line="542"/>
+        <location filename="../src/SideBar.qml" line="542"/>
         <source>Merging cells</source>
         <translation>Объединение ячеек</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="551"/>
-        <location filename="../src/SideBar.qml" line="551"/>
+        <location filename="../src/SideBar.qml" line="556"/>
+        <location filename="../src/SideBar.qml" line="556"/>
         <source>Viewport%1</source>
         <translation>Вьюпорт%1</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="551"/>
-        <location filename="../src/SideBar.qml" line="551"/>
+        <location filename="../src/SideBar.qml" line="556"/>
+        <location filename="../src/SideBar.qml" line="556"/>
         <source> #%1</source>
         <translation> №%1</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="576"/>
-        <location filename="../src/SideBar.qml" line="576"/>
+        <location filename="../src/SideBar.qml" line="582"/>
+        <location filename="../src/SideBar.qml" line="582"/>
         <source>Url</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="605"/>
-        <location filename="../src/SideBar.qml" line="605"/>
+        <location filename="../src/SideBar.qml" line="614"/>
+        <location filename="../src/SideBar.qml" line="614"/>
         <source>FFmpeg options</source>
         <translation>Опции FFmpeg</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="691"/>
-        <location filename="../src/SideBar.qml" line="691"/>
+        <location filename="../src/SideBar.qml" line="706"/>
+        <location filename="../src/SideBar.qml" line="706"/>
         <source>Press and hold to enter delete mode</source>
         <translation>Нажмите и удерживайте,
 чтобы войти в режим удаления</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="563"/>
-        <location filename="../src/SideBar.qml" line="563"/>
+        <location filename="../src/SideBar.qml" line="568"/>
+        <location filename="../src/SideBar.qml" line="568"/>
         <source>Select viewport!</source>
         <translation>Выберите вьюпорт!</translation>
     </message>
@@ -309,57 +321,57 @@
         <translation>Скопировано в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="585"/>
-        <location filename="../src/SideBar.qml" line="585"/>
+        <location filename="../src/SideBar.qml" line="592"/>
+        <location filename="../src/SideBar.qml" line="592"/>
         <source>Mute</source>
         <translation>Отключение звука</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="647"/>
-        <location filename="../src/SideBar.qml" line="647"/>
+        <location filename="../src/SideBar.qml" line="657"/>
+        <location filename="../src/SideBar.qml" line="657"/>
         <source>Presets</source>
         <translation>Пресеты</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="691"/>
-        <location filename="../src/SideBar.qml" line="691"/>
+        <location filename="../src/SideBar.qml" line="705"/>
+        <location filename="../src/SideBar.qml" line="705"/>
         <source>Press and hold to exit delete mode</source>
         <translation>Нажмите и удерживайте,
 чтобы выйти из режима удаления</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="710"/>
-        <location filename="../src/SideBar.qml" line="710"/>
+        <location filename="../src/SideBar.qml" line="726"/>
+        <location filename="../src/SideBar.qml" line="726"/>
         <source>Are you sure?</source>
         <translation>Вы уверены?</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="712"/>
-        <location filename="../src/SideBar.qml" line="712"/>
+        <location filename="../src/SideBar.qml" line="728"/>
+        <location filename="../src/SideBar.qml" line="728"/>
         <source>Are you sure you want to delete preset #%1?</source>
         <translation>Вы уверены, что хотите удалить пресет №%1?</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="713"/>
-        <location filename="../src/SideBar.qml" line="713"/>
+        <location filename="../src/SideBar.qml" line="729"/>
+        <location filename="../src/SideBar.qml" line="729"/>
         <source>It&apos;s an irreversible procedure. Be careful!</source>
         <translation>Это необратимая процедура. Будьте внимательны!</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="723"/>
-        <location filename="../src/SideBar.qml" line="723"/>
+        <location filename="../src/SideBar.qml" line="739"/>
+        <location filename="../src/SideBar.qml" line="739"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="736"/>
-        <location filename="../src/SideBar.qml" line="736"/>
+        <location filename="../src/SideBar.qml" line="752"/>
+        <location filename="../src/SideBar.qml" line="752"/>
         <source>Expand</source>
         <translation>Развернуть</translation>
     </message>
     <message>
-        <location filename="../src/SideBar.qml" line="736"/>
-        <location filename="../src/SideBar.qml" line="736"/>
+        <location filename="../src/SideBar.qml" line="752"/>
+        <location filename="../src/SideBar.qml" line="752"/>
         <source>Collapse</source>
         <translation>Свернуть</translation>
     </message>

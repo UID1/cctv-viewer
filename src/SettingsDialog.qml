@@ -39,6 +39,12 @@ Dialog {
 
                     text: qsTr("Automatically collapse sidebar") 
                 }
+
+                CheckBox {
+                    id: editModeCheckBox
+
+                    text: qsTr("Enable edit mode (unlock layout settings in sidebar)")
+                }
             }
         }
 
@@ -150,6 +156,7 @@ Dialog {
         singleApplicationCheckBox.checked = !generalSettings.singleApplication;
         
         sidebarAutoCollapseCheckBox.checked = rootWindowSettings.sidebarAutoCollapse;
+        editModeCheckBox.checked = rootWindowSettings.editMode;
         
         presetIndicatorCheckBox.checked = layoutsCollectionSettings.presetIndicator;
 
@@ -175,6 +182,7 @@ Dialog {
         generalSettings.singleApplication = !singleApplicationCheckBox.checked;
         
         rootWindowSettings.sidebarAutoCollapse = sidebarAutoCollapseCheckBox.checked;
+        rootWindowSettings.editMode = editModeCheckBox.checked;
         
         layoutsCollectionSettings.presetIndicator = presetIndicatorCheckBox.checked;
 

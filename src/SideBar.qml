@@ -226,8 +226,8 @@ FocusScope {
                                 title: qsTr("Window division")
                                 palette.windowText: "white"
 
-                                // Disable controls when one of the viewports is in full-screen mode.
-                                enabled: !(Utils.currentLayout().fullScreenIndex >= 0)
+                                // Disable controls when edit mode is off or when one of the viewports is in full-screen mode.
+                                enabled: rootWindowSettings.editMode && !(Utils.currentLayout().fullScreenIndex >= 0)
 
                                 Layout.fillWidth: true
 
@@ -442,13 +442,14 @@ FocusScope {
                                                 aspectRatioTextField.cancel();
                                             }
                                             Keys.onPressed: {
-                                                if (event.key === Qt.Key_F2) {
+                                                if (event.key === Qt.Key_F2 && rootWindowSettings.editMode) {
                                                     aspectRatioTextField.edit();
                                                 }
                                             }
 
                                             Button {
                                                 text: ratio
+                                                enabled: rootWindowSettings.editMode
                                                 highlighted: {
                                                     Utils.currentModel().aspectRatio === str2ratio(ratio);
                                                 }
@@ -461,12 +462,16 @@ FocusScope {
                                                         setRootWindowRatio(r);
                                                     }
                                                 }
-                                                onPressAndHold: aspectRatioTextField.edit()
+                                                onPressAndHold: {
+                                                    if (rootWindowSettings.editMode) {
+                                                        aspectRatioTextField.edit();
+                                                    }
+                                                }
 
                                                 ToolTip.delay: Compact.toolTipDelay
                                                 ToolTip.timeout: Compact.toolTipTimeout
                                                 ToolTip.visible: hovered
-                                                ToolTip.text: qsTr("Press and hold to enter edit mode")
+                                                ToolTip.text: rootWindowSettings.editMode ? qsTr("Press and hold to enter edit mode") : qsTr("Enable edit mode in Settings to modify")
                                             }
 
                                             TextField {
@@ -535,7 +540,7 @@ FocusScope {
 
                                     Button {
                                         text: qsTr("Merging cells")
-                                        enabled: Utils.currentLayout().mergeCells(true)
+                                        enabled: rootWindowSettings.editMode && Utils.currentLayout().mergeCells(true)
 
                                         Layout.fillWidth: true
 
@@ -572,9 +577,11 @@ FocusScope {
                                 anchors.fill: parent
 
                                 TextField {
-                                    text: enabled ? Utils.currentModel().get(currentViewportIndex).url : ""
+                                    id: urlTextField
+                                    text: viewportLayout.enabled ? Utils.currentModel().get(currentViewportIndex).url : ""
                                     placeholderText: qsTr("Url")
                                     selectByMouse: true
+                                    enabled: rootWindowSettings.editMode
 
                                     Layout.fillWidth: true
 
@@ -583,6 +590,7 @@ FocusScope {
 
                                 Button {
                                     text: qsTr("Mute")
+                                    // Mute button is always accessible (not protected by edit mode)
                                     enabled: currentViewportIndex >= 0 ? Utils.currentLayout().get(currentViewportIndex).hasAudio : false
                                     highlighted: !(currentViewportIndex >= 0 && Utils.currentModel().get(currentViewportIndex).volume > 0 || viewportSettings.unmuteWhenFullScreen && Utils.currentLayout().fullScreenIndex >= 0)
 
@@ -600,6 +608,7 @@ FocusScope {
 
                                 ColumnLayout {
                                     Layout.fillWidth: true
+                                    enabled: rootWindowSettings.editMode
 
                                     Text {
                                         text: qsTr("FFmpeg options")
@@ -608,7 +617,8 @@ FocusScope {
                                     }
 
                                     TextField {
-                                        text: enabled ? getOptionsString(Utils.currentModel().get(currentViewportIndex).avFormatOptions) : ""
+                                        id: ffmpegOptionsTextField
+                                        text: viewportLayout.enabled ? getOptionsString(Utils.currentModel().get(currentViewportIndex).avFormatOptions) : ""
                                         selectByMouse: true
 
                                         Layout.fillWidth: true
@@ -667,7 +677,11 @@ FocusScope {
                                             event.accepted = deleteMode;
                                             deleteMode = false;
                                         }
-                                        Keys.onDeletePressed: deleteMode = true
+                                        Keys.onDeletePressed: {
+                                            if (rootWindowSettings.editMode) {
+                                                deleteMode = true;
+                                            }
+                                        }
 
                                         Layout.fillWidth: true
 
@@ -680,7 +694,7 @@ FocusScope {
                                             }
                                         }
                                         onPressAndHold: {
-                                            if (layoutsCollectionModel.count > 1) {
+                                            if (rootWindowSettings.editMode && layoutsCollectionModel.count > 1) {
                                                 deleteMode = !deleteMode;
                                             }
                                         }
@@ -688,7 +702,8 @@ FocusScope {
                                         ToolTip.delay: Compact.toolTipDelay
                                         ToolTip.timeout: Compact.toolTipTimeout
                                         ToolTip.visible: hovered
-                                        ToolTip.text: deleteMode ? qsTr("Press and hold to exit delete mode") : qsTr("Press and hold to enter delete mode")
+                                        ToolTip.text: deleteMode ? qsTr("Press and hold to exit delete mode") : 
+                                                      (rootWindowSettings.editMode ? qsTr("Press and hold to enter delete mode") : "")
                                     }
                                 }
 
@@ -696,6 +711,7 @@ FocusScope {
                                     id: addButton
 
                                     text: "➕"
+                                    enabled: rootWindowSettings.editMode
 
                                     Layout.fillWidth: true
 

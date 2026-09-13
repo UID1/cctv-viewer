@@ -53,6 +53,7 @@ ApplicationWindow {
         property int height: 720
         property bool fullScreen
         property bool sidebarAutoCollapse: true
+        property bool editMode: false  // When false, sidebar controls are locked
 
         Component.onCompleted: {
             // Do not initialize "fullScreen" if option "-f" is set

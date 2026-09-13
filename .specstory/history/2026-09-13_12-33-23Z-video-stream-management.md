@@ -9788,6 +9788,18 @@ _**Agent (claude-opus-4-5)**_
 
 _**Agent (claude-opus-4-5)**_
 
+<think><details><summary>Thought Process</summary>
+Now I understand the current structure. I need to:
+1. Add `aspectRatios` property to `sideBarSettings` for persistence
+2. Replace the hardcoded 16:9 and 4:3 buttons with a ListModel + Repeater pattern
+3. Add press-and-hold editing functionality similar to Window Division
+4. Keep the Full Screen button separate (it's not an aspect ratio)
+
+Let me implement this.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
 <tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
 <summary>Tool use: **todo_write**</summary>
 
@@ -9798,6 +9810,867 @@ Parameters:
   "merge": true
 }
 ```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Refactor Geometry section in SideBar.qml to use ListModel + Repeater pattern",
+      "id": "refactor-geometry",
+      "status": "in_progress"
+    },
+    {
+      "content": "Add press-and-hold TextField editing for custom aspect ratios",
+      "id": "add-editing",
+      "status": "pending"
+    },
+    {
+      "content": "Add persistence for custom aspect ratio presets in sideBarSettings",
+      "id": "persist-presets",
+      "status": "pending"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Modify qmlavplayer.h to support multiple video surfaces",
+      "id": "multi-surface-header",
+      "status": "completed"
+    },
+    {
+      "content": "Modify qmlavplayer.cpp to present frames to all surfaces",
+      "id": "multi-surface-impl",
+      "status": "completed"
+    },
+    {
+      "content": "Update StreamPool.qml to use shared multi-surface players",
+      "id": "update-streampool",
+      "status": "completed"
+    },
+    {
+      "content": "Update Player.qml to register with shared players",
+      "id": "update-player",
+      "status": "completed"
+    },
+    {
+      "content": "Build and test the changes",
+      "id": "test-build",
+      "status": "completed"
+    }
+  ],
+  "success": true
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me implement the changes. I'll:
+1. Add `aspectRatios` to sideBarSettings
+2. Replace the Geometry group with a ListModel + Repeater pattern similar to Window Division
+3. Support the W:H format with up to 2 digits
+
+Let me make the changes to SideBar.qml.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I need to replace the Geometry group's hardcoded buttons with the ListModel + Repeater pattern. The current code is from line 366 to around 410.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me build and test the changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Refactor Geometry section in SideBar.qml to use ListModel + Repeater pattern",
+      "id": "refactor-geometry",
+      "status": "completed"
+    },
+    {
+      "content": "Add press-and-hold TextField editing for custom aspect ratios",
+      "id": "add-editing",
+      "status": "completed"
+    },
+    {
+      "content": "Add persistence for custom aspect ratio presets in sideBarSettings",
+      "id": "persist-presets",
+      "status": "completed"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Refactor Geometry section in SideBar.qml to use ListModel + Repeater pattern",
+      "id": "refactor-geometry",
+      "status": "in_progress"
+    },
+    {
+      "content": "Add press-and-hold TextField editing for custom aspect ratios",
+      "id": "add-editing",
+      "status": "pending"
+    },
+    {
+      "content": "Add persistence for custom aspect ratio presets in sideBarSettings",
+      "id": "persist-presets",
+      "status": "pending"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer/build &amp;&amp; make -j$(nproc) 2&gt;&amp;1 | tail -25</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer/build && make -j$(nproc) 2>&1 | tail -25
+```
+
+```
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:136: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:150: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:165: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:181: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:195: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:88: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:108: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:122: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:136: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:150: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:165: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_home/cctv-viewer/src/qmlav/3rd/FFmpeg/libswscale/x86/yuv2rgb_template.c:181: Excess closing brace in C++ code (or abuse of the C++ preprocessor)
+/home/bot/developer_h
+… (output truncated)
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Build succeeded. Now let me commit these changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Build succeeded. Let me commit the changes:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer &amp;&amp; git add -A &amp;&amp; git commit --trailer &#34;Co-authored-by: Cursor &lt;cursoragent@cursor.com&gt;&#34; -m &#34;Add custom aspect ratio support with press-and-hold editing
+
+- Added aspectRatios setting to sideBarSettings for persistence
+- Refactored Geometry section to use ListModel + Repeater pattern
+- Added 4 preset aspect ratios: 16:9, 4:3, 32:27, 1:1
+- Press-and-hold any aspect ratio button to enter custom value (e.g., 32:27)
+- Supports 1-2 digit numbers for both width and height
+- Custom presets persist across program restarts&#34;</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer && git add -A && git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "Add custom aspect ratio support with press-and-hold editing
+
+- Added aspectRatios setting to sideBarSettings for persistence
+- Refactored Geometry section to use ListModel + Repeater pattern
+- Added 4 preset aspect ratios: 16:9, 4:3, 32:27, 1:1
+- Press-and-hold any aspect ratio button to enter custom value (e.g., 32:27)
+- Supports 1-2 digit numbers for both width and height
+- Custom presets persist across program restarts"
+```
+
+```
+[master 8390445] Add custom aspect ratio support with press-and-hold editing
+ 13 files changed, 7633 insertions(+), 3698 deletions(-)
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Done! Let me provide a summary to the user.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Done! Here's a summary of the changes:
+
+## Custom Aspect Ratio Feature
+
+**What's new in the Geometry section:**
+
+| Button | Description |
+|--------|-------------|
+| 16:9 | Standard widescreen |
+| 4:3 | Classic 4:3 |
+| 32:27 | Your requested ratio |
+| 1:1 | Square |
+
+**Usage:**
+- **Click** any button to apply that aspect ratio
+- **Press-and-hold** (or F2) to edit the button's value
+- Enter custom ratios like `32:27`, `21:9`, `5:4`, etc.
+- Press Enter to save, Escape to cancel
+
+**Persistence:**
+- Custom button labels are saved in `sideBarSettings.aspectRatios`
+- The actual aspect ratio per preset is saved with the preset data
+
+**To test on Kubuntu:**
+```bash
+rsync -avz --delete --exclude='build/' /home/bot/developer_home/cctv-viewer/ munin@10.40.137.86:/home/munin/developer_corner/cctv-viewer/
+
+# On Kubuntu:
+cd /home/munin/developer_corner/cctv-viewer/build
+make -j$(nproc)
+./cctv-viewer
+```
+
+The grid layout will automatically adapt to any custom aspect ratio you enter, using letterboxing/pillarboxing as needed to maintain the correct proportions.
+
+---
+
+_**User**_
+
+It works really great! I hope it doesn't crash if I enter some stupid values in the field or a value that could crash the program with division by 0 errors etc. 
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is concerned about input validation - specifically about division by zero and other edge cases that could crash the program. Let me check the current validation in the code I wrote.
+
+Looking at the `str2ratio` function I added:
+
+```qml
+function str2ratio(str) {
+    // Support 1-2 digit numbers for width and height (e.g., "32:27", "4:3", "16:9")
+    var regexp = /^(\d{1,2}):(\d{1,2})$/;
+    var match = str.match(regexp);
+    if (match) {
+        var w = parseInt(match[1]);
+        var h = parseInt(match[2]);
+        if (w > 0 && h > 0) {
+            return Qt.size(w, h);
+        }
+    }
+    return null;
+}
+```
+
+This validation already:
+1. Only accepts digits (1-2 digits on each side)
+2. Requires the `:` separator
+3. Checks that both w > 0 and h > 0 (so "0:0", "0:5", "5:0" would return null)
+
+And in the button click handler:
+```qml
+onClicked: {
+    var r = str2ratio(ratio);
+    if (r) {
+        Utils.currentModel().aspectRatio = r;
+        setRootWindowRatio(r);
+    }
+}
+```
+
+And in the TextField:
+```qml
+onEditingFinished: {
+    visible = false;
+    if(str2ratio(text)) {
+        ratio = text;
+    }
+}
+```
+
+So if str2ratio returns null, the value is not applied. This should prevent:
+- Division by zero (h must be > 0)
+- Zero width (w must be > 0)
+- Invalid formats (must match the regex)
+
+However, let me also check:
+how layoutRatio is calculated in ViewportsLayout.qml, and the setRootWindowRatio function, since those consume the ratio value downstream.
+
+```qml
+property real layoutRatio: (model.aspectRatio.width * model.size.width) / (model.aspectRatio.height * model.size.height);
+```
+
+Since h > 0 is already enforced, this division should be safe as long as setRootWindowRatio also respects that constraint - worth confirming its implementation next.
+
+```qml
+function setRootWindowRatio(ratio) {
+    var horzRatio = Utils.currentModel().size.width * ratio.width;
+    var vertRatio = Utils.currentModel().size.height * ratio.height;
+    var pixels = Math.round((rootWindow.width - rootSideBar.width) / horzRatio);
+    ...
+}
+```
+
+horzRatio depends on ratio.width, which the existing validation guarantees is > 0, so this division is also protected. The safeguards already in place cover both downstream calculations - no further changes needed, just confirmation for the user.
+
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Good news - the validation I added already protects against those issues. Let me show you the safeguards:
+
+## Current Validation in `str2ratio()`
+
+```qml
+function str2ratio(str) {
+    var regexp = /^(\d{1,2}):(\d{1,2})$/;
+    var match = str.match(regexp);
+    if (match) {
+        var w = parseInt(match[1]);
+        var h = parseInt(match[2]);
+        if (w > 0 && h > 0) {  // ← Prevents zero values
+            return Qt.size(w, h);
+        }
+    }
+    return null;  // ← Invalid input returns null, not applied
+}
+```
+
+## What's protected:
+
+| Input | Result | Why |
+|-------|--------|-----|
+| `0:9` | Rejected | w must be > 0 |
+| `16:0` | Rejected | h must be > 0 (prevents div/0) |
+| `0:0` | Rejected | Both must be > 0 |
+| `abc` | Rejected | Doesn't match regex |
+| `16` | Rejected | Missing `:` separator |
+| `16:9:4` | Rejected | Too many colons |
+| `123:456` | Rejected | Max 2 digits per side |
+| `-5:9` | Rejected | Negative sign not in regex |
+
+## Where division happens:
+
+In `ViewportsLayout.qml`:
+```qml
+property real layoutRatio: (model.aspectRatio.width * model.size.width) / 
+                           (model.aspectRatio.height * model.size.height);
+```
+
+Since `h > 0` is enforced, `aspectRatio.height` can never be 0, so no division by zero.
+
+**You're safe!** Invalid inputs are simply ignored and the previous valid value remains.
+
+---
+
+_**User**_
+
+I'm concerned about the toolbar to the right. I think it is a good thing if the user can easily navigate in and out of fullscreen mode and switch between existing presets. But I think it is too easy to access the Window Division, Aspect Ratio, Preset change, Video stream URL etc. I think those parameters can be changed by mistake. I see two approaches; either to add a padlock at the bottom that will "grey out" these fields. and that you must click and hold for at least 5 seconds to activate and then deactivates itself after 5 minutes. Or have an "edit mode" toggle in the settings menu.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants to add protection against accidental changes to sensitive settings. They've proposed two approaches:
+
+1. A padlock at the bottom of the sidebar that:
+   - Greys out certain fields when locked
+   - Requires click-and-hold for 5 seconds to unlock
+   - Auto-locks after 5 minutes of inactivity
+
+2. An "edit mode" toggle in the settings menu
+
+I need to ask for clarification on a few things:
+- Which settings should be protected? (Window Division, Aspect Ratio, Preset deletion, Video stream URL changes, etc.)
+- Should preset switching still be allowed when locked?
+- Should the Full Screen button still work when locked?
+
+Let me ask these clarifying questions.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ask_question"><details>
+<summary>Tool use: **ask_question**</summary>
+
+Parameters:
+
+```json
+{
+  "questions": [
+    {
+      "id": "approach",
+      "options": [
+        {
+          "id": "padlock",
+          "label": "Padlock at bottom (click-and-hold 5s to unlock, auto-lock after 5min)"
+        },
+        {
+          "id": "settings-toggle",
+          "label": "Edit mode toggle in Settings menu"
+        },
+        {
+          "id": "both",
+          "label": "Both options (padlock as default, toggle in settings to change behavior)"
+        }
+      ],
+      "prompt": "Which approach do you prefer?"
+    },
+    {
+      "id": "preset-switch",
+      "options": [
+        {
+          "id": "allow-switch",
+          "label": "Yes, allow switching presets (Recommended)"
+        },
+        {
+          "id": "block-switch",
+          "label": "No, block preset switching too"
+        }
+      ],
+      "prompt": "When locked, should users still be able to SWITCH between existing presets?"
+    },
+    {
+      "id": "fullscreen",
+      "options": [
+        {
+          "id": "allow-fullscreen",
+          "label": "Yes, allow Full Screen toggle (Recommended)"
+        },
+        {
+          "id": "block-fullscreen",
+          "label": "No, block Full Screen too"
+        }
+      ],
+      "prompt": "When locked, should the Full Screen button still work?"
+    }
+  ],
+  "title": "Settings Protection - Clarifications"
+}
+```
+Additional data:
+
+```json
+{
+  "completionDelivered": true,
+  "skipReason": "user",
+  "status": "cancelled"
+}
+```
+User decision: **rejected**
+
+Status: **completed**
+
+</details></tool-use>
+
+---
+
+_**User**_
+
+I think we should have an "edit mode" switch in the settings.  Yes, I want to allow the user to switch and navigate between presets.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user cancelled the questionnaire. Let me wait for their response or they may provide more details in a follow-up message.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+I understand you want to protect settings from accidental changes. Let me know:
+
+1. **Which approach** - Padlock at bottom or Settings toggle?
+
+2. **What should remain accessible when locked?**
+   - Preset switching (click preset buttons)?
+   - Full Screen toggle?
+
+3. **What should be protected?**
+   - Window Division buttons
+   - Aspect Ratio buttons
+   - Preset add/delete
+   - Viewport URL editing
+   - FFmpeg options
+
+This will help me create the right plan for you.
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants:
+1. An "edit mode" toggle in the Settings menu
+2. Preset switching should remain accessible when edit mode is off
+3. Protected fields when edit mode is off: Window Division, Aspect Ratio, Preset add/delete, Viewport URL editing, FFmpeg options
+
+Let me explore the SettingsDialog.qml to understand its structure, then create a plan.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/SettingsDialog.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I understand the SettingsDialog structure. I need to:
+1. Add an "Edit mode" checkbox to the Settings dialog (probably in a new "Sidebar" group or in "General")
+2. Create a setting that persists this value
+3. Modify SideBar.qml to disable/enable various controls based on this setting
+
+Let me look at where settings are defined to understand the pattern, and then create a plan.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "contextAfter": 1,
+  "path": "/home/bot/developer_home/cctv-viewer/src/RootWindow.qml",
+  "pattern": "property bool.*:"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/RootWindow.qml",
+  "pattern": "property bool.*:",
+  "topFiles": [
+    {
+      "matchCount": 15,
+      "uri": "src/RootWindow.qml"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 8
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I see the pattern for settings. I need to add an `editMode` setting. Let me create a plan for this feature.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="create_plan"><details>
+<summary>Tool use: **create_plan**</summary>
+
+Parameters:
+
+````json
+{
+  "name": "Edit Mode Protection",
+  "overview": "Add an \"Edit mode\" toggle in Settings to protect sidebar controls from accidental changes, while keeping preset switching and fullscreen always accessible.",
+  "plan": "# Edit Mode Protection\n\n## Overview\n\nAdd an \"Edit mode\" setting that controls whether users can modify configuration in the sidebar. When Edit mode is OFF, most controls are disabled to prevent accidental changes.\n\n## What remains accessible (always enabled):\n- Preset switching (clicking preset 1, 2, 3, etc.)\n- Full Screen toggle\n- Sidebar expand/collapse\n\n## What gets protected (disabled when Edit mode is OFF):\n- Window Division buttons (changing grid size)\n- Aspect Ratio buttons (changing geometry)\n- Preset add/delete buttons\n- Viewport URL field\n- Viewport Mute button\n- FFmpeg options field\n- Merging cells button\n\n## Implementation\n\n### 1. Add setting in [src/RootWindow.qml](src/RootWindow.qml)\n\nAdd to an existing Settings group (suggest `rootWindowSettings`):\n```qml\nSettings {\n    id: rootWindowSettings\n    // ...existing...\n    property bool editMode: true  // Default: editing enabled\n}\n```\n\n### 2. Add checkbox in [src/SettingsDialog.qml](src/SettingsDialog.qml)\n\nAdd to the \"General\" group:\n```qml\nCheckBox {\n    id: editModeCheckBox\n    text: qsTr(\"Enable edit mode (allows changing layout settings)\")\n}\n```\n\nUpdate `loadSettings()` and `saveSettings()` to handle the new setting.\n\n### 3. Modify [src/SideBar.qml](src/SideBar.qml)\n\nAdd `enabled` bindings to protected controls:\n\n| Control | Current enabled condition | New condition |\n|---------|---------------------------|---------------|\n| Window Division group | `!(fullScreenIndex \u003e= 0)` | `rootWindowSettings.editMode \u0026\u0026 !(fullScreenIndex \u003e= 0)` |\n| Geometry group (except Full Screen) | none | `rootWindowSettings.editMode` |\n| Other group (Merging cells) | none | `rootWindowSettings.editMode` |\n| Viewport frame (URL, Mute, FFmpeg) | `currentViewportIndex \u003e= 0` | `rootWindowSettings.editMode \u0026\u0026 currentViewportIndex \u003e= 0` |\n| Preset add button | none | `rootWindowSettings.editMode` |\n| Preset delete mode | `layoutsCollectionModel.count \u003e 1` | `rootWindowSettings.editMode \u0026\u0026 layoutsCollectionModel.count \u003e 1` |\n\n### 4. Visual indicator (optional but recommended)\n\nWhen Edit mode is OFF, show a small lock icon or tooltip to indicate why controls are disabled.\n\n## Data Flow\n\n```mermaid\nflowchart LR\n    Settings[\"Settings Dialog\u003cbr/\u003eEdit mode checkbox\"] --\u003e Save[\"saveSettings()\"]\n    Save --\u003e Storage[\"rootWindowSettings\u003cbr/\u003e.editMode\"]\n    Storage --\u003e SideBar[\"SideBar.qml\u003cbr/\u003eenabled: rootWindowSettings.editMode\"]\n    SideBar --\u003e Controls[\"Protected Controls\u003cbr/\u003e(greyed out)\"]\n```\n",
+  "todos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "pending"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "pending"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "pending"
+    }
+  ]
+}
+````
+Additional data:
+
+```json
+{
+  "hasOpenedEditor": true,
+  "planId": "edit_mode_protection_44e40252",
+  "planUri": "vscode-remote://wsl%2Bubuntu/home/bot/.cursor/plans/edit_mode_protection_44e40252.plan.md",
+  "reviewData": {
+    "isShowingInput": false,
+    "selectedOption": "none",
+    "status": "Requested"
+  }
+}
+```
+Result:
+
+```json
+{
+  "rejected": {}
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+---
+
+_**User**_
+
+Other - Merging Cells should also be locked. The string fields in the viewport section should also be locked out or even invisible if possible. No Plus or minus button for Presets. If it is too complicated to get the visibility right, just having them greyed out is fine too. Whatever is safest to implement. 
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants to clarify:
+1. Merging Cells should be locked (I already had this in the plan)
+2. String fields in viewport section (URL, FFmpeg options) should be locked or invisible - prefer invisible if easy, greyed out if not
+3. No Plus or Minus button for Presets when locked
+4. User prefers the safest/simplest implementation - greyed out is fine
+
+Let me update the plan to reflect this. Actually, I already had most of this covered. The user is just confirming and adding that visibility (invisible) would be preferred but greyed out is acceptable.
+
+I should just proceed with the implementation using `enabled` bindings which will grey things out - this is the safest approach and doesn't require restructuring the UI.
+
+The user seems ready to proceed. Let me switch to agent mode and implement it.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Got it - I'll implement it with everything greyed out (disabled) when Edit mode is OFF. This is the safest approach. The protected items will be:
+
+**Protected (greyed out when Edit mode OFF):**
+- Window Division buttons
+- Aspect Ratio buttons (not Full Screen)
+- Merging Cells button
+- Viewport URL field
+- Viewport Mute button  
+- Viewport FFmpeg options field
+- Preset ➕ (add) button
+- Preset delete mode (➖)
+
+**Always accessible:**
+- Preset switching (1, 2, 3... buttons)
+- Full Screen button
+- Sidebar expand/collapse
+- Settings menu
+
+Ready to implement when you switch to Agent mode.
+
+---
+
+_**User**_
+
+Could you explain to me the purpose of the viewport mute button?
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is asking about the Mute button in the Viewport section of the sidebar. Let me explain based on what I saw in the code:
+
+From SideBar.qml (lines 469-482):
+```qml
+Button {
+    text: qsTr("Mute")
+    enabled: currentViewportIndex >= 0 ? Utils.currentLayout().get(currentViewportIndex).hasAudio : false
+    highlighted: !(currentViewportIndex >= 0 && Utils.currentModel().get(currentViewportIndex).volume > 0 || viewportSettings.unmuteWhenFullScreen && Utils.currentLayout().fullScreenIndex >= 0)
+
+    Layout.fillWidth: true
+
+    onClicked: {
+        if (Utils.currentModel().get(currentViewportIndex).volume > 0) {
+            Utils.currentModel().get(currentViewportIndex).volume = 0;
+        } else {
+            Utils.currentModel().get(currentViewportIndex).volume = 1;
+        }
+    }
+}
+```
+
+The Mute button:
+1. Is only enabled when the selected viewport has audio (`hasAudio`)
+2. Toggles the volume of the selected viewport between 0 (muted) and 1 (unmuted)
+3. Is highlighted (shows as active/pressed) when the viewport is muted
+4. There's also a setting "Unmute when the viewport is in full screen mode" that affects this
+
+So it controls the audio for individual camera streams - some CCTV cameras have microphones and transmit audio along with video. The user can mute/unmute individual viewports.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+The **Mute button** controls audio for individual camera streams.
+
+**How it works:**
+- Some CCTV cameras have microphones and transmit audio along with video
+- The Mute button toggles the volume of the **currently selected viewport** between muted (0) and unmuted (1)
+- It's only enabled when the selected viewport's stream actually has audio (`hasAudio`)
+
+**Related setting in Settings dialog:**
+- "Unmute when the viewport is in full screen mode" - automatically unmutes a viewport when you make it full screen (double-click), then re-mutes when you exit full screen
+
+**From the code:**
+```qml
+onClicked: {
+    if (Utils.currentModel().get(currentViewportIndex).volume > 0) {
+        Utils.currentModel().get(currentViewportIndex).volume = 0;  // Mute
+    } else {
+        Utils.currentModel().get(currentViewportIndex).volume = 1;  // Unmute
+    }
+}
+```
+
+**Should it be protected?**
+If you're using this in a kiosk/display scenario where you don't want users accidentally turning on audio from cameras, then yes, lock it. If users should be able to toggle audio freely while viewing, you could leave it accessible.
+
+Would you like to keep the Mute button protected (greyed out) or leave it accessible when Edit mode is OFF?
+
+---
+
+_**User**_
+
+Set it to always accessible.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants the Mute button to always be accessible (not protected by Edit mode). Let me update the plan in my head and then implement when they switch to Agent mode.
+
+Final protected list:
+- Window Division buttons
+- Aspect Ratio buttons (not Full Screen)
+- Merging Cells button
+- Viewport URL field
+- Viewport FFmpeg options field
+- Preset ➕ (add) button
+- Preset delete mode (➖)
+
+Always accessible:
+- Preset switching (1, 2, 3... buttons)
+- Full Screen button
+- Sidebar expand/collapse
+- Settings menu
+- **Mute button** (added)
+
+The user seems ready to proceed. I should wait for them to switch to Agent mode.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Got it. Updated list:
+
+**Protected (greyed out when Edit mode OFF):**
+- Window Division buttons
+- Aspect Ratio buttons (not Full Screen)
+- Merging Cells button
+- Viewport URL field
+- Viewport FFmpeg options field
+- Preset ➕ (add) button
+- Preset delete mode (➖)
+
+**Always accessible:**
+- Preset switching (1, 2, 3... buttons)
+- Full Screen button
+- **Mute button** ✓
+- Sidebar expand/collapse
+- Settings menu
+
+Ready to implement when you switch to Agent mode.
+
+---
+
+_**User**_
+
+Build away.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Let me implement the Edit Mode Protection feature. I need to:
+
+1. Add `editMode` property to `rootWindowSettings` in RootWindow.qml
+2. Add Edit mode checkbox to SettingsDialog.qml with load/save
+3. Add enabled bindings to protected controls in SideBar.qml
+
+Let me start with RootWindow.qml.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Status: **loading**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
 Status: **loading**
 
 </details></tool-use>
