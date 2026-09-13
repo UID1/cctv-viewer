@@ -271,7 +271,7 @@
 	"MOC_DEFINITIONS" : 
 	[
 		"APP_NAME=\"CCTV Viewer\"",
-		"APP_VERSION=\"0.1.9-alpha GIT.29f1eaf (x86_64)\"",
+		"APP_VERSION=\"0.1.9-alpha GIT.a9ce324 (x86_64)\"",
 		"ORG_DOMAIN=\"cctv-viewer.org\"",
 		"ORG_NAME=\"CCTV Viewer\"",
 		"QT_CORE_LIB",

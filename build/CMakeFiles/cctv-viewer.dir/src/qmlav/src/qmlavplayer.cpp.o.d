@@ -318,6 +318,8 @@ CMakeFiles/cctv-viewer.dir/src/qmlav/src/qmlavplayer.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QTimer \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qbasictimer.h \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/QList \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/qlist.h \
  /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.h \
  /usr/include/x86_64-linux-gnu/qt5/QtMultimedia/QVideoFrame \
  /usr/include/x86_64-linux-gnu/qt5/QtMultimedia/qvideoframe.h \

@@ -377,6 +377,8 @@ CMakeFiles/cctv-viewer.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QTimer \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qbasictimer.h \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/QList \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/qlist.h \
  /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.h \
  /usr/include/x86_64-linux-gnu/qt5/QtMultimedia/QVideoFrame \
  /usr/include/x86_64-linux-gnu/qt5/QtMultimedia/qvideoframe.h \
@@ -609,7 +611,6 @@ CMakeFiles/cctv-viewer.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qversionnumber.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qline.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qlinkedlist.h \
- /usr/include/x86_64-linux-gnu/qt5/QtCore/qlist.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qlocale.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qmap.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qmath.h \

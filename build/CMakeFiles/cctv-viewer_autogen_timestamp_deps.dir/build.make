@@ -86,8 +86,8 @@ CMakeFiles/cctv-viewer_autogen_timestamp_deps: src_imports_CCTV_Viewer_Themes_Co
 CMakeFiles/cctv-viewer_autogen_timestamp_deps: src_imports_CCTV_Viewer_Themes_Compact_qml.cpp
 CMakeFiles/cctv-viewer_autogen_timestamp_deps: src_imports_CCTV_Viewer_Utils_utils_js.cpp
 CMakeFiles/cctv-viewer_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.13
-CMakeFiles/cctv-viewer_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Multimedia.so.5.15.13
 CMakeFiles/cctv-viewer_autogen_timestamp_deps: /usr/lib/qt5/bin/moc
+CMakeFiles/cctv-viewer_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Multimedia.so.5.15.13
 CMakeFiles/cctv-viewer_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Quick.so.5.15.13
 
 qmlcache_loader.cpp: /home/bot/developer_home/cctv-viewer/cctv-viewer.qrc

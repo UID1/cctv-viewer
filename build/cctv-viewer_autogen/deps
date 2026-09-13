@@ -382,6 +382,7 @@ cctv-viewer_autogen/timestamp: \
 	/usr/include/x86_64-linux-gnu/qt5/QtCore/QDir \
 	/usr/include/x86_64-linux-gnu/qt5/QtCore/QEvent \
 	/usr/include/x86_64-linux-gnu/qt5/QtCore/QIODevice \
+	/usr/include/x86_64-linux-gnu/qt5/QtCore/QList \
 	/usr/include/x86_64-linux-gnu/qt5/QtCore/QLockFile \
 	/usr/include/x86_64-linux-gnu/qt5/QtCore/QLoggingCategory \
 	/usr/include/x86_64-linux-gnu/qt5/QtCore/QMetaEnum \

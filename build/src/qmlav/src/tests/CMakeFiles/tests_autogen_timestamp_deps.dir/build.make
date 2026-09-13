@@ -67,8 +67,8 @@ include src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps.dir/compiler
 include src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps.dir/progress.make
 
 src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.13
-src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Multimedia.so.5.15.13
 src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps: /usr/lib/qt5/bin/moc
+src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Multimedia.so.5.15.13
 src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt5Quick.so.5.15.13
 
 tests_autogen_timestamp_deps: src/qmlav/src/tests/CMakeFiles/tests_autogen_timestamp_deps

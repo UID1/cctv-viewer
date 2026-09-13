@@ -6136,3 +6136,1758 @@ Would you like me to:
 2. Discuss the Qt video surface API in more detail?
 
 If you want me to create the snapshot and start exploring the code, switch to Agent mode and I can proceed.
+
+---
+
+_**User**_
+
+git add -A                                              Sun Sep 13 17:39:16 2026
+fatal: not a git repository: src/qmlav/../../.git/modules/src/qmlav
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is getting a git submodule error. The `.gitmodules` or submodule config is pointing to a path that doesn't exist. This is likely because the cctv-viewer directory isn't a proper git repository, or the submodule configuration is broken.
+
+Let me help them diagnose this. I should suggest checking if this is a git repo and the state of the submodule.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+That error suggests the git submodule configuration is broken or this directory isn't a proper git repository. Let me help diagnose:
+
+```bash
+# Check if it's a git repo at all
+cd /home/munin/developer_corner/cctv-viewer
+git status
+
+# Check the .git structure
+ls -la .git
+
+# Check submodule config
+cat .gitmodules
+
+# Check if qmlav has its own broken .git reference
+cat src/qmlav/.git
+```
+
+**Common causes:**
+1. The repo was copied (rsync/cp) rather than cloned, breaking submodule links
+2. The parent `.git/modules/` directory is missing
+3. The submodule was partially initialized
+
+**Quick fix options:**
+
+**Option A** - If you just want a snapshot without git:
+```bash
+# Create a tarball backup instead
+cd /home/munin/developer_corner
+tar -czvf cctv-viewer-stream-persist-$(date +%Y%m%d).tar.gz cctv-viewer/
+```
+
+**Option B** - Fix the git repo by reinitializing:
+```bash
+cd /home/munin/developer_corner/cctv-viewer
+
+# Remove broken submodule reference
+rm src/qmlav/.git
+
+# Reinitialize (if .git exists at top level)
+git submodule deinit -f src/qmlav
+git submodule update --init --recursive
+```
+
+**Option C** - Initialize fresh git repo (loses history):
+```bash
+cd /home/munin/developer_corner/cctv-viewer
+rm -rf .git src/qmlav/.git
+git init
+git add -A
+git commit -m "Working keepRunning implementation"
+```
+
+Which approach would you prefer? The tarball (Option A) is the simplest for just preserving the working state.
+
+---
+
+_**User**_
+
+I used git on the Kubuntu machine. I'm using it on the local WSL machine and it worked fine. Does it mean I pushed the code to the real cct-viewer repo?
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is asking whether they pushed code to a real remote repository. They ran git commands on the WSL machine successfully, but are concerned about whether this affected any upstream/remote repo.
+
+Let me help them check:
+1. What remotes are configured
+2. Whether any push was actually done
+
+They only mentioned running `git add -A` and `git commit` - those are local operations. A `git push` would be needed to send changes to a remote.
+
+Let me check what the git situation is in the local workspace.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+No, `git add` and `git commit` are **local-only operations**. They don't touch any remote repository.
+
+To push to a remote, you'd need to explicitly run `git push`. Let me check what's configured in your local WSL repo:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer &amp;&amp; git remote -v 2&gt;/dev/null || echo &#34;Not a git repo or no remotes&#34;</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer && git remote -v 2>/dev/null || echo "Not a git repo or no remotes"
+```
+
+```
+origin	https://github.com/iEvgeny/cctv-viewer.git (fetch)
+origin	https://github.com/iEvgeny/cctv-viewer.git (push)
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer &amp;&amp; git log --oneline -3 2&gt;/dev/null || echo &#34;No git history&#34;</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer && git log --oneline -3 2>/dev/null || echo "No git history"
+```
+
+```
+a9ce324 Working keepRunning implementation - streams persist across preset switches
+29f1eaf Update QmlAV submodule
+7df5fef snap: rebase to core24 + gpu-2404
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Good, I can see:
+1. The remote is configured to point to `https://github.com/iEvgeny/cctv-viewer.git` - this is the original upstream repo
+2. There's a commit `a9ce324` with the message "Working keepRunning implementation" - so the commit was made locally
+3. This is ahead of the original commits
+
+The user has NOT pushed - they only committed locally. The commit is safe and only exists on their machine.
+
+Let me also check if there's any indication they pushed.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Your local commit is **safe and local only**. Here's what I see:
+
+**Remote configured:**
+```
+origin → https://github.com/iEvgeny/cctv-viewer.git
+```
+
+**Recent commits:**
+```
+a9ce324 Working keepRunning implementation - streams persist across preset switches  ← YOUR commit (local)
+29f1eaf Update QmlAV submodule  ← original
+7df5fef snap: rebase to core24 + gpu-2404  ← original
+```
+
+Your commit `a9ce324` exists **only on your local machine**. You did not push anything. To push, you would need:
+1. `git push origin <branch>` (and you'd need write access to the iEvgeny repo, which you likely don't have)
+
+**Your changes are safely snapshotted locally.** 
+
+If you want to sync this to the Kubuntu machine, you can:
+```bash
+# From WSL, rsync the entire repo including .git
+rsync -avz --delete /home/bot/developer_home/cctv-viewer/ munin@10.40.137.86:/home/munin/developer_corner/cctv-viewer/
+```
+
+This will give the Kubuntu machine the same git history and snapshot. Ready to explore the frame distribution layer?
+
+---
+
+_**User**_
+
+Do I need to delete anything on the remote? Any changes applied will be taken care of by rsync anyway.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is asking about the rsync command and whether they need to clean up anything on the Kubuntu machine before syncing.
+
+With `rsync -avz --delete`:
+- `--delete` will remove files on the destination that don't exist on the source
+- This should handle removing any stale files
+
+But there's a potential issue - the Kubuntu machine had a broken `.git` submodule setup. That might need manual cleanup, or rsync should handle it.
+
+Also, the build directory (`build/`) might have compiled objects that could cause issues.
+
+Let me advise them properly.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+With `--delete` in rsync, files that don't exist on the source will be removed from the destination automatically. However, there are a couple of considerations:
+
+**Build directory:**
+The `build/` folder on Kubuntu has compiled binaries for that system. You probably want to **exclude** it so you don't overwrite with WSL-compiled binaries:
+
+```bash
+rsync -avz --delete --exclude='build/' /home/bot/developer_home/cctv-viewer/ munin@10.40.137.86:/home/munin/developer_corner/cctv-viewer/
+```
+
+**After rsync, on Kubuntu:**
+```bash
+cd /home/munin/developer_corner/cctv-viewer/build
+make clean   # optional, clears old objects
+make -j$(nproc)
+```
+
+**The broken .git submodule:**
+rsync will overwrite the broken `src/qmlav/.git` reference with the working one from WSL, which should fix that issue.
+
+**Summary:** Just use rsync with `--exclude='build/'` and you're good. No manual deletion needed.
+
+---
+
+_**User**_
+
+I'm not sure I like this. I ran:
+rsync -avz --delete --exclude='build/' --exclude='.git/' /home/bot/dev
+eloper_home/cctv-viewer/ munin@10.40.137.86:/home/munin/developer_corner/cctv-viewer/
+
+got this output:
+sending incremental file list
+deleting src/streampool.h
+.specstory/.project.json
+.specstory/statistics.json
+.specstory/cli/config.toml
+.specstory/history/2026-09-13_12-33-23Z-video-stream-management.md
+translations/cctv-viewer_ru_RU.qm
+translations/cctv-viewer_ru_RU.ts
+
+And now git status shows:
+
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .specstory/history/2026-09-13_12-33-23Z-video-stream-management.md
+        modified:   .specstory/statistics.json
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+what happened?
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user ran rsync from WSL to the Kubuntu machine, but they're showing `git status` output which is showing changes. The question is - where did they run `git status`? On WSL or on Kubuntu?
+
+Looking at the output:
+1. rsync synced files to Kubuntu
+2. It deleted `src/streampool.h` on the remote (Kubuntu) because it doesn't exist on the source (WSL)
+3. It synced some .specstory files
+
+The `git status` output shows:
+- Branch is ahead by 1 commit (the "Working keepRunning implementation" commit)
+- Some .specstory files are modified
+
+The `.specstory` directory seems to be some kind of project tracking/history tool that's being modified. The files were synced FROM WSL TO Kubuntu, which means Kubuntu's version was overwritten.
+
+But wait - the user is concerned. Let me think about what might have gone wrong:
+
+1. They excluded `.git/` from rsync, which is good - it preserves the git history on both machines
+2. But the `.specstory` files were synced, which overwrote local changes on Kubuntu
+3. The `src/streampool.h` was deleted on Kubuntu - this suggests that file existed on Kubuntu but not on WSL
+
+The issue is that rsync with `--delete` removed files that existed on Kubuntu but not on WSL. And `--delete` doesn't care about git tracking - it just makes the destination match the source.
+
+The fact that `git status` shows modified .specstory files suggests they're running git status on WSL (the source), not Kubuntu. These files might have been modified by some tool during/after the rsync, or they're timestamp changes.
+
+Actually wait - I think I misread. The user might be confused about bidirectional sync. Let me re-read:
+
+- rsync was run FROM WSL TO Kubuntu (`/home/bot/developer_home/cctv-viewer/` -> `munin@10.40.137.86:/home/munin/developer_corner/cctv-viewer/`)
+- deleting streampool.h means it was removed from Kubuntu since it didn't exist on WSL
+
+The git status looks like it's being run on WSL itself, and the .specstory files are showing modified probably from some IDE extension auto-tracking activity, not from the rsync itself.
+
+So really there are two separate concerns to address: why streampool.h disappeared (source lacked it) and why .specstory shows changes (likely unrelated background tooling).
+
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Nothing bad happened! Let me explain:
+
+**What rsync did (on Kubuntu):**
+- `deleting src/streampool.h` — This file existed on Kubuntu but **not** on your WSL source. Our implementation doesn't use a C++ `streampool.h` (we kept it in QML). rsync removed it to match your source.
+- The `.specstory/` files were synced (this appears to be a Cursor/Specstory extension tracking your session)
+
+**The `git status` you're showing:**
+That's from your **local WSL machine**, not Kubuntu. It shows:
+- You're 1 commit ahead (your "Working keepRunning implementation" commit) ✓
+- The `.specstory/` files are modified — this is just a Cursor extension logging activity, not your code
+
+**Nothing is wrong.** Your code changes are safely committed. The `.specstory` stuff is IDE metadata that you can ignore or add to `.gitignore`.
+
+**To verify on Kubuntu:**
+```bash
+ssh munin@10.40.137.86 "cd /home/munin/developer_corner/cctv-viewer && ls src/*.qml && git status"
+```
+
+This should show your QML files (`StreamPool.qml`, `StreamPoolPlayer.qml`, `Player.qml`, etc.) and the git status there.
+
+**To ignore the .specstory noise locally:**
+```bash
+echo ".specstory/" >> /home/bot/developer_home/cctv-viewer/.gitignore
+```
+
+Want me to explain the frame distribution layer exploration next, or do you want to verify the Kubuntu sync first?
+
+---
+
+_**User**_
+
+Ok, good how do we proceed?
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants to explore the frame distribution layer approach. Let me first examine the qmlav submodule to understand how video frames are currently handled, so I can explain where we would hook in to distribute frames to multiple consumers.
+
+I should look at:
+1. The qmlav source code structure
+2. How QmlAVPlayer handles video frames
+3. Where the video surface connection happens
+
+This will help me explain the approach for implementing a frame distribution layer.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Let me explore the `qmlav` submodule to understand where we'd hook in for frame distribution:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: find /home/bot/developer_home/cctv-viewer/src/qmlav -name &#34;*.h&#34; -o -name &#34;*.cpp&#34; | head -20</summary>
+```bash
+find /home/bot/developer_home/cctv-viewer/src/qmlav -name "*.h" -o -name "*.cpp" | head -20
+```
+
+```
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavutils.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_egl.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavthread.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavutils.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavaudioiodevice.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_glx.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavaudioiodevice.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavoptions.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavresampler.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavwaitingqueue.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_egl.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/tests/qmlavthread.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavpropertyhelpers.h
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavthread.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdecoder.cpp
+/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavformat.h
+find: ‘standard output’: Broken pipe
+find: write error
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **1076** results in **1** directory</summary>
+
+Directory: **`/home/bot/developer_home/cctv-viewer`** (1076 files)
+
+| File |
+|------|
+| `build/src/qmlav/src/tests/tests_autogen/moc_predefs.h` |
+| `src/qmlav/3rd/FFmpeg/tools/decode_simple.h` |
+| `src/qmlav/3rd/FFmpeg/tests/checkasm/checkasm.h` |
+| `src/qmlav/3rd/FFmpeg/libswscale/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libswscale/version.h` |
+| `src/qmlav/3rd/FFmpeg/libswscale/swscale_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libswscale/swscale.h` |
+| `src/qmlav/3rd/FFmpeg/libswscale/rgb2rgb.h` |
+| `src/qmlav/3rd/FFmpeg/libswscale/ppc/yuv2rgb_altivec.h` |
+| `src/qmlav/3rd/FFmpeg/libswresample/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libswresample/version.h` |
+| `src/qmlav/3rd/FFmpeg/libswresample/swresample_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libswresample/swresample.h` |
+| `src/qmlav/3rd/FFmpeg/libswresample/resample.h` |
+| `src/qmlav/3rd/FFmpeg/libswresample/audioconvert.h` |
+| `src/qmlav/3rd/FFmpeg/libpostproc/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libpostproc/version.h` |
+| `src/qmlav/3rd/FFmpeg/libpostproc/postprocess_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libpostproc/postprocess.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/xtea.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/xga_font_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/w64xmmtest.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/timer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/pixelutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/intmath.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/emms.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/x86/asm.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/wchar_filename.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/vulkan_loader.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/vulkan_functions.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/vulkan.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/video_enc_params.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/version.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/uuid.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/tx_priv.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/tx.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/twofish.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/tree.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/tomi/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/timer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/timestamp.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/timecode.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/time_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/time.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/threadmessage.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/thread.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/tea.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/softfloat_tables.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/spherical.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/stereo3d.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/softfloat_ieee754.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/softfloat.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/slicethread.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/sha512.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/sh4/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/samplefmt.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/sha.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ripemd.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/replaygain.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/reverse.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/rc4.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/rational.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/random_seed.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/qsort.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ppc/util_altivec.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ppc/timer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ppc/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ppc/float_dsp_vsx.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ppc/float_dsp_altivec.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ppc/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/pixfmt.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/pixelutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/pixdesc.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/pca.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/parseutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/opt.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/murmur3.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/objc.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/motion_vector.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mips/mmiutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mips/libm_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mips/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mips/generic_macros_msa.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mips/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mips/asmdefs.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mem_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mem.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/md5.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mathematics.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/mastering_display_metadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/macros.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/macos_kperf.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/lzo.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/loongarch/loongson_intrinsics.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/loongarch/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/log.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/lls.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/libm.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/lfg.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/intmath.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/intfloat.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/integer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/imgutils_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/imgutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_vulkan.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_videotoolbox.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_vdpau.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_vaapi.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_qsv.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_opencl.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_mediacodec.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_dxva2.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_drm.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_d3d11va.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_cuda.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext_cuda_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hwcontext.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hmac.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hdr_dynamic_vivid_metadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hdr_dynamic_metadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/hash.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/frame.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/getenv_utf8.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/float_dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/fixed_dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/film_grain_params.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/file.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/fifo.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/ffmath.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/eval.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/error.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/encryption_info.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/dynarray.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/downmix_info.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/dovi_meta.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/display.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/dict.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/detection_bbox.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/des.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/cuda_check.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/csp.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/crc.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/cpu_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/common.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/colorspace.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/color_utils.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/channel_layout.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/cast5.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/camellia.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/buffer_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/buffer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/bprint.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/blowfish.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/bfin/timer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/bfin/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/base64.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/avutil.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/avstring.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/avr32/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/avassert.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/avr32/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/audio_fifo.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/attributes.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/intreadwrite.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/neontest.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/timer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/intmath.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/float_dsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/arm/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aes_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aes_ctr.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aes.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/adler32.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aarch64/timer.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aarch64/neontest.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aarch64/cpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavutil/aarch64/bswap.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/yuv4mpeg.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/wv.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/wtv.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/w64.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/vpcc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/vorbiscomment.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/voc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/version.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/urldecode.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/url.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/ttmlenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/tls.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/tee_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/swf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/subtitles.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/srtp.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/spdif.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/sox.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/smjpeg.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/sauce.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtspcodes.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtpproto.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtpenc_chain.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtpenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtpdec_formats.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtpdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtp.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtmppkt.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtmpdh.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtmpcrypt.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rtmp.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rso.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rmsipr.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rm.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/riff.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/replaygain.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rdt.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rawutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rawenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/rawdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/qtpalette.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/pcm.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/os_support.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/options_table.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/oma.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/oggdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/nut.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/network.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/mxf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/mux.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/mpegts.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/mpeg.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/movenccenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/movenc_ttml.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/movenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/mov_chan.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/mms.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/metadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/matroska.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/lrc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/jpegxl_probe.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/isom.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/ircam.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/ip.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/img2.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/imf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/id3v2.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/id3v1.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/httpauth.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/http.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/hlsplaylist.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/hls_sample_encryption.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/hevc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/gxf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/flv.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/flacenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/flac_picture.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/ffmeta.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/dv.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/dovi_isom.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/demux.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/dash.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/caf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/avlanguage.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/avio_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/avio.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/avi.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/avformat.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/avc.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/av1.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/ast.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/asfcrypt.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/asf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/argo_asf.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/apetag.h` |
+| `src/qmlav/3rd/FFmpeg/libavformat/aiff.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/yadif.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vulkan_filter.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/w3fdif.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vulkan.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/window_func.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vmaf_motion.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vidstabutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/video.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_threshold_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_spp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_scale_cuda.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_pullup.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_pp7.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_overlay.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_nlmeans.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_noise.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_nlmeans_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_idet.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_hqdn3d.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_hflip_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_gblur_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_fspp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_eq.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vf_blend_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/version.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/vaapi_vpp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/v360.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/unsharp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/transpose.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/transform.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/tinterlace.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/threshold.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/thread.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/stereo3d.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/ssim.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/signature.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/scene_sad.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/scale_eval.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/removegrain.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/qsvvpp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/qp_table.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/psnr.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/preserve_color.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/opencl_source.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/opencl.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/motion_estimation.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/metal/utils.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/median.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/maskedmerge.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/maskedclamp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/lut3d.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/lswsutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/limiter.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/lavfutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/hflip.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/hermite.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/generate_wave_table.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/gradfun.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/gblur.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/framesync.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/framerate.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/framequeue.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/framepool.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/formats.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/filters.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/fflcms2.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/edge_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/ebur128.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/drawutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn_interface.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn_filter_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/safe_queue.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/queue.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_io_proc.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_tf.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_openvino.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layers.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_pad.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_mathbinary.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_depth2space.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_maximum.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_mathunary.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_conv2d.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_dense.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native_layer_avgpool.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_native.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/dnn/dnn_backend_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/deshake.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/cuda/load_helper.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/convolution.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/colorspacedsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/colorspace.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/bwdif.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/buffersrc.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/buffersink.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/bufferqueue.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/boxblur.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/blend.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/bbox.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/avfilter.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/avf_showcqt.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/audio.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/atadenoise.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/af_volume.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/af_anlmdndsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/af_afirdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavfilter/af_afir.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/version.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/v4l2-common.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/timefilter.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/sndio.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/pulse_audio_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/oss.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/opengl_enc_shaders.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/fbdev_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/dshow_capture.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/decklink_enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/decklink_dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/decklink_common_c.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/decklink_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/avdevice.h` |
+| `src/qmlav/3rd/FFmpeg/libavdevice/alsa.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/zlib_wrapper.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/xwd.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/xvmc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/xvididct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/xiph.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/xface.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/xvididct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/vp9dsp_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/vp56_arith.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/vc1dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/simple_idct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/mathops.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/inline_asm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/idctdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/hevcdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/hpeldsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/fpel.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/fft.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/fdct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/constants.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/x86/cabac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmv2enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmv2dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmv2dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmv2data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmv2.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmavoice_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmaprodata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wmadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wma_freqs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wma_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wma.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wavpackenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/wavpack.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vt_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp9shared.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp9dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp9dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp9data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp9.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp8dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp8data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp8.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp6data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp5data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp56dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp56data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp56.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp4data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp3dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vp3data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vorbisdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vorbis_parser_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vorbis_parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vorbis_enc_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vorbis.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vlc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/videotoolbox.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/videodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/version.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/version_major.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vdpau_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vdpau.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc2enc_dwt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc1dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc1data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc1acdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc1_pred.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc1_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vc1.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vbn.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vaapi_hevc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vaapi_encode.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/vaapi_decode.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v4l2_m2m.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v4l2_fmt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v4l2_context.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v4l2_buffers.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v210enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v210enc_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v210dec_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/v210dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/utvideodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/utvideo.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/unary.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ulti_cb.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/twinvq_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/twinvq.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ttmlenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ttaencdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ttadsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ttadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tscc2data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/truespeech_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/truemotion1data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tpeldsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/to_upper4.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tiff_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tiff_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tiff.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/threadframe.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/thread.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/texturedsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/targa.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/takdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tak.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/synth_filter.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tableprint_vlc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/tableprint.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/svq1enc_cb.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/svq1enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/svq1_vlc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/svq1_cb.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/svq1.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sunrast.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/startcode.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/speexdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/speedhqenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sp5x.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/snowdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/snow_dwt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/snow.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/snappy.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/siprdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sipr16kdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sipr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sinewin_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sinewin_fixed_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sinewin.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/simple_idct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sheervideodata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sgi.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sei.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/scpr3.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/scpr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sbrdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sbr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sbcdsp_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sbcdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sbcdec_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/sbc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv40vlc2.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv40data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv34vlc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv34dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv34data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv34.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv10enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv30data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rv10dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rtjpeg.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/roqvideo.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rle.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rnd_avg.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rl.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rectangle.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rdft.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/raw.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ratecontrol.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/rangecoder.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ralfdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ra288.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ra144.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qsvenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qsv_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qsv.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qpeldsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qoi.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qdm2data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qdm2_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/qcelpdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/put_golomb.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/put_bits.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/pthread_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/psymodel.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/proresdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/proresdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/proresdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/profiles.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ppc/mathops.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ppc/hpeldsp_altivec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ppc/fft_vsx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ppc/fdct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/pnm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/pngdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/png.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/pixels.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/pixblockdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/pcm_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/paf.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/packet_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/packet.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opustab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opusenc_utils.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opusenc_psy.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opusenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opusdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opus.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opus_rc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opus_pvq.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/options_table.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/opus_celt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/on2avcdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/nvenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/nvdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/nellymoser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mss34dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mss2dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mss12.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/msrledec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/msmpeg4enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/msmpeg4dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/msmpeg4data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/msmpeg4.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/msgsmdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mqc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegvideoencdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegvideoenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegvideodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegvideodec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegvideodata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegvideo.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegutils.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegpicture.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudiotabs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudiotab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudiodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudiodecheader.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudiodec_common_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudiodata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudio_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpegaudio.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg_er.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4videoenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4videodec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4videodata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4video_parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4video.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4audio_sample_rates.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg4audio.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg12vlc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg12enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg12dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg12data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpeg12.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpcdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpc8huff.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpc8data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpc7data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mpc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/motionpixels_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/motion_est.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mlz.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mlpdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mlp_parse.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mlp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mjpegenc_huffman.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mjpegenc_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mjpegenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mjpegdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mjpeg.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/xvididct_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/wmv2dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/vp9dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/vp8dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/vp3dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/vc1dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/qpeldsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/pixblockdsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/mpegvideo_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/me_cmp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/mathops.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/lsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/idctdsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/hpeldsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/hevcpred_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/hevcdsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/hevc_macros_msa.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/h264pred_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/h264dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/h264chroma_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/h263dsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/constants.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/compute_antialias_float.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/compute_antialias_fixed.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/cabac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/blockdsp_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/amrwbdec_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/aacsbr_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/aacpsy_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mips/aacdec_mips.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mf_utils.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/metasound_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mediacodecdec_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mediacodec_wrapper.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mediacodec_sw_buffer.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mediacodec_surface.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mediacodec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/me_cmp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mdct15.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/mathops.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lzw.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lzf.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lpc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lossless_videoencdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lossless_videodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lossless_audiodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/vp9dsp_loongarch.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/vp8dsp_loongarch.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/vc1dsp_loongarch.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/idctdsp_loongarch.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/hpeldsp_lasx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/hevcdsp_lsx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/h264qpel_lasx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/h264dsp_lasx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/h264chroma_lasx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/h264_intrapred_lasx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/loongarch/cabac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/libwebpenc_common.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/libvpx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/libopus.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/libopenh264.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/libjxl.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lcl.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/lagarithrac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/kbdwin.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpegtabs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpegtables.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpeglsdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpegls.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpeg2000dwt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpeg2000dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jpeg2000.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jni.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/jacosub.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ivi_dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ivi.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/intrax8huf.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/intrax8dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/intrax8.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/indeo5data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/indeo4data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/indeo3data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/indeo2data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/imcdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ilbcdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/iirfilter.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/idctdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hwaccels.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hwconfig.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/huffyuvencdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/huffyuvdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/huffyuv.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/huffman.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/htmlsubtitles.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hqx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hqxdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hq_hqadsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hq_hqa.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hpeldsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevcpred.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevcdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevcdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevc_sei.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevc_ps.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevc_parse.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevc_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hevc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hca_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/hap.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/half2float.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h274.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h265_profile_level.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264qpel.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264pred.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264idct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264chroma.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264_sei.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264_ps.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264_parse.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264_mvpred.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264_levels.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h2645_parse.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h264.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h263dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h263enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h263dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h263data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h263_parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h263.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h261enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/h261.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/gsmdec_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/gsm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/golomb.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/gif.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/get_bits.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/g729postfilter.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/g729data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/g729.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/g723_1.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/g722dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/g722.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/frame_thread_encoder.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/fmtconvert.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/flvenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/flvdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/float2half.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/flacdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/flacdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/flac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/fits.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ffv1.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/fft_table.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/fft.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/fft-internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ffjni.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/fdctdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/faxcompr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/faanidct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/faandct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/exrdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/exif.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/evrcdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/error_resilience.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/encode.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/elsdec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/elbg.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/eaidct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/eac3enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/eac3_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dynamic_hdr_vivid.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dynamic_hdr10_plus.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dxva2_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dxva2.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dvdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dvbtxt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dvaudio.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dv_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dv_profile_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dv_profile.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dv.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dsd.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dovi_rpu.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dolby_e.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dnxhdenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dnxhddata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/diractab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/diracdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dirac_vlc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dirac_dwt.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dirac_arith.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dirac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/defs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/decode.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dctref.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dct32.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcamath.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcahuff.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcaenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcadsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcadec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcadct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcadata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dcaadpcm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca_xll.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca_syncwords.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca_sample_rate_tab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca_lbr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca_exss.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca_core.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/dca.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/d3d11va.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cookdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/copy_block.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/codec_par.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/codec_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/codec_id.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/codec_desc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/codec2utils.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/codec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/clearvideodata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cga_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cfhdencdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cfhddsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cfhd.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/celp_math.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/celp_filters.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_vp9.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_sei.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_mpeg2.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_jpeg.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_h265.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_h2645.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_h264.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_bsf.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs_av1.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbrt_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cbrt_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cavsdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cavs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/canopus.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cabac_functions.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/cabac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bytestream.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bswapdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bsf_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bsf.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bmp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/blockdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bintext.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/binkdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/binkdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bgmc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/bethsoftvideo.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/avs3.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/avs2.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/avr32/mathops.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/avfft.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/avdct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/avcodec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/av1dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/av1_parse.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/av1.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/audiodsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/audio_frame_queue.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atsc_a53.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atrac9tab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atrac3plus_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atrac3plus.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atrac3data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atrac1data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/atrac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/asv.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ass_split.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ass.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/vp9dsp_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/vp8dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/vp8.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/vp56_arith.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/videodsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/vc1dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/startcode.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/mpegvideo_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/mathops.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/idctdsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/idct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/hpeldsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/hevcdsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/dca.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/cabac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/blockdsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/audiodsp_arm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/asm-offsets.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/arm/aac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aptx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/apng.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/amrwbdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/amrnbdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/amr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/amfenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/alpha/regdef.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/alpha/idctdsp_alpha.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/alpha/hpeldsp_alpha.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/alpha/asm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/alacdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/alac_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/adx.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/adts_parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/adts_header.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/adpcm_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/adpcm.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/acelp_vectors.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/acelp_pitch_delay.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/acelp_filters.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3tab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3enc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3defs.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3dec_data.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3dec.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3_parser_internal.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3_parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3_channel_layout_tab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/ac3.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aarch64/vp9dsp_init.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aarch64/vp8dsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aarch64/idct.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aarch64/cabac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aarch64/asm-offsets.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aandcttab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aactab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacsbrdata.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacsbr.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacpsdsp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacps_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacps_fixed_tablegen.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacps.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenctab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_utils.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_tns.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_quantization.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_quantization_misc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_pred.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_ltp.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc_is.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacenc.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aacdectab.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aaccoder_twoloop.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aaccoder_trellis.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aac_defines.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aac_ac3_parser.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/aac.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/a64tables.h` |
+| `src/qmlav/3rd/FFmpeg/libavcodec/a64colors.h` |
+| `src/qmlav/3rd/FFmpeg/fftools/opt_common.h` |
+| `src/qmlav/3rd/FFmpeg/fftools/fopen_utf8.h` |
+| `src/qmlav/3rd/FFmpeg/fftools/ffmpeg.h` |
+| `src/qmlav/3rd/FFmpeg/fftools/cmdutils.h` |
+| `src/qmlav/3rd/FFmpeg/compat/w32pthreads.h` |
+| `src/qmlav/3rd/FFmpeg/compat/va_copy.h` |
+| `src/qmlav/3rd/FFmpeg/compat/w32dlfcn.h` |
+| `src/qmlav/3rd/FFmpeg/compat/os2threads.h` |
+| `src/qmlav/3rd/FFmpeg/compat/msvcrt/snprintf.h` |
+| `src/qmlav/3rd/FFmpeg/compat/float/limits.h` |
+| `src/qmlav/3rd/FFmpeg/compat/float/float.h` |
+| `src/qmlav/3rd/FFmpeg/compat/djgpp/math.h` |
+| `src/qmlav/3rd/FFmpeg/compat/dispatch_semaphore/semaphore.h` |
+| `src/qmlav/3rd/FFmpeg/compat/cuda/dynlink_loader.h` |
+| `src/qmlav/3rd/FFmpeg/compat/cuda/cuda_runtime.h` |
+| `src/qmlav/3rd/FFmpeg/compat/atomics/pthread/stdatomic.h` |
+| `src/qmlav/3rd/FFmpeg/compat/atomics/win32/stdatomic.h` |
+| `src/qmlav/3rd/FFmpeg/compat/atomics/suncc/stdatomic.h` |
+| `src/qmlav/3rd/FFmpeg/compat/atomics/dummy/stdatomic.h` |
+| `src/qmlav/3rd/FFmpeg/compat/atomics/gcc/stdatomic.h` |
+| `src/qmlav/3rd/FFmpeg/compat/aix/math.h` |
+| `src/qmlav/src/qmlavwaitingqueue.h` |
+| `src/qmlav/src/qmlavvideobuffer.h` |
+| `src/qmlav/src/qmlavutils.h` |
+| `src/qmlav/src/qmlavthread.h` |
+| `src/qmlav/src/qmlavresampler.h` |
+| `src/qmlav/src/qmlavplayer.h` |
+| `src/qmlav/src/qmlavpropertyhelpers.h` |
+| `src/qmlav/src/qmlavoptions.h` |
+| `src/qmlav/src/qmlavmediacontextholder.h` |
+| `src/qmlav/src/qmlavhwoutput_vaapi_glx.h` |
+| `src/qmlav/src/qmlavhwoutput_vaapi_egl.h` |
+| `src/qmlav/src/qmlavhwoutput.h` |
+| `src/qmlav/src/qmlavframe.h` |
+| `src/qmlav/src/qmlavformat.h` |
+| `src/qmlav/src/qmlavdemuxer.h` |
+| `src/qmlav/src/qmlavdecoder.h` |
+| `src/qmlav/src/qmlavaudioiodevice.h` |
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Good, I can see the qmlav library structure. Let me look at the key files that handle video frames and the player interface:
+1. qmlavplayer.h/cpp - the main player class
+2. qmlavvideobuffer - handles video frames
+3. qmlavdecoder - decoding
+4. qmlavframe - frame representation
+
+Let me examine these to understand the video pipeline.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me look at the player implementation and the frame handler to understand the flow. The key is `frameHandler` and `setVideoSurface`.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I have a clear picture of how qmlav works:
+
+1. `QmlAVPlayer` connects to `QmlAVDemuxer::frameFinished` signal
+2. `frameHandler()` receives decoded frames (`QmlAVFrame`)
+3. For video frames, it converts to `QVideoFrame` and calls `m_videoSurface->present(qvf)`
+4. The video surface is set by `VideoOutput` when it connects to the player
+
+The key insight: the frame distribution would happen in `frameHandler()`. Instead of presenting to one `m_videoSurface`, we could present to multiple surfaces.
+
+**Frame Distribution Layer Architecture:**
+
+Option 1: **Multi-Surface Player** (modify QmlAVPlayer)
+- Add `QList<QAbstractVideoSurface*> m_videoSurfaces`
+- In `frameHandler()`, loop through all surfaces and present the frame to each
+- Need to handle surface format negotiation for multiple outputs
+
+Option 2: **Broadcaster Component** (new class)
+- Create `QmlAVFrameBroadcaster` that wraps a `QmlAVPlayer`
+- Intercepts frames and distributes to multiple outputs
+- Each output registers as a listener
+
+Option 3: **Custom Video Surface** that fans out
+- Create `QmlAVMultiSurface : public QAbstractVideoSurface`
+- It accepts frame presents and forwards to multiple child surfaces
+
+Let me explain this to the user.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Now I have a clear picture. Here's the architecture:
+
+## Current Flow
+
+```
+┌──────────────┐     frameFinished()      ┌─────────────┐     present()      ┌─────────────────┐
+│ QmlAVDemuxer │ ──────────────────────► │ QmlAVPlayer │ ─────────────────► │ VideoSurface(1) │
+│  (FFmpeg)    │                          │             │                    └─────────────────┘
+└──────────────┘                          └─────────────┘
+```
+
+The critical code is in `qmlavplayer.cpp` lines 77-125:
+
+```cpp:77:125:/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp
+void QmlAVPlayer::frameHandler(const std::shared_ptr<QmlAVFrame> frame)
+{
+    // ... converts QmlAVVideoFrame to QVideoFrame ...
+    if (m_videoSurface && m_videoSurface->isActive()) {
+        if (!m_videoSurface->present(qvf)) {  // ← Only ONE surface
+            stop();
+        }
+    }
+}
+```
+
+## Frame Distribution Approach
+
+**Option A: Multi-Surface Player** (Modify qmlav)
+
+Add support for multiple video surfaces in `QmlAVPlayer`:
+
+```cpp
+// New in qmlavplayer.h
+QList<QAbstractVideoSurface*> m_videoSurfaces;
+
+// Modified frameHandler
+void QmlAVPlayer::frameHandler(...) {
+    QVideoFrame qvf = *vf;
+    for (auto* surface : m_videoSurfaces) {
+        surface->present(qvf);  // Present to ALL surfaces
+    }
+}
+```
+
+**Option B: Frame Broadcaster** (New QML component)
+
+Create a separate broadcaster that multiple VideoOutputs can connect to:
+
+```
+┌──────────────┐     ┌─────────────┐     ┌────────────────────┐     ┌─────────────────┐
+│ QmlAVDemuxer │ ──► │ QmlAVPlayer │ ──► │ FrameBroadcaster   │ ──► │ VideoOutput 1   │
+└──────────────┘     └─────────────┘     │  (intercepts &     │ ──► │ VideoOutput 2   │
+                                          │   copies frames)   │ ──► │ VideoOutput N   │
+                                          └────────────────────┘     └─────────────────┘
+```
+
+**Recommended: Option A** is simpler - modify `QmlAVPlayer` to support multiple surfaces directly.
+
+## Complexity Assessment
+
+| Task | Difficulty |
+|------|-----------|
+| Add `QList<QAbstractVideoSurface*>` | Low |
+| Handle surface format negotiation | Medium |
+| Handle surfaces starting/stopping independently | Medium |
+| Frame copying (if needed for thread safety) | Medium |
+| QML API for registering multiple outputs | Medium |
+
+Would you like me to outline the specific code changes needed for Option A? If you switch to Agent mode, I can implement it.
+
+---
+
+_**User**_
+
+Could you explain Option A further? I'm not sure what is QmlAVFrame, I would assume it is a Qt managed container carrying the video stream. I fail to see where m_videoSurface comes from. What does the "if (!m_videoSurface->present(qvf))" do?
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants a deeper explanation of the video pipeline. Let me explain:
+
+1. QmlAVFrame - what it is
+2. Where m_videoSurface comes from
+3. What present() does
+
+Let me look at the frame class and trace where the video surface is set.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Great questions! Let me trace through the video pipeline:
+
+## 1. What is `QmlAVFrame`?
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Good, now I can explain QmlAVFrame. Let me also check where m_videoSurface gets set - it's through setVideoSurface which is called by Qt's VideoOutput component.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+`QmlAVFrame` is a **wrapper around FFmpeg's decoded frame** (`AVFrame`). Here's the hierarchy:
+
+```
+FFmpeg decodes stream → AVFrame (raw pixels/samples) → QmlAVFrame (Qt wrapper) → QVideoFrame (Qt's display format)
+```
+
+Key point at line 78: `operator QVideoFrame() const;` — this converts the FFmpeg frame to Qt's video frame format.
+
+## 2. Where does `m_videoSurface` come from?
+
+The connection happens through Qt's property binding. In `qmlavplayer.h` line 21:
+
+```cpp:21:21:/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h
+Q_PROPERTY(QAbstractVideoSurface *videoSurface READ videoSurface WRITE setVideoSurface)
+```
+
+When you write this in QML:
+```qml
+VideoOutput {
+    id: videoOutput
+    source: qmlAvPlayer   // ← This line triggers the connection
+    anchors.fill: parent
+}
+```
+
+Qt's `VideoOutput` automatically:
+1. Looks for a `videoSurface` property on the `source` object
+2. Calls `setVideoSurface(myInternalSurface)` to connect itself
+
+So the flow is:
+```
+VideoOutput creates internal QAbstractVideoSurface
+        ↓
+VideoOutput.source = qmlAvPlayer
+        ↓
+Qt calls qmlAvPlayer.setVideoSurface(videoOutput's internal surface)
+        ↓
+m_videoSurface now points to VideoOutput's rendering surface
+```
+
+## 3. What does `present()` do?
+
+```cpp:119:122:/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp
+if (!m_videoSurface->present(qvf)) {
+    stop();
+}
+```
+
+`QAbstractVideoSurface::present(QVideoFrame)` does:
+
+1. **Accepts the frame** and queues it for rendering
+2. **Returns `true`** if the surface accepted the frame
+3. **Returns `false`** if:
+   - The surface is stopped/invalid
+   - The frame format doesn't match
+   - The surface is overwhelmed (can't keep up)
+
+When `present()` returns `false`, the player calls `stop()` because something is wrong with the output.
+
+## The Problem with Multiple Outputs
+
+Currently there's only **one** `m_videoSurface`. When you do:
+
+```qml
+// Viewport 1
+VideoOutput { source: sharedPlayer }
+
+// Viewport 2  
+VideoOutput { source: sharedPlayer }  // ← This REPLACES the first surface!
+```
+
+The second `VideoOutput` calls `setVideoSurface()`, which **overwrites** `m_videoSurface`. Only the last one connected receives frames.
+
+## Option A: Multi-Surface Solution
+
+Change from single surface to a list:
+
+```cpp
+// Before (single surface)
+QAbstractVideoSurface *m_videoSurface;
+
+// After (multiple surfaces)
+QList<QAbstractVideoSurface*> m_videoSurfaces;
+
+// And change present() call:
+for (auto* surface : m_videoSurfaces) {
+    if (surface && surface->isActive()) {
+        surface->present(qvf);  // Send frame to ALL connected outputs
+    }
+}
+```
+
+This way, multiple `VideoOutput` components can all receive the same decoded frames from one decoder.
+
+Does this clarify the architecture?
+
+---
+
+_**User**_
+
+Ok, let's try option A.

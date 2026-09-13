@@ -9,44 +9,94 @@ FocusScope {
     property string color: "black"
     property var avOptions: ({})
 
-    // Stream pool support - when enabled, player keeps running when hidden
+    // Stream pool support - when enabled, uses shared players from pool
     property var streamPool: null
-    property bool keepRunning: streamPool !== null && streamPool.enabled
+    property bool usePool: streamPool !== null && streamPool.enabled
+    
+    // Source URL for the video
+    property url source: ""
+    
+    // Properties that work with both modes
+    property int loops: MediaPlayer.Infinite
+    property bool muted: false
+    property real volume: 1.0
+    readonly property bool hasAudio: _activePlayer ? _activePlayer.hasAudio : false
+    
+    // Internal: the active player (either pooled or local)
+    property var _activePlayer: usePool ? _pooledPlayer : localPlayer
+    property var _pooledPlayer: null
+    property url _lastPooledSource: ""
+    property var _lastPooledOptions: null
 
-    property alias loops: qmlAvPlayer.loops
-    property alias source: qmlAvPlayer.source
-    property alias muted: qmlAvPlayer.muted
-    property alias volume: qmlAvPlayer.volume
-    readonly property alias hasAudio: qmlAvPlayer.hasAudio
+    // Acquire pooled player when source changes and pool is enabled
+    onSourceChanged: _updatePooledPlayer()
+    onAvOptionsChanged: _updatePooledPlayer()
+    onUsePoolChanged: _updatePooledPlayer()
+
+    function _updatePooledPlayer() {
+        if (usePool && source.toString() !== "") {
+            // Release previous pooled player if source changed
+            if (_pooledPlayer && (_lastPooledSource.toString() !== source.toString())) {
+                streamPool.releasePlayer(_lastPooledSource, _lastPooledOptions);
+                _pooledPlayer = null;
+            }
+            
+            // Acquire new player from pool
+            if (!_pooledPlayer) {
+                var defaultOpts = layoutsCollectionSettings.toJSValue("defaultAVFormatOptions");
+                _pooledPlayer = streamPool.acquirePlayer(source, avOptions, defaultOpts);
+                _lastPooledSource = source;
+                _lastPooledOptions = avOptions;
+                
+                if (_pooledPlayer) {
+                    console.log("Player: Using pooled player for", source);
+                }
+            }
+        } else if (_pooledPlayer) {
+            // Pool disabled or no source - release pooled player
+            streamPool.releasePlayer(_lastPooledSource, _lastPooledOptions);
+            _pooledPlayer = null;
+            _lastPooledSource = "";
+            _lastPooledOptions = null;
+        }
+    }
 
     onVisibleChanged: {
-        if (visible) {
-            if (!timer.running) {
-                timer.start();
+        if (!usePool) {
+            // Local player mode - original behavior
+            if (visible) {
+                if (!timer.running) {
+                    timer.start();
+                }
+            } else {
+                timer.stop();
+                localPlayer.autoPlay = false;
+                localPlayer.stop();
             }
-        } else if (!keepRunning) {
-            // Only stop if keepRunning is disabled
-            timer.stop();
-            qmlAvPlayer.autoPlay = false;
-            qmlAvPlayer.stop();
         }
-        // When keepRunning is true and becoming invisible, do nothing - keep playing
+        // In pool mode, visibility doesn't affect playback - pool manages it
     }
 
     Component.onCompleted: {
-        if (visible) {
+        _updatePooledPlayer();
+        if (visible && !usePool) {
             timer.start();
+        }
+    }
+    
+    Component.onDestruction: {
+        // Release pooled player on destruction
+        if (_pooledPlayer && streamPool) {
+            streamPool.releasePlayer(_lastPooledSource, _lastPooledOptions);
         }
     }
 
     Timer {
         id: timer
-
         interval: 50
-
         onTriggered: {
-            if (root.visible || root.keepRunning) {
-                qmlAvPlayer.autoPlay = true;
+            if (root.visible && !root.usePool) {
+                localPlayer.autoPlay = true;
             }
         }
     }
@@ -58,65 +108,82 @@ FocusScope {
 
         VideoOutput {
             id: videoOutput
-
-            source: qmlAvPlayer
+            // Source is either the pooled player's mediaObject or local player
+            source: root._activePlayer ? (root.usePool ? root._activePlayer.mediaObject : root._activePlayer) : null
             anchors.fill: parent
         }
 
         Text {
             id: message
-
             color: "white"
-            visible: qmlAvPlayer.status !== MediaPlayer.Buffered
+            visible: root._activePlayer ? root._activePlayer.status !== MediaPlayer.Buffered : true
             anchors.centerIn: parent
-        }
-
-        QmlAVPlayer {
-            id: qmlAvPlayer
-
-            autoLoad: false
-
-            avOptions: {
-                var avOptions = root.avOptions;
-                Object.assignDefault(avOptions, layoutsCollectionSettings.toJSValue("defaultAVFormatOptions"));
-                return avOptions;
-            }
-
-            onStatusChanged: {
-                switch (status) {
+            text: {
+                if (!root._activePlayer) return qsTr("No media");
+                switch (root._activePlayer.status) {
                 case MediaPlayer.NoMedia:
-                    message.text = qsTr("No media");
-                    break;
+                    return qsTr("No media");
                 case MediaPlayer.Loading:
-                    message.text = qsTr("Loading...");
-                    break;
+                    return qsTr("Loading...");
                 case MediaPlayer.Loaded:
-                    message.text = qsTr("Loaded");
-                    break;
-                case MediaPlayer.Buffering:
-                    break;
+                    return qsTr("Loaded");
                 case MediaPlayer.Stalled:
-                    message.text = qsTr("Stalled");
-                    break;
-                case MediaPlayer.Buffered:
-                    break;
+                    return qsTr("Stalled");
                 case MediaPlayer.EndOfMedia:
-                    message.text = qsTr("End of media");
-                    break;
+                    return qsTr("End of media");
                 case MediaPlayer.InvalidMedia:
-                    message.text = qsTr("Error!");
-                    break;
-                case MediaPlayer.UnknownStatus:
-                    break;
+                    return qsTr("Error!");
+                default:
+                    return "";
                 }
             }
+        }
 
-            onBufferProgressChanged: {
-                message.text = qsTr("Buffering %1\%").arg(Math.round(bufferProgress * 100));
+        // Local player - only used when pool is disabled
+        QmlAVPlayer {
+            id: localPlayer
+
+            autoLoad: false
+            source: root.usePool ? "" : root.source
+            loops: root.loops
+            muted: root.muted
+            volume: root.volume
+
+            avOptions: {
+                var opts = root.avOptions;
+                Object.assignDefault(opts, layoutsCollectionSettings.toJSValue("defaultAVFormatOptions"));
+                return opts;
+            }
+        }
+        
+        // Buffer progress display
+        Connections {
+            target: root._activePlayer
+            function onBufferProgressChanged() {
+                if (root._activePlayer && root._activePlayer.status === MediaPlayer.Buffering) {
+                    message.text = qsTr("Buffering %1\%").arg(Math.round(root._activePlayer.bufferProgress * 100));
+                }
             }
         }
     }
 
-    function play() { qmlAvPlayer.play(); }
-    function stop() { qmlAvPlayer.stop(); }
+    function play() {
+        if (_activePlayer) {
+            if (usePool && _activePlayer.mediaObject) {
+                _activePlayer.mediaObject.play();
+            } else {
+                _activePlayer.play();
+            }
+        }
+    }
+    
+    function stop() {
+        if (_activePlayer) {
+            if (usePool && _activePlayer.mediaObject) {
+                _activePlayer.mediaObject.stop();
+            } else {
+                _activePlayer.stop();
+            }
+        }
+    }
 }

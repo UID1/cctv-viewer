@@ -37,46 +37,46 @@
 <context>
     <name>Player</name>
     <message>
-        <location filename="../src/Player.qml" line="225"/>
-        <location filename="../src/Player.qml" line="225"/>
+        <location filename="../src/Player.qml" line="122"/>
+        <location filename="../src/Player.qml" line="125"/>
+        <location filename="../src/Player.qml" line="122"/>
+        <location filename="../src/Player.qml" line="125"/>
         <source>No media</source>
         <translation>Нет источника</translation>
     </message>
     <message>
-        <location filename="../src/Player.qml" line="228"/>
-        <location filename="../src/Player.qml" line="228"/>
+        <location filename="../src/Player.qml" line="127"/>
+        <location filename="../src/Player.qml" line="127"/>
         <source>Loading...</source>
         <translation>Загрузка...</translation>
     </message>
     <message>
-        <location filename="../src/Player.qml" line="231"/>
-        <location filename="../src/Player.qml" line="231"/>
+        <location filename="../src/Player.qml" line="129"/>
+        <location filename="../src/Player.qml" line="129"/>
         <source>Loaded</source>
         <translation>Загружено</translation>
     </message>
     <message>
-        <location filename="../src/Player.qml" line="236"/>
-        <location filename="../src/Player.qml" line="236"/>
+        <location filename="../src/Player.qml" line="131"/>
+        <location filename="../src/Player.qml" line="131"/>
         <source>Stalled</source>
         <translation>Застопорено</translation>
     </message>
     <message>
-        <location filename="../src/Player.qml" line="241"/>
-        <location filename="../src/Player.qml" line="241"/>
+        <location filename="../src/Player.qml" line="133"/>
+        <location filename="../src/Player.qml" line="133"/>
         <source>End of media</source>
         <translation>Конец источника</translation>
     </message>
     <message>
-        <location filename="../src/Player.qml" line="244"/>
-        <location filename="../src/Player.qml" line="244"/>
+        <location filename="../src/Player.qml" line="135"/>
+        <location filename="../src/Player.qml" line="135"/>
         <source>Error!</source>
         <translation>Ошибка!</translation>
     </message>
     <message>
-        <location filename="../src/Player.qml" line="204"/>
-        <location filename="../src/Player.qml" line="217"/>
-        <location filename="../src/Player.qml" line="204"/>
-        <location filename="../src/Player.qml" line="217"/>
+        <location filename="../src/Player.qml" line="164"/>
+        <location filename="../src/Player.qml" line="164"/>
         <source>Buffering %1%</source>
         <translation>Буферизация %1%</translation>
     </message>

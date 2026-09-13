@@ -23,17 +23,22 @@ Item {
     property alias status: player.status
     property alias bufferProgress: player.bufferProgress
 
-    // The actual player
+    // The actual player - with multi-surface mode for shared usage
     QmlAVPlayer {
         id: player
 
         autoLoad: false  // Don't auto-load, we control this via timer
+        multiSurfaceMode: true  // Enable multi-surface support for pool sharing
 
         onStatusChanged: {
             // Auto-restart on errors after a delay
             if (status === MediaPlayer.InvalidMedia || status === MediaPlayer.Stalled) {
                 restartTimer.start();
             }
+        }
+        
+        onVideoSurfaceCountChanged: {
+            console.log("StreamPoolPlayer: Surface count changed to", videoSurfaceCount, "for", source);
         }
     }
 

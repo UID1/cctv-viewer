@@ -333,6 +333,7 @@
   /usr/include/x86_64-linux-gnu/libswresample/version.h \
   /usr/include/x86_64-linux-gnu/libswresample/version_major.h \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/QIODevice \
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/QList \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/QLoggingCategory \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/QSharedDataPointer \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/QString \

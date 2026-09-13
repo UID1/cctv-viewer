@@ -420,6 +420,8 @@ src/qmlav/src/tests/CMakeFiles/tests.dir/tests_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QTimer \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qbasictimer.h \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/QList \
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/qlist.h \
  /home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests_autogen/UOMHZE5JMV/../../../../../../../src/qmlav/src/qmlavframe.h \
  /usr/include/x86_64-linux-gnu/qt5/QtMultimedia/QAudioFormat \
  /usr/include/x86_64-linux-gnu/qt5/QtMultimedia/qaudioformat.h \
