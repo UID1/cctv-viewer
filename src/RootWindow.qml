@@ -109,6 +109,13 @@ ApplicationWindow {
         category: "Viewport"
 
         property bool unmuteWhenFullScreen: false
+        property bool persistentStreams: false
+    }
+
+    // Stream pool for persistent video streams across preset switches
+    StreamPool {
+        id: globalStreamPool
+        enabled: viewportSettings.persistentStreams
     }
 
     Settings {
@@ -240,6 +247,7 @@ ApplicationWindow {
                 ViewportsLayout {
                     model: layoutModel
                     focus: true
+                    streamPool: viewportSettings.persistentStreams ? globalStreamPool : null
                 }
             }
 

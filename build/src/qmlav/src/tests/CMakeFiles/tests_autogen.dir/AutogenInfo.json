@@ -1,0 +1,317 @@
+{
+	"BUILD_DIR" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests_autogen",
+	"CMAKE_BINARY_DIR" : "/home/bot/developer_home/cctv-viewer/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/bot/developer_home/cctv-viewer/src/qmlav/src/tests",
+	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/tests/CMakeLists.txt",
+		"/usr/share/cmake-3.28/Modules/FindGTest.cmake",
+		"/usr/share/cmake-3.28/Modules/GoogleTest.cmake",
+		"/usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake",
+		"/usr/share/cmake-3.28/Modules/FindPackageMessage.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/GTest/GTestConfigVersion.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/GTest/GTestConfig.cmake",
+		"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+		"/usr/share/cmake-3.28/Modules/FindThreads.cmake",
+		"/usr/share/cmake-3.28/Modules/CheckLibraryExists.cmake",
+		"/usr/share/cmake-3.28/Modules/CheckIncludeFile.cmake",
+		"/usr/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake",
+		"/usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake",
+		"/usr/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake",
+		"/usr/share/cmake-3.28/Modules/FindPackageMessage.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/GTest/GTestTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/GTest/GTestTargets-none.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/GTest/GMockTargets.cmake",
+		"/usr/lib/x86_64-linux-gnu/cmake/GTest/GMockTargets-none.cmake",
+		"/usr/share/cmake-3.28/Modules/GoogleTest.cmake",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/tests/qmlavthread.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavwaitingqueue.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavpropertyhelpers.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavmediacontextholder.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavutils.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavutils.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavoptions.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavoptions.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavthread.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavthread.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdecoder.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdecoder.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavformat.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavformat.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavresampler.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavresampler.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_glx.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_glx.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_egl.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_egl.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavaudioiodevice.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavaudioiodevice.h",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h"
+	],
+	"CMAKE_SOURCE_DIR" : "/home/bot/developer_home/cctv-viewer",
+	"DEP_FILE" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "tests_autogen/timestamp",
+	"HEADERS" : 
+	[
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavaudioiodevice.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavaudioiodevice.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdecoder.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavdecoder.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavdemuxer.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavformat.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavformat.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavframe.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavhwoutput.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_egl.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavhwoutput_vaapi_egl.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_glx.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavhwoutput_vaapi_glx.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavmediacontextholder.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavmediacontextholder.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavoptions.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavoptions.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavplayer.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavpropertyhelpers.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavpropertyhelpers.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavresampler.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavresampler.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavthread.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavthread.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavutils.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavutils.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavvideobuffer.cpp",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavwaitingqueue.h",
+			"MU",
+			"UOMHZE5JMV/moc_qmlavwaitingqueue.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"APP_NAME=\"CCTV Viewer\"",
+		"APP_VERSION=\"0.1.9-alpha GIT.29f1eaf (x86_64)\"",
+		"ORG_DOMAIN=\"cctv-viewer.org\"",
+		"ORG_NAME=\"CCTV Viewer\"",
+		"QT_CORE_LIB",
+		"QT_DISABLE_DEPRECATED_BEFORE=0x050F00",
+		"QT_GUI_LIB",
+		"QT_MULTIMEDIA_LIB",
+		"QT_NETWORK_LIB",
+		"QT_NO_DEBUG",
+		"QT_QMLMODELS_LIB",
+		"QT_QML_LIB",
+		"QT_QUICK_LIB"
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests",
+		"/home/bot/developer_home/cctv-viewer/src/qmlav/src/tests",
+		"/usr/include/x86_64-linux-gnu/qt5",
+		"/usr/include/x86_64-linux-gnu/qt5/QtCore",
+		"/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++",
+		"/usr/include/x86_64-linux-gnu/qt5/QtQuick",
+		"/usr/include/x86_64-linux-gnu/qt5/QtQmlModels",
+		"/usr/include/x86_64-linux-gnu/qt5/QtQml",
+		"/usr/include/x86_64-linux-gnu/qt5/QtNetwork",
+		"/usr/include/x86_64-linux-gnu/qt5/QtGui",
+		"/usr/include/x86_64-linux-gnu/qt5/QtMultimedia",
+		"/usr/include/x86_64-linux-gnu",
+		"/usr/include",
+		"/usr/include/c++/13",
+		"/usr/include/x86_64-linux-gnu/c++/13",
+		"/usr/include/c++/13/backward",
+		"/usr/lib/gcc/x86_64-linux-gnu/13/include",
+		"/usr/local/include"
+	],
+	"MOC_MACRO_NAMES" : [ "Q_OBJECT", "Q_GADGET", "Q_NAMESPACE", "Q_NAMESPACE_EXPORT" ],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-std=gnu++17",
+		"-dM",
+		"-E",
+		"-c",
+		"/usr/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/tests_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : [],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 14,
+	"PARSE_CACHE_FILE" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/CMakeFiles/tests_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/usr/lib/qt5/bin/moc",
+	"QT_UIC_EXECUTABLE" : "",
+	"QT_VERSION_MAJOR" : 5,
+	"QT_VERSION_MINOR" : 15,
+	"SETTINGS_FILE" : "/home/bot/developer_home/cctv-viewer/build/src/qmlav/src/tests/CMakeFiles/tests_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavaudioiodevice.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdecoder.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavformat.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_egl.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput_vaapi_glx.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavoptions.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavresampler.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavthread.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavutils.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/bot/developer_home/cctv-viewer/src/qmlav/src/tests/qmlavthread.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : [],
+	"UIC_UI_FILES" : [],
+	"VERBOSITY" : 0
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<RCC>
+    <qresource prefix="/">
+        <file alias="qtquickcontrols2.conf">../qtquickcontrols2.conf</file>
+        <file alias="translations/cctv-viewer_ru_RU.qm">../translations/cctv-viewer_ru_RU.qm</file>
+        <file alias="src/RootWindow.qml">../src/RootWindow.qml</file>
+        <file alias="src/SettingsDialog.qml">../src/SettingsDialog.qml</file>
+        <file alias="src/Player.qml">../src/Player.qml</file>
+        <file alias="src/ViewportsLayout.qml">../src/ViewportsLayout.qml</file>
+        <file alias="src/SideBar.qml">../src/SideBar.qml</file>
+        <file alias="src/SideBarItem.qml">../src/SideBarItem.qml</file>
+        <file alias="images/cctv-viewer.svg">../images/cctv-viewer.svg</file>
+        <file alias="images/cctv-viewer.ico">../images/cctv-viewer.ico</file>
+        <file alias="images/menu-viewport.svg">../images/menu-viewport.svg</file>
+        <file alias="images/menu-tools.svg">../images/menu-tools.svg</file>
+        <file alias="images/menu-settings.svg">../images/menu-settings.svg</file>
+        <file alias="images/menu-presets.svg">../images/menu-presets.svg</file>
+        <file alias="images/menu.svg">../images/menu.svg</file>
+        <file alias="images/menu-collapse.svg">../images/menu-collapse.svg</file>
+        <file alias="images/menu-item-collapse.svg">../images/menu-item-collapse.svg</file>
+        <file alias="src/imports/CCTV_Viewer/Utils/qmldir">../src/imports/CCTV_Viewer/Utils/qmldir</file>
+        <file alias="src/imports/CCTV_Viewer/Utils/utils.js">../src/imports/CCTV_Viewer/Utils/utils.js</file>
+        <file alias="src/imports/CCTV_Viewer/Themes/qmldir">../src/imports/CCTV_Viewer/Themes/qmldir</file>
+        <file alias="src/imports/CCTV_Viewer/Themes/Compact.qml">../src/imports/CCTV_Viewer/Themes/Compact.qml</file>
+        <file alias="Compact/Button.qml">../src/imports/CCTV_Viewer/Themes/Compact/Button.qml</file>
+        <file alias="Compact/Frame.qml">../src/imports/CCTV_Viewer/Themes/Compact/Frame.qml</file>
+        <file alias="Compact/GroupBox.qml">../src/imports/CCTV_Viewer/Themes/Compact/GroupBox.qml</file>
+        <file alias="Compact/TextField.qml">../src/imports/CCTV_Viewer/Themes/Compact/TextField.qml</file>
+        <file alias="Compact/CheckBox.qml">../src/imports/CCTV_Viewer/Themes/Compact/CheckBox.qml</file>
+        <file alias="Compact/ToolTip.qml">../src/imports/CCTV_Viewer/Themes/Compact/ToolTip.qml</file>
+        <file alias="images/github.svg">../images/github.svg</file>
+        <file alias="src/PresetIndicator.qml">../src/PresetIndicator.qml</file>
+        <file alias="images/play.svg">../images/play.svg</file>
+        <file alias="images/pause.svg">../images/pause.svg</file>
+        <file alias="src/CursorShape.qml">../src/CursorShape.qml</file>
+        <file alias="src/StreamPool.qml">../src/StreamPool.qml</file>
+        <file alias="src/StreamPoolPlayer.qml">../src/StreamPoolPlayer.qml</file>
+    </qresource>
+</RCC>

@@ -12,6 +12,7 @@ FocusScope {
     property var size: model.size
     property var model: ViewportsLayoutModel {}
     property string color: "black"
+    property var streamPool: null
 
     readonly property alias fullScreenIndex: d.fullScreenIndex
     readonly property alias focusIndex: d.focusIndex
@@ -434,6 +435,7 @@ FocusScope {
                             volume: Math.max(viewport.volume, root.fullScreenIndex === index && viewportSettings.unmuteWhenFullScreen)
                             avOptions: viewport.avFormatOptions
                             loops: MediaPlayer.Infinite
+                            streamPool: root.streamPool
                             
                             // Apply zoom transformation when zoom is enabled
                             scale: viewport.zoomEnabled ? viewport.zoomScale : 1.0

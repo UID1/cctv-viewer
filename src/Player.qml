@@ -7,8 +7,11 @@ FocusScope {
     id: root
 
     property string color: "black"
-
     property var avOptions: ({})
+
+    // Stream pool support - when enabled, player keeps running when hidden
+    property var streamPool: null
+    property bool keepRunning: streamPool !== null && streamPool.enabled
 
     property alias loops: qmlAvPlayer.loops
     property alias source: qmlAvPlayer.source
@@ -21,12 +24,15 @@ FocusScope {
             if (!timer.running) {
                 timer.start();
             }
-        } else {
+        } else if (!keepRunning) {
+            // Only stop if keepRunning is disabled
             timer.stop();
             qmlAvPlayer.autoPlay = false;
             qmlAvPlayer.stop();
         }
+        // When keepRunning is true and becoming invisible, do nothing - keep playing
     }
+
     Component.onCompleted: {
         if (visible) {
             timer.start();
@@ -39,7 +45,7 @@ FocusScope {
         interval: 50
 
         onTriggered: {
-            if (root.visible) {
+            if (root.visible || root.keepRunning) {
                 qmlAvPlayer.autoPlay = true;
             }
         }
@@ -57,14 +63,6 @@ FocusScope {
             anchors.fill: parent
         }
 
-//        Rectangle {
-//            id: shutter
-
-//            color: root.color
-//            visible: qmlAvPlayer.status !== MediaPlayer.Buffering && qmlAvPlayer.status !== MediaPlayer.Buffered
-//            anchors.fill: parent
-//        }
-
         Text {
             id: message
 
@@ -80,10 +78,7 @@ FocusScope {
 
             avOptions: {
                 var avOptions = root.avOptions;
-
-                // BUG: Без этого кода значения по умолчанию не устанавливаются. Это не должно происходить в коде плеера!
                 Object.assignDefault(avOptions, layoutsCollectionSettings.toJSValue("defaultAVFormatOptions"));
-
                 return avOptions;
             }
 
@@ -123,7 +118,5 @@ FocusScope {
     }
 
     function play() { qmlAvPlayer.play(); }
-//    function pause() { mediaPlayer.pause(); }
-//    function seek(position) { mediaPlayer.seek(position); }
     function stop() { qmlAvPlayer.stop(); }
 }

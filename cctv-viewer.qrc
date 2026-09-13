@@ -32,5 +32,7 @@
         <file>images/play.svg</file>
         <file>images/pause.svg</file>
         <file>src/CursorShape.qml</file>
+        <file>src/StreamPool.qml</file>
+        <file>src/StreamPoolPlayer.qml</file>
     </qresource>
 </RCC>

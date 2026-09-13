@@ -78,6 +78,12 @@ Dialog {
                     text: qsTr("Unmute when the viewport is in full screen mode")
                 }
 
+                CheckBox {
+                    id: persistentStreamsCheckBox
+
+                    text: qsTr("Keep streams running between preset switches")
+                }
+
                 Label {
                     text: qsTr("Default FFmpeg options")
                 }
@@ -150,6 +156,7 @@ Dialog {
         hideCursorWhenFullScreenCheckBox.checked = viewSettings.hideCursorWhenFullScreen;
 
         unmuteWhenFullScreenCheckBox.checked = viewportSettings.unmuteWhenFullScreen;
+        persistentStreamsCheckBox.checked = viewportSettings.persistentStreams;
 
         carouselRunningCheckBox.checked = presetsSettings.carouselRunning;
         carouselIntervalSpinBox.value = presetsSettings.carouselInterval;
@@ -174,6 +181,7 @@ Dialog {
         viewSettings.hideCursorWhenFullScreen = hideCursorWhenFullScreenCheckBox.checked;
 
         viewportSettings.unmuteWhenFullScreen = unmuteWhenFullScreenCheckBox.checked;
+        viewportSettings.persistentStreams = persistentStreamsCheckBox.checked;
 
         presetsSettings.carouselRunning = carouselRunningCheckBox.checked;
         presetsSettings.carouselInterval = carouselIntervalSpinBox.value;

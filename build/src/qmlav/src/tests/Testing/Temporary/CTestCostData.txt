@@ -1,0 +1,21 @@
+QmlAVThread.RunGenericFunction 1 0.105462
+QmlAVThread.RunGenericFunction_RefArgTest 1 0.032902
+QmlAVThread.RunGenericFunction_ConstRefArgTest 1 0.0493411
+QmlAVThread.RunGenericFunction_RefRefArgTest 1 0.0322796
+QmlAVThread.RunGenericFunction_RefRefArgTest2 1 0.0311133
+QmlAVThread.RunGenericFunction_WithoutArgsTest 1 0.0302573
+QmlAVThread.RunGenericFunction_WithoutArgsTest2 1 0.0304406
+QmlAVThread.RunClassMember 1 0.0283444
+QmlAVThread.RunFunctor 1 0.0280981
+QmlAVThread.RunLambda 1 0.0286787
+QmlAVThread.LoopLambda 1 0.0291729
+QmlAVThread.QmlAVTask_GenericFunction 1 0.0277697
+QmlAVThread.QmlAVTask_ClassMember 1 0.0292594
+QmlAVThread.QmlAVTask_Functor 1 0.0290512
+QmlAVThread.QmlAVTask_Retry 1 0.0288813
+QmlAVThread.QmlAVTask_VoidResult 1 0.0280607
+QmlAVThread.QmlAVTask_NoArgs 1 0.0275532
+QmlAVThread.QmlAVThreadRun_MoveOnlyCallable 1 0.0271967
+QmlAVThread.QmlAVTask_MoveOnlyCallable 1 0.0273184
+QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel 1 0.0283995
+---
