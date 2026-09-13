@@ -10663,7 +10663,48 @@ Parameters:
   "merge": true
 }
 ```
-Status: **loading**
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "in_progress"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "pending"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "pending"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Refactor Geometry section in SideBar.qml to use ListModel + Repeater pattern",
+      "id": "refactor-geometry",
+      "status": "completed"
+    },
+    {
+      "content": "Add press-and-hold TextField editing for custom aspect ratios",
+      "id": "add-editing",
+      "status": "completed"
+    },
+    {
+      "content": "Add persistence for custom aspect ratio presets in sideBarSettings",
+      "id": "persist-presets",
+      "status": "completed"
+    }
+  ],
+  "success": true
+}
+```
+Status: **completed**
 
 </details></tool-use>
 
@@ -10671,6 +10712,567 @@ _**Agent (claude-opus-4-5)**_
 
 <tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
 <summary>Tool use: **ripgrep_raw_search**</summary>
-Status: **loading**
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "contextAfter": 10,
+  "path": "/home/bot/developer_home/cctv-viewer/src/RootWindow.qml",
+  "pattern": "id: rootWindowSettings"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/RootWindow.qml",
+  "pattern": "id: rootWindowSettings",
+  "topFiles": [
+    {
+      "matchCount": 11,
+      "uri": "src/RootWindow.qml"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 1
+}
+```
+Status: **completed**
 
 </details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I'll add the editMode property to rootWindowSettings.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/RootWindow.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me add the checkbox to SettingsDialog.qml. I'll add it to the "General" group.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "completed"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "in_progress"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "pending"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "in_progress"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "pending"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "pending"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SettingsDialog.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I need to update the loadSettings and saveSettings functions in SettingsDialog.qml.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SettingsDialog.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now update saveSettings.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SettingsDialog.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me update SideBar.qml to add the enabled bindings to the protected controls.
+
+Protected items:
+1. Window Division group - already has `enabled: !(Utils.currentLayout().fullScreenIndex >= 0)`, need to add `&& rootWindowSettings.editMode`
+2. Aspect Ratio buttons (in Geometry group via Repeater) - need to add enabled binding
+3. Merging Cells button in "Other" group - need to add enabled binding
+4. Viewport URL field - need to add enabled binding
+5. Viewport FFmpeg options field - need to add enabled binding
+6. Preset add button (➕) - need to add enabled binding
+7. Preset delete mode - need to add check to onPressAndHold
+
+NOT protected:
+- Full Screen button
+- Mute button
+- Preset switching buttons (clicking to switch)
+
+Let me read the current SideBar.qml to make these changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "completed"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "completed"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "in_progress"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "completed"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "in_progress"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "pending"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Let me update the Window Division group first.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me find and update the Geometry group. The aspect ratio buttons need to be protected, but NOT the Full Screen button.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+I need to add `enabled: rootWindowSettings.editMode` to the aspect ratio buttons. The Button inside the Repeater delegate. And I need to also protect the edit function (onPressAndHold). Also find the Full Screen button which should NOT be protected.
+
+Let me add enabled binding to the aspect ratio buttons (the delegate Item or the Button itself).
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me find and update:
+1. The "Other" group (Merging Cells button)
+2. The Viewport section (URL field, FFmpeg options - but NOT Mute button)
+3. The Presets section (add button, delete mode)
+
+Let me find these sections.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I need to update:
+1. Merging cells button - add `rootWindowSettings.editMode &&` to the enabled condition
+2. URL TextField - add enabled binding
+3. FFmpeg options TextField - add enabled binding
+4. Mute button - keep as is (always accessible)
+
+Let me do these changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me update the URL TextField and FFmpeg options TextField in the viewport section.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I need to update the Presets section - the add button and delete mode. Let me find that section.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I need to update:
+1. The preset buttons - the delete mode should only be accessible when editMode is true
+2. The add button should be disabled when editMode is false
+
+Let me make these changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me build and test the changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "completed"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "completed"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "completed"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Add editMode property to rootWindowSettings in RootWindow.qml",
+      "id": "add-setting",
+      "status": "completed"
+    },
+    {
+      "content": "Add Edit mode checkbox to SettingsDialog.qml with load/save",
+      "id": "add-checkbox",
+      "status": "completed"
+    },
+    {
+      "content": "Add enabled bindings to protected controls in SideBar.qml",
+      "id": "protect-sidebar",
+      "status": "in_progress"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer/build &amp;&amp; make -j$(nproc) 2&gt;&amp;1 | tail -25</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer/build && make -j$(nproc) 2>&1 | tail -25
+```
+
+```
+    Found 60 source text(s) (2 new and 58 already existing)
+[ 40%] Generating /home/bot/developer_home/cctv-viewer/translations/cctv-viewer_ru_RU.qm
+17/20 Test #17: QmlAVThread.QmlAVTask_NoArgs ......................   Passed    0.04 sec
+      Start 18: QmlAVThread.QmlAVThreadRun_MoveOnlyCallable
+Updating '/home/bot/developer_home/cctv-viewer/translations/cctv-viewer_ru_RU.qm'...
+    Generated 57 translation(s) (57 finished and 0 unfinished)
+    Ignored 3 untranslated source text(s)
+18/20 Test #18: QmlAVThread.QmlAVThreadRun_MoveOnlyCallable .......   Passed    0.04 sec
+      Start 19: QmlAVThread.QmlAVTask_MoveOnlyCallable
+make[2]: Circular .lupdate/cctv-viewer_ru_RU.ts.stamp <- qrc_cctv-viewer_qmlcache.cpp dependency dropped.
+19/20 Test #19: QmlAVThread.QmlAVTask_MoveOnlyCallable ............   Passed    0.03 sec
+      Start 20: QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel
+[ 42%] Building CXX object CMakeFiles/cctv-viewer.dir/src_SideBar_qml.cpp.o
+[ 41%] Building CXX object CMakeFiles/cctv-viewer.dir/src_SettingsDialog_qml.cpp.o
+[ 41%] Generating qrc_cctv-viewer_qmlcache.cpp
+[ 43%] Building CXX object CMakeFiles/cctv-viewer.dir/src_RootWindow_qml.cpp.o
+[ 44%] Building CXX object CMakeFiles/cctv-viewer.dir/qrc_cctv-viewer_qmlcache.cpp.o
+20/20 Test #20: QmlAVThread.QmlAVTask_DemuxerDecoderThreadModel ...   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 20
+
+Total Test time (real) =   0.69 sec
+[ 44%] Built target run_unit_tests
+[ 45%] Linking CXX executable cctv-viewer
+[100%] Built target cctv-viewer
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Build succeeded. Now let me commit these changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Build successful! Let me commit the changes:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer &amp;&amp; git add -A &amp;&amp; git commit --trailer &#34;Co-authored-by: Cursor &lt;cursoragent@cursor.com&gt;&#34; -m &#34;Add Edit mode protection for sidebar controls
+
+- Added editMode setting to rootWindowSettings (default: false/locked)
+- Added &#39;Enable edit mode&#39; checkbox in Settings dialog under General
+- Protected controls (greyed out when edit mode OFF):
+  - Window Division buttons
+  - Aspect Ratio buttons (Full Screen remains accessible)
+  - Merging Cells button
+  - Viewport URL field
+  - Viewport FFmpeg options field
+  - Preset add (+) button
+  - Preset delete mode (-)
+- Always accessible controls:
+  - Preset switching (1, 2, 3... buttons)
+  - Full Screen button
+  - Mute button
+  - Sidebar expand/collapse
+  - Settings menu&#34;</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer && git add -A && git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "Add Edit mode protection for sidebar controls
+
+- Added editMode setting to rootWindowSettings (default: false/locked)
+- Added 'Enable edit mode' checkbox in Settings dialog under General
+- Protected controls (greyed out when edit mode OFF):
+  - Window Division buttons
+  - Aspect Ratio buttons (Full Screen remains accessible)
+  - Merging Cells button
+  - Viewport URL field
+  - Viewport FFmpeg options field
+  - Preset add (+) button
+  - Preset delete mode (-)
+- Always accessible controls:
+  - Preset switching (1, 2, 3... buttons)
+  - Full Screen button
+  - Mute button
+  - Sidebar expand/collapse
+  - Settings menu"
+```
+
+```
+[master 44bab59] Add Edit mode protection for sidebar controls
+ 17 files changed, 7826 insertions(+), 3727 deletions(-)
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Done! Let me provide a summary to the user.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Done! Here's a summary:
+
+## Edit Mode Protection
+
+**New setting:** "Enable edit mode" checkbox in Settings → General
+
+**Default state:** Edit mode is **OFF** (controls are locked)
+
+**When Edit mode is OFF (locked):**
+| Control | State |
+|---------|-------|
+| Window Division buttons | Greyed out |
+| Aspect Ratio buttons | Greyed out |
+| Merging Cells button | Greyed out |
+| Viewport URL field | Greyed out |
+| FFmpeg options field | Greyed out |
+| Preset ➕ button | Greyed out |
+| Preset ➖ delete mode | Disabled |
+
+**Always accessible:**
+| Control | State |
+|---------|-------|
+| Preset switching (1, 2, 3...) | Always works |
+| Full Screen button | Always works |
+| Mute button | Always works |
+| Settings menu | Always works |
+
+**To test on Kubuntu:**
+```bash
+rsync -avz --delete --exclude='build/' /home/bot/developer_home/cctv-viewer/ munin@10.40.137.86:/home/munin/developer_corner/cctv-viewer/
+
+# On Kubuntu:
+cd /home/munin/developer_corner/cctv-viewer/build
+make -j$(nproc)
+./cctv-viewer
+```
+
+The settings will persist across restarts. When you first launch, edit mode will be OFF (locked).
+
+---
+
+_**User**_
+
+Is it possible to change the color of the buttons and fields when they are disabled? Another thing that I don't like is that when you are in full screen mode, all it takes is to hover with the mouse to the right to reveal the panel. I'm fine with that but when I leave the area with the mouse, I want it to collapse again after perhaps 30 seconds. Also there is a widget at the bottom that toggles between expand and collapse. When activating the panel with the mouse, it doesn't toggle to collapse. I want it to be in collapse state when the menu is out in this fullscreen mode or whenever the menu is expandable/collapsable.
