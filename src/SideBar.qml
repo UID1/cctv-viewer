@@ -112,7 +112,7 @@ FocusScope {
             Timer {
                 id: delayAutoCollapseTimer
 
-                interval: 1500
+                interval: 30000  // 30 seconds before auto-collapse
 
                 onTriggered: {
                     if (rootWindowSettings.sidebarAutoCollapse &&
@@ -225,6 +225,7 @@ FocusScope {
                             GroupBox {
                                 title: qsTr("Window division")
                                 palette.windowText: "white"
+                                opacity: enabled ? 1.0 : 0.5
 
                                 // Disable controls when edit mode is off or when one of the viewports is in full-screen mode.
                                 enabled: rootWindowSettings.editMode && !(Utils.currentLayout().fullScreenIndex >= 0)
@@ -450,6 +451,7 @@ FocusScope {
                                             Button {
                                                 text: ratio
                                                 enabled: rootWindowSettings.editMode
+                                                opacity: enabled ? 1.0 : 0.5
                                                 highlighted: {
                                                     Utils.currentModel().aspectRatio === str2ratio(ratio);
                                                 }
@@ -541,6 +543,7 @@ FocusScope {
                                     Button {
                                         text: qsTr("Merging cells")
                                         enabled: rootWindowSettings.editMode && Utils.currentLayout().mergeCells(true)
+                                        opacity: rootWindowSettings.editMode ? 1.0 : 0.5
 
                                         Layout.fillWidth: true
 
@@ -582,6 +585,7 @@ FocusScope {
                                     placeholderText: qsTr("Url")
                                     selectByMouse: true
                                     enabled: rootWindowSettings.editMode
+                                    opacity: enabled ? 1.0 : 0.5
 
                                     Layout.fillWidth: true
 
@@ -609,6 +613,7 @@ FocusScope {
                                 ColumnLayout {
                                     Layout.fillWidth: true
                                     enabled: rootWindowSettings.editMode
+                                    opacity: enabled ? 1.0 : 0.5
 
                                     Text {
                                         text: qsTr("FFmpeg options")
@@ -712,6 +717,7 @@ FocusScope {
 
                                     text: "➕"
                                     enabled: rootWindowSettings.editMode
+                                    opacity: enabled ? 1.0 : 0.5
 
                                     Layout.fillWidth: true
 
@@ -748,14 +754,15 @@ FocusScope {
                     id: footer
 
                     icon: "qrc:/images/menu-collapse.svg"
-                    mirrorIcon: rootSideBar.state !== SideBar.Expanded ^ mirrored
-                    title: rootSideBar.state !== SideBar.Expanded ? qsTr("Expand") : qsTr("Collapse")
+                    // Show collapse icon when sidebar is visible (Popup or Expanded), expand when Compact
+                    mirrorIcon: rootSideBar.state === SideBar.Compact ^ mirrored
+                    title: rootSideBar.state === SideBar.Compact ? qsTr("Expand") : qsTr("Collapse")
                     width: parent.width
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: layout.verticalMargins
 
                     onClicked: {
-                        if (rootSideBar.state !== SideBar.Expanded) {
+                        if (rootSideBar.state === SideBar.Compact) {
                             rootSideBar.state = SideBar.Expanded
                         } else {
                             rootSideBar.state = SideBar.Compact

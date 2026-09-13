@@ -11276,3 +11276,179 @@ The settings will persist across restarts. When you first launch, edit mode will
 _**User**_
 
 Is it possible to change the color of the buttons and fields when they are disabled? Another thing that I don't like is that when you are in full screen mode, all it takes is to hover with the mouse to the right to reveal the panel. I'm fine with that but when I leave the area with the mouse, I want it to collapse again after perhaps 30 seconds. Also there is a widget at the bottom that toggles between expand and collapse. When activating the panel with the mouse, it doesn't toggle to collapse. I want it to be in collapse state when the menu is out in this fullscreen mode or whenever the menu is expandable/collapsable.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user has three requests:
+
+1. **Change disabled button/field colors** - Make disabled controls more visually distinct (probably want them more obviously greyed out or with a different visual treatment)
+
+2. **Auto-collapse sidebar after 30 seconds in fullscreen mode** - Currently there's a `delayAutoCollapseTimer` with 1500ms (1.5 seconds). The user wants this to be 30 seconds when in fullscreen mode.
+
+3. **Collapse/Expand toggle button state** - When the sidebar appears via mouse hover (in popup mode), the toggle button at the bottom should show "Collapse" state, not "Expand". Currently it seems to show "Expand" when the menu pops out.
+
+Let me explore the SideBar.qml to understand the current implementation of these features.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Let me explore the current sidebar behavior to understand these features better.
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "contextAfter": 5,
+  "contextBefore": 2,
+  "path": "/home/bot/developer_home/cctv-viewer/src/SideBar.qml",
+  "pattern": "delayAutoCollapseTimer|SideBar.Popup|SideBar.Expanded|SideBar.Compact"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/SideBar.qml",
+  "pattern": "delayAutoCollapseTimer|SideBar.Popup|SideBar.Expanded|SideBar.Compact",
+  "topFiles": [
+    {
+      "matchCount": 98,
+      "uri": "src/SideBar.qml"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 23
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I understand the current behavior:
+
+1. **Disabled button colors** - This would involve modifying the palette or creating custom styles for disabled controls. In Qt Quick Controls 2, you can customize the palette or use custom styles.
+
+2. **Auto-collapse timer** - Currently `delayAutoCollapseTimer` has a 1500ms (1.5 second) interval. The user wants 30 seconds (30000ms). However, there's also a `sidebarAutoCollapse` setting that controls whether this happens at all.
+
+3. **Toggle button state** - The footer button shows "Expand" when state is not Expanded (i.e., when it's Compact or Popup). The user wants it to show "Collapse" when the sidebar is in Popup mode (visible but temporary).
+
+Current logic:
+```qml
+title: rootSideBar.state !== SideBar.Expanded ? qsTr("Expand") : qsTr("Collapse")
+```
+
+Should be:
+```qml
+title: rootSideBar.state === SideBar.Compact ? qsTr("Expand") : qsTr("Collapse")
+```
+
+This way:
+- Compact → "Expand"
+- Popup → "Collapse"
+- Expanded → "Collapse"
+
+Let me create a plan for these changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="create_plan"><details>
+<summary>Tool use: **create_plan**</summary>
+
+Parameters:
+
+````json
+{
+  "name": "Sidebar UX Improvements",
+  "overview": "Three sidebar UX improvements: enhance disabled control visibility, extend auto-collapse timer to 30 seconds in fullscreen, and fix the expand/collapse toggle button state in popup mode.",
+  "plan": "# Sidebar UX Improvements\n\n## 1. Disabled Control Visual Styling\n\nQt Quick Controls 2 uses a palette system for styling. To make disabled controls more visually distinct, we can modify the palette colors for disabled states.\n\n**Option A:** Modify the application-wide palette in [src/RootWindow.qml](src/RootWindow.qml)\n**Option B:** Add control-specific styling in [src/SideBar.qml](src/SideBar.qml)\n\nFor disabled controls, the key palette roles are:\n- `palette.buttonText` (when disabled)\n- `palette.text` (when disabled)\n- Control `opacity` when `!enabled`\n\n**Recommended approach:** Add a subtle opacity reduction and/or color change to disabled controls in the sidebar.\n\n## 2. Auto-Collapse Timer (30 seconds in fullscreen)\n\nCurrent behavior in [src/SideBar.qml](src/SideBar.qml) line 115:\n```qml\nTimer {\n    id: delayAutoCollapseTimer\n    interval: 1500  // Current: 1.5 seconds\n```\n\n**Change:** Increase to 30000ms (30 seconds):\n```qml\ninterval: 30000  // 30 seconds\n```\n\nNote: This timer only triggers when `rootWindowSettings.sidebarAutoCollapse` is true AND the sidebar is in `Popup` state.\n\n## 3. Fix Expand/Collapse Toggle Button State\n\nCurrent logic at line 752:\n```qml\ntitle: rootSideBar.state !== SideBar.Expanded ? qsTr(\"Expand\") : qsTr(\"Collapse\")\n```\n\nThis shows \"Expand\" for both Compact and Popup states.\n\n**Change to:**\n```qml\ntitle: rootSideBar.state === SideBar.Compact ? qsTr(\"Expand\") : qsTr(\"Collapse\")\n```\n\nThis way:\n| Sidebar State | Button Shows |\n|---------------|--------------|\n| Compact | \"Expand\" |\n| Popup | \"Collapse\" |\n| Expanded | \"Collapse\" |\n\nAlso update the `mirrorIcon` property to match:\n```qml\nmirrorIcon: rootSideBar.state === SideBar.Compact ^ mirrored\n```\n\n## Files to Modify\n\n| File | Changes |\n|------|---------|\n| [src/SideBar.qml](src/SideBar.qml) | Timer interval, button text logic, optional disabled styling |\n",
+  "todos": [
+    {
+      "content": "Add visual styling for disabled controls (opacity or palette change)",
+      "id": "disabled-style",
+      "status": "pending"
+    },
+    {
+      "content": "Change delayAutoCollapseTimer interval to 30 seconds",
+      "id": "auto-collapse",
+      "status": "pending"
+    },
+    {
+      "content": "Fix expand/collapse button state for Popup mode",
+      "id": "toggle-button",
+      "status": "pending"
+    }
+  ]
+}
+````
+Additional data:
+
+```json
+{
+  "hasOpenedEditor": true,
+  "planId": "sidebar_ux_improvements_999912e2",
+  "planUri": "vscode-remote://wsl%2Bubuntu/home/bot/.cursor/plans/sidebar_ux_improvements_999912e2.plan.md",
+  "reviewData": {
+    "isShowingInput": false,
+    "selectedOption": "none",
+    "status": "Requested"
+  }
+}
+```
+Result:
+
+```json
+{
+  "rejected": {}
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+---
+
+_**User**_
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Status: **loading**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: </summary>
+
+</details></tool-use>
