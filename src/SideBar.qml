@@ -56,6 +56,7 @@ FocusScope {
 
         // Items settings
         property string windowDivision
+        property string aspectRatios
         property string itemsState
     }
 
@@ -375,28 +376,142 @@ FocusScope {
                                     columns: 2
                                     anchors.fill: parent
 
-                                    Button {
-                                        text: "16:9"
-                                        highlighted: Utils.currentModel().aspectRatio === Qt.size(16, 9)
+                                    ListModel {
+                                        id: aspectRatioModel
 
-                                        Layout.fillWidth: true
+                                        ListElement {
+                                            ratio: "16:9"
+                                        }
+                                        ListElement {
+                                            ratio: "4:3"
+                                        }
+                                        ListElement {
+                                            ratio: "32:27"
+                                        }
+                                        ListElement {
+                                            ratio: "1:1"
+                                        }
 
-                                        onClicked: {
-                                            Utils.currentModel().aspectRatio = Qt.size(16, 9);
-                                            setRootWindowRatio(Utils.currentModel().aspectRatio);
+                                        Component.onCompleted: {
+                                            fromJSValue(sideBarSettings.aspectRatios);
+
+                                            aspectRatioModel.dataChanged.connect(() => {
+                                                sideBarSettings.aspectRatios = JSON.stringify(toJSValue());
+                                            });
+                                        }
+
+                                        function fromJSValue(model) {
+                                            var arr;
+
+                                            try {
+                                                if (!model.isEmpty()) {
+                                                    arr = JSON.parse(model);
+                                                }
+                                            } catch(err) {
+                                                Utils.log_error(qsTr("Error reading configuration!"));
+                                            }
+
+                                            if (arr instanceof Array) {
+                                                for (var i = 0; i < arr.length; ++i) {
+                                                    aspectRatioModel.set(i, arr[i]);
+                                                }
+                                            }
+                                        }
+
+                                        function toJSValue() {
+                                            var arr = [];
+                                            for (var i = 0; i < aspectRatioModel.count; ++i) {
+                                                arr[i] = aspectRatioModel.get(i)
+                                            }
+                                            return arr;
                                         }
                                     }
-                                    Button {
-                                        text: "4:3"
-                                        highlighted: Utils.currentModel().aspectRatio === Qt.size(4, 3)
 
-                                        Layout.fillWidth: true
+                                    Repeater {
+                                        model: aspectRatioModel
+                                        delegate: Item {
+                                            id: aspectRatioItem
 
-                                        onClicked: {
-                                            Utils.currentModel().aspectRatio = Qt.size(4, 3);
-                                            setRootWindowRatio(Utils.currentModel().aspectRatio);
+                                            implicitWidth: aspectRatioTextField.implicitWidth
+                                            implicitHeight: aspectRatioTextField.implicitHeight
+
+                                            Layout.fillWidth: true
+
+                                            Keys.onEscapePressed: {
+                                                event.accepted = aspectRatioTextField.visible;
+                                                aspectRatioTextField.cancel();
+                                            }
+                                            Keys.onPressed: {
+                                                if (event.key === Qt.Key_F2) {
+                                                    aspectRatioTextField.edit();
+                                                }
+                                            }
+
+                                            Button {
+                                                text: ratio
+                                                highlighted: {
+                                                    Utils.currentModel().aspectRatio === str2ratio(ratio);
+                                                }
+                                                anchors.fill: parent
+
+                                                onClicked: {
+                                                    var r = str2ratio(ratio);
+                                                    if (r) {
+                                                        Utils.currentModel().aspectRatio = r;
+                                                        setRootWindowRatio(r);
+                                                    }
+                                                }
+                                                onPressAndHold: aspectRatioTextField.edit()
+
+                                                ToolTip.delay: Compact.toolTipDelay
+                                                ToolTip.timeout: Compact.toolTipTimeout
+                                                ToolTip.visible: hovered
+                                                ToolTip.text: qsTr("Press and hold to enter edit mode")
+                                            }
+
+                                            TextField {
+                                                id: aspectRatioTextField
+
+                                                visible: false
+                                                anchors.fill: parent
+                                                horizontalAlignment: TextInput.AlignHCenter
+                                                selectByMouse: true
+
+                                                onEditingFinished: {
+                                                    visible = false;
+                                                    if(str2ratio(text)) {
+                                                        ratio = text;
+                                                    }
+                                                }
+
+                                                function edit() {
+                                                    text = ratio;
+                                                    visible = true;
+                                                    forceActiveFocus();
+                                                }
+
+                                                function cancel() {
+                                                    text = ratio;
+                                                    visible = false;
+                                                }
+                                            }
+
+                                            function str2ratio(str) {
+                                                // Support 1-2 digit numbers for width and height (e.g., "32:27", "4:3", "16:9")
+                                                var regexp = /^(\d{1,2}):(\d{1,2})$/;
+                                                var match = str.match(regexp);
+                                                if (match) {
+                                                    var w = parseInt(match[1]);
+                                                    var h = parseInt(match[2]);
+                                                    if (w > 0 && h > 0) {
+                                                        return Qt.size(w, h);
+                                                    }
+                                                }
+                                                return null;
+                                            }
                                         }
                                     }
+
                                     Button {
                                         text: qsTr("Full Screen")
                                         highlighted: Context.config.fullScreen

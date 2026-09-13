@@ -9573,3 +9573,231 @@ git tag -l
 The previous tag `v0.2.0-keeprunning` marks the simpler "keep running" implementation, and this new tag would mark the full multi-surface sharing implementation.
 
 Switch to Agent mode if you'd like me to run these commands for you.
+
+---
+
+_**User**_
+
+In the program under "Window Division" you get to choose whether you want 1x1, 1x1, 3x3 or 4x4. If you want custom layout, you can click and hold one of the buttons and be able to enter a custom value.
+
+Then further down you have aspect ratio for the viewports. I want to have a feature that allows me to enter a custom aspect ratio. For example 32:27 and I want the grid layout to adapt to that rato.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants to add a custom aspect ratio feature for viewports. Let me understand the current implementation by exploring the codebase to see:
+1. Where the Window Division settings are implemented
+2. How the current aspect ratio settings work
+3. How the viewport grid layout is managed
+
+I should explore the settings dialog and the viewport layout components.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Let me explore the codebase to understand how the current settings and viewport layout work.
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="task_v2"><details>
+<summary>Tool use: **task_v2**</summary>
+
+Parameters:
+
+```json
+{
+  "description": "Explore viewport settings and layout",
+  "model": "composer-2.5-fast",
+  "name": "explore",
+  "prompt": "Explore the cctv-viewer codebase to find:\n1. Where the \"Window Division\" settings UI is implemented (the 1x1, 2x2, 3x3, 4x4 buttons with custom value on click-and-hold)\n2. Where the viewport aspect ratio settings are currently implemented\n3. How the viewport grid layout adapts to settings\n\nLook in:\n- src/SettingsDialog.qml or similar settings files\n- src/ViewportsLayout.qml or similar layout files\n- Any files related to aspect ratio or grid configuration\n\nReturn:\n- File paths and relevant code snippets for each area\n- How the current aspect ratio setting works (if any)\n- How the grid layout calculates viewport sizes",
+  "subagentType": "explore"
+}
+```
+Additional data:
+
+```json
+{
+  "status": "success",
+  "subagentComposerId": "f40c9faf-02fa-4d6b-9c4d-18d6f30c2659",
+  "supersededSubagentComposerIds": [
+    "b157ae4b-e725-4114-b6de-8dd0cbb7069a"
+  ],
+  "terminationReason": "completed"
+}
+```
+Result:
+
+```json
+{
+  "agentId": "f40c9faf-02fa-4d6b-9c4d-18d6f30c2659"
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I have a good understanding of the codebase. Let me summarize what I learned:
+
+1. **Window Division** is in `SideBar.qml` with 4 preset buttons (1x1, 2x2, 3x3, 4x4) and a press-and-hold feature to enter custom values
+2. **Aspect Ratio** is also in `SideBar.qml` under "Geometry" with just two hardcoded buttons: 16:9 and 4:3
+3. The aspect ratio is stored in `ViewportsLayoutModel.aspectRatio` (a QSize property)
+4. The grid layout uses `layoutRatio` to calculate sizing and letterbox/pillarbox
+
+The user wants to add a custom aspect ratio feature, similar to how window division works (click-and-hold to enter custom value).
+
+I should create a plan to:
+1. Add custom aspect ratio buttons with press-and-hold editing (similar to window division)
+2. Allow custom values like "32:27"
+3. The grid layout should already adapt since it uses `model.aspectRatio` - we just need to enable setting custom values
+
+Let me create a plan for this.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+I now understand the codebase structure. Let me create a plan for adding custom aspect ratio support.
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="create_plan"><details>
+<summary>Tool use: **create_plan**</summary>
+
+Parameters:
+
+````json
+{
+  "name": "Custom Aspect Ratio Feature",
+  "overview": "Add a custom aspect ratio feature to the Geometry section in the sidebar, allowing users to enter values like \"32:27\" using the same press-and-hold pattern as Window Division.",
+  "plan": "# Custom Aspect Ratio Feature\n\n## Current State\n\nThe aspect ratio settings are in [SideBar.qml](src/SideBar.qml) under the \"Geometry\" group with two hardcoded buttons:\n- **16:9** button\n- **4:3** button\n\nThe grid layout in [ViewportsLayout.qml](src/ViewportsLayout.qml) already adapts to any aspect ratio via `layoutRatio`:\n```qml\nproperty real layoutRatio: (model.aspectRatio.width * model.size.width) / (model.aspectRatio.height * model.size.height);\n```\n\n## Implementation Plan\n\n### 1. Refactor Geometry buttons to use a ListModel (like Window Division)\n\nReplace the hardcoded buttons with a `ListModel` + `Repeater` pattern:\n\n```qml\nListModel {\n    id: aspectRatioModel\n    ListElement { ratio: \"16:9\" }\n    ListElement { ratio: \"4:3\" }\n    ListElement { ratio: \"32:27\" }  // Can add default presets\n    ListElement { ratio: \"1:1\" }\n}\n```\n\n### 2. Add press-and-hold editing for custom aspect ratios\n\nMirror the Window Division pattern:\n- **Click**: Apply the aspect ratio\n- **Press-and-hold**: Show TextField for custom input\n- **Validation**: Parse `W:H` format (support 2-digit numbers like 32:27)\n\nParsing function:\n```qml\nfunction str2ratio(str) {\n    var regexp = /^(\\d{1,2}):(\\d{1,2})$/;\n    var match = str.match(regexp);\n    if (match) {\n        return Qt.size(parseInt(match[1]), parseInt(match[2]));\n    }\n    return null;\n}\n```\n\n### 3. Persist custom aspect ratio presets\n\nAdd to `sideBarSettings`:\n```qml\nproperty string aspectRatios  // JSON array of custom ratios\n```\n\n### 4. Files to modify\n\n| File | Changes |\n|------|---------|\n| [src/SideBar.qml](src/SideBar.qml) | Refactor Geometry group to use ListModel + Repeater with press-and-hold editing |\n\nNo changes needed to:\n- `ViewportsLayout.qml` - already handles any aspect ratio\n- `ViewportsLayoutModel` - already has `aspectRatio` property (QSize)\n\n## Data Flow\n\n```mermaid\nflowchart LR\n    UI[\"Geometry Button\u003cbr/\u003ePress-and-hold\"] --\u003e TextField[\"TextField\u003cbr/\u003eEnter '32:27'\"]\n    TextField --\u003e Parse[\"str2ratio()\"]\n    Parse --\u003e Model[\"ViewportsLayoutModel\u003cbr/\u003e.aspectRatio\"]\n    Model --\u003e Layout[\"ViewportsLayout\u003cbr/\u003e.layoutRatio\"]\n    Layout --\u003e Grid[\"GridLayout sizing\u003cbr/\u003eletterbox/pillarbox\"]\n```\n",
+  "todos": [
+    {
+      "content": "Refactor Geometry section in SideBar.qml to use ListModel + Repeater pattern",
+      "id": "refactor-geometry",
+      "status": "pending"
+    },
+    {
+      "content": "Add press-and-hold TextField editing for custom aspect ratios",
+      "id": "add-editing",
+      "status": "pending"
+    },
+    {
+      "content": "Add persistence for custom aspect ratio presets in sideBarSettings",
+      "id": "persist-presets",
+      "status": "pending"
+    }
+  ]
+}
+````
+Additional data:
+
+```json
+{
+  "hasOpenedEditor": true,
+  "planId": "custom_aspect_ratio_feature_0332e9d8",
+  "planUri": "vscode-remote://wsl%2Bubuntu/home/bot/.cursor/plans/custom_aspect_ratio_feature_0332e9d8.plan.md",
+  "reviewData": {
+    "isShowingInput": false,
+    "selectedOption": "none",
+    "status": "Requested"
+  }
+}
+```
+Result:
+
+```json
+{
+  "rejected": {}
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+---
+
+_**User**_
+
+Will this remain in the configuration so that it will keep that aspect ratio for each preaset after a program restart?
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is asking about persistence of the aspect ratio setting. Let me check how the current aspect ratio is persisted.
+
+From the exploration, I learned that:
+1. `ViewportsLayoutModel.aspectRatio` is already a property that's stored per preset
+2. The model has `toJSValue()` and `fromJSValue()` methods that serialize/deserialize to JSON
+3. This is stored in `layoutsCollectionSettings.models`
+
+So the custom aspect ratio that the user enters (like 32:27) will be persisted per preset automatically, because it's set on `Utils.currentModel().aspectRatio` which is already being saved.
+
+The only additional thing my plan adds is persistence of the **button presets** themselves (the list of ratios shown in the UI buttons). This is separate from the actual aspect ratio value used by each preset.
+
+Let me clarify this for the user.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Yes, the aspect ratio will persist per preset after restart. Here's how:
+
+**Already built-in:**
+- `ViewportsLayoutModel.aspectRatio` is already serialized via `toJSValue()` and saved to `layoutsCollectionSettings.models` (JSON)
+- When you set `Utils.currentModel().aspectRatio = Qt.size(32, 27)`, it's saved **per preset**
+- Each preset remembers its own aspect ratio (Preset 1 could be 16:9, Preset 2 could be 32:27)
+
+**What the plan adds:**
+- Persistence of the **button labels** (so if you add "32:27" as a preset button, that button stays in the UI after restart)
+- This mirrors how Window Division works - custom button labels are saved in `sideBarSettings.windowDivision`
+
+**Summary:**
+
+| What | Persisted? | Where |
+|------|------------|-------|
+| Aspect ratio per preset | Yes (already works) | `layoutsCollectionSettings.models` |
+| Custom button presets (UI) | Yes (plan adds this) | `sideBarSettings.aspectRatios` |
+
+So when you enter "32:27" and apply it, that aspect ratio will be remembered for that preset even without the UI persistence part. The UI persistence just makes sure your custom "32:27" button stays visible in the sidebar after restart.
+
+---
+
+_**User**_
+
+OK, let's build.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user wants me to implement the custom aspect ratio feature. Let me start by reading the current SideBar.qml to understand the exact structure, then make the necessary changes.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/SideBar.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Status: **loading**
+
+</details></tool-use>
