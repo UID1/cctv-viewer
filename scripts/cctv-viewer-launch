@@ -1,13 +1,15 @@
 #!/bin/bash
 # Wrapper script to launch cctv-viewer with correct X11 environment
-# This handles the dynamic XAUTHORITY path on KDE/Wayland systems
+# This handles the dynamic XAUTHORITY and XDG_RUNTIME_DIR paths
 
 export DISPLAY="${DISPLAY:-:0}"
-export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 
-# Find the X authority file dynamically
+# Always set XDG_RUNTIME_DIR based on actual user ID
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+
+# Find the X authority file dynamically (KDE/Wayland uses random suffix)
 if [ -z "$XAUTHORITY" ]; then
-    XAUTHORITY=$(ls /run/user/$(id -u)/xauth_* 2>/dev/null | head -1)
+    XAUTHORITY=$(ls "$XDG_RUNTIME_DIR"/xauth_* 2>/dev/null | head -1)
     if [ -n "$XAUTHORITY" ]; then
         export XAUTHORITY
     fi

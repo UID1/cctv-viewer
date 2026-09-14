@@ -31,6 +31,8 @@
         <file>src/PresetIndicator.qml</file>
         <file>images/play.svg</file>
         <file>images/pause.svg</file>
+        <file>images/loading.svg</file>
+        <file>images/error.svg</file>
         <file>src/CursorShape.qml</file>
         <file>src/StreamPool.qml</file>
         <file>src/StreamPoolPlayer.qml</file>

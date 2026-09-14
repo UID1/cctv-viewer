@@ -7,23 +7,21 @@ After=display-manager.service
 Type=simple
 User=%i
 
-# Environment for display
+# Environment for display (XDG_RUNTIME_DIR set by wrapper script)
 Environment=DISPLAY=:0
 Environment=QT_QPA_PLATFORM=xcb
-Environment=XDG_RUNTIME_DIR=/run/user/%U
 
 # Wait for display to be ready
 ExecStartPre=/bin/sleep 5
 
-# Use wrapper script to find XAUTHORITY dynamically
+# Use wrapper script to find XAUTHORITY and XDG_RUNTIME_DIR dynamically
 ExecStart=/usr/bin/cctv-viewer-launch --full-screen
 
 # Restart policy - restart on crash
 Restart=on-failure
 RestartSec=5
 
-# Watchdog timeout - systemd restarts if unresponsive for 5 minutes
-WatchdogSec=300
+# Timeouts
 TimeoutStartSec=30
 TimeoutStopSec=10
 

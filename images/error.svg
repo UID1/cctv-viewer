@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131.35 114.97">
+  <!-- Triangle outline only (no fill) -->
+  <path fill="#fff" d="M65.67,0c-1.55,0-3.1.77-3.99,2.3L.62,108.06c-1.77,3.07.44,6.91,3.99,6.91h122.12c3.55,0,5.76-3.84,3.99-6.91L69.66,2.3c-.89-1.54-2.44-2.3-3.99-2.3ZM65.67,33.39l36.13,62.58H29.54l36.13-62.58Z"/>
+  <!-- Exclamation mark - stem -->
+  <rect fill="#fff" x="60.5" y="48" width="10" height="30" rx="2"/>
+  <!-- Exclamation mark - dot -->
+  <circle fill="#fff" cx="65.67" cy="88" r="6"/>
+</svg>
