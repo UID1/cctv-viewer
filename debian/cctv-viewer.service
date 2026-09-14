@@ -1,0 +1,40 @@
+[Unit]
+Description=CCTV Viewer - Video Stream Display (%i)
+Documentation=https://github.com/iEvgeny/cctv-viewer
+After=display-manager.service
+
+[Service]
+Type=simple
+User=%i
+
+# Environment for display
+Environment=DISPLAY=:0
+Environment=QT_QPA_PLATFORM=xcb
+Environment=XDG_RUNTIME_DIR=/run/user/%U
+
+# Wait for display to be ready
+ExecStartPre=/bin/sleep 5
+
+# Use wrapper script to find XAUTHORITY dynamically
+ExecStart=/usr/bin/cctv-viewer-launch --full-screen
+
+# Restart policy - restart on crash
+Restart=on-failure
+RestartSec=5
+
+# Watchdog timeout - systemd restarts if unresponsive for 5 minutes
+WatchdogSec=300
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+# Resource limits
+Nice=0
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/%i/.config
+
+[Install]
+WantedBy=multi-user.target

@@ -1,8 +1,8 @@
-import QtQml 2.12
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
+import QtQml 2.15
 import QtQuick.Dialogs 1.3
 import Qt.labs.settings 1.0
 import CCTV_Viewer.Core 1.0
@@ -28,6 +28,7 @@ ApplicationWindow {
         property: "width"
         value: rootWindow.width
         when: !Context.config.fullScreen
+        restoreMode: Binding.RestoreBindingOrValue
     }
 
     Binding {
@@ -35,6 +36,7 @@ ApplicationWindow {
         property: "height"
         value: rootWindow.height
         when: !Context.config.fullScreen
+        restoreMode: Binding.RestoreBindingOrValue
     }
 
     Settings {
@@ -200,13 +202,14 @@ ApplicationWindow {
 
         onCountChanged: stackLayout.currentIndex = stackLayout.currentIndex.clamp(0, layoutsCollectionModel.count - 1)
         Component.onCompleted: {
-            // Demo streams
-            get(0).get(0).url = "rtmp://live.a71.ru/demo/0";
-            get(0).get(1).url = "rtmp://live.a71.ru/demo/1";
-
             try {
                 if (!layoutsCollectionSettings.models.isEmpty()) {
+                    // Config exists - load saved configuration
                     fromJSValue(JSON.parse(layoutsCollectionSettings.models));
+                } else {
+                    // No config - set demo streams for first-time users
+                    get(0).get(0).url = "rtmp://live.a71.ru/demo/0";
+                    get(0).get(1).url = "rtmp://live.a71.ru/demo/1";
                 }
             } catch(err) {
                 Utils.log_error(qsTr("Error reading configuration!"));

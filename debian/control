@@ -1,36 +1,31 @@
 Source: cctv-viewer
 Section: video
 Priority: optional
-Maintainer: Evgeny S Maksimov <admin@vragam.net>
-Build-Depends: debhelper (>= 9),
+Maintainer: CCTV Viewer Maintainer <maintainer@example.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake,
+               pkg-config,
+               qtbase5-dev,
+               qtdeclarative5-dev,
+               qtmultimedia5-dev,
+               qttools5-dev,
                libva-dev,
-               libglx-dev,
-               libegl-dev,
-               libgles-dev,
-               libdrm-dev,
                libavformat-dev,
                libavcodec-dev,
                libavutil-dev,
                libswscale-dev,
                libswresample-dev,
                libavdevice-dev,
-               qtdeclarative5-dev,
-               qtmultimedia5-dev,
-               qttools5-dev,
-               libgtest-dev,
-               git,
-               cmake,
-               pkg-config
-Standards-Version: 3.9.8
+               libavfilter-dev,
+               libgles-dev,
+               libdrm-dev
+Standards-Version: 4.6.0
 Homepage: https://github.com/iEvgeny/cctv-viewer
-Vcs-Git: https://github.com/iEvgeny/cctv-viewer.git
-Vcs-Browser: https://github.com/iEvgeny/cctv-viewer
 
 Package: cctv-viewer
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
-         libqt5multimedia5-plugins,
-         qtwayland5,
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
          qml-module-qtquick-layouts,
          qml-module-qtqml-models2,
          qml-module-qtquick-controls,
@@ -39,6 +34,11 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
          qml-module-qtquick-dialogs,
          qml-module-qt-labs-settings,
          qml-module-qtmultimedia
-Description: CCTV Viewer - viewer and mounter video streams.
- A simple application for simultaneously viewing multiple video streams.
- Designed for high performance and low latency. Based on ffmpeg.
+Description: CCTV stream viewer with multi-surface support
+ CCTV Viewer is a Qt5-based application for viewing multiple video
+ streams simultaneously. Features include:
+  - Multiple preset layouts with carousel switching
+  - Multi-surface video distribution (shared decoders)
+  - Custom aspect ratios
+  - Kiosk mode with edit protection
+  - systemd service for 24/7 operation

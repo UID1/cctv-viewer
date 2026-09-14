@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+    configure)
+        # Reload systemd to recognize the new service file
+        if [ -d /run/systemd/system ]; then
+            systemctl daemon-reload || true
+        fi
+
+        echo ""
+        echo "==================================================="
+        echo " CCTV Viewer installation complete!"
+        echo "==================================================="
+        echo ""
+        echo "To start CCTV Viewer manually:"
+        echo "  cctv-viewer"
+        echo ""
+        echo "To enable as a systemd service for a user:"
+        echo "  sudo systemctl enable cctv-viewer@USERNAME"
+        echo "  sudo systemctl start cctv-viewer@USERNAME"
+        echo ""
+        echo "Configuration is stored in:"
+        echo "  ~/.config/CCTV Viewer/CCTV Viewer.conf"
+        echo ""
+        echo "To install a custom config file:"
+        echo "  mkdir -p ~/.config/CCTV\\ Viewer"
+        echo "  cp /usr/share/doc/cctv-viewer/examples/cctv-viewer.conf \\"
+        echo "     ~/.config/CCTV\\ Viewer/CCTV\\ Viewer.conf"
+        echo ""
+        echo "==================================================="
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

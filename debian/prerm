@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+    remove|upgrade|deconfigure)
+        # Stop any running cctv-viewer services
+        if [ -d /run/systemd/system ]; then
+            # Find and stop any cctv-viewer@* services
+            for service in $(systemctl list-units --type=service --state=running --no-legend 'cctv-viewer@*' 2>/dev/null | awk '{print $1}'); do
+                systemctl stop "$service" || true
+            done
+        fi
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0
