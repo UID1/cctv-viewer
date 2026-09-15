@@ -25,6 +25,7 @@ T.Page {
     property url icon: ""
     property bool mirrorIcon: false
     property color color: "white"
+    property bool locked: false  // When true, panel cannot be expanded
 
     property int state: SideBarItem.Compact
 
@@ -68,7 +69,14 @@ T.Page {
                 if (!root.objectName.isEmpty() && obj[root.objectName] && obj[root.objectName].collapsed !== undefined) {
                     root.state = obj[root.objectName].collapsed ? SideBarItem.Collapsed : SideBarItem.Expanded;
                 } else {
-                    root.state = SideBarItem.Collapsed;
+                    // Default expanded: header (CCTV Viewer has no objectName), recordings, presets
+                    // Default collapsed: tools, viewport
+                    var expandByDefault = ["recordings", "presets"];
+                    if (root.objectName.isEmpty() || expandByDefault.indexOf(root.objectName) >= 0) {
+                        root.state = SideBarItem.Expanded;
+                    } else {
+                        root.state = SideBarItem.Collapsed;
+                    }
                 }
             }
         }
@@ -103,7 +111,7 @@ T.Page {
         onClicked: {
             root.clicked();
 
-            if (!holdClickTimer.running) {
+            if (!holdClickTimer.running && !root.locked) {
                 if (root.contentHeight > 0) {
                     if (root.state !== SideBarItem.Expanded) {
                         root.state = SideBarItem.Expanded;
@@ -115,14 +123,14 @@ T.Page {
             }
         }
 
-        onHoveredChanged: hovered && root.state !== SideBarItem.Expanded ? delayOpenningTimer.start() : delayOpenningTimer.stop()
+        onHoveredChanged: hovered && root.state !== SideBarItem.Expanded && !root.locked ? delayOpenningTimer.start() : delayOpenningTimer.stop()
         Timer {
             id: delayOpenningTimer
 
             interval: 500
 
             onTriggered: {
-                if (root.contentHeight > 0 ) {
+                if (root.contentHeight > 0 && !root.locked) {
                     root.state = SideBarItem.Expanded;
                     holdClickTimer.start();
                 }
@@ -215,7 +223,7 @@ T.Page {
             Rectangle {
                 id: headerBackground
 
-                color: "#17a9ca"
+                color: "#5c1d37"
                 visible: header.hovered || root.state === SideBarItem.Expanded || collapseAnimaton.running
                 opacity: visible ? 1 : 0
                 anchors.fill: parent

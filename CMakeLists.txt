@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 
 set(VER_MAJ 0)
-set(VER_MIN 1)
-set(VER_PAT 9)
-set(REL_STATUS "alpha")
+set(VER_MIN 2)
+set(VER_PAT 1)
+# set(REL_STATUS "alpha")
 
 set(APP_NAME "CCTV Viewer")
 set(ORG_NAME "CCTV Viewer")
@@ -159,6 +159,8 @@ set(PROJ_FILES
     src/main.cpp
     src/clipboard.h
     src/singleapplication.h
+    src/systeminfo.cpp src/systeminfo.h
+    src/processlauncher.cpp src/processlauncher.h
     src/config.cpp src/config.h
     src/context.cpp src/context.h
     src/eventfilter.h src/eventfilter.cpp

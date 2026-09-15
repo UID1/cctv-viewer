@@ -3,6 +3,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.3
+import QtGraphicalEffects 1.12
 import Qt.labs.settings 1.0
 import CCTV_Viewer.Core 1.0
 import CCTV_Viewer.Themes 1.0
@@ -156,58 +157,84 @@ FocusScope {
 
                         Layout.fillWidth: true
 
-                        Frame {
-                            anchors.fill: parent
+                        Item {
+                            implicitWidth: 200
+                            implicitHeight: 160
 
-                            ColumnLayout {
-                                anchors.fill: parent
+                            Column {
+                                id: headerContent
+                                anchors.centerIn: parent
+                                spacing: 10
+                                width: parent.width
 
-                                Text {
-                                    text: {
-                                        var v = `<b style=\"font-size: ${rootWindow.font.pointSize * 1.4}pt;\">v${Qt.application.version.replace(/\s/, "</b><br />")}`;
-                                        return `<a href=\"#\" style=\"color: white; text-decoration: none;\">${v}</a>`;
+                                // Circular avatar - centered
+                                Rectangle {
+                                    id: avatarContainer
+                                    width: 96
+                                    height: 96
+                                    radius: 48
+                                    color: "#333"
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    
+                                    // Circular clipping using layer
+                                    layer.enabled: true
+                                    layer.effect: OpacityMask {
+                                        maskSource: Rectangle {
+                                            width: avatarContainer.width
+                                            height: avatarContainer.height
+                                            radius: avatarContainer.radius
+                                        }
                                     }
-                                    color: "white"
-                                    textFormat: Text.RichText
-                                    horizontalAlignment: Text.AlignHCenter
-
-                                    Layout.fillWidth: true
-
-                                    onLinkHovered: header.linkHovered(link)
-                                    onLinkActivated: {
-                                        toolTip.visible = true;
-                                        Clipboard.setText(Qt.application.version);
-                                    }
-
-                                    ToolTip {
-                                        id: toolTip
-
-                                        delay: 0
-                                        timeout: Compact.toolTipTimeout
-                                        text: qsTr("Copied to clipboard")
+                                    
+                                    Image {
+                                        id: avatarImage
+                                        source: SystemInfo.userAvatar
+                                        anchors.fill: parent
+                                        fillMode: Image.PreserveAspectCrop
+                                        smooth: true
+                                        asynchronous: true
                                     }
                                 }
 
+                                // Username@hostname - centered
                                 Text {
-                                    text: "<a href=\"https://github.com/iEvgeny/cctv-viewer\"><img src=\"qrc:/images/github.svg\" width=\"180\"></a>"
+                                    id: userInfoText
+                                    text: SystemInfo.userName + "@" + SystemInfo.hostName
                                     color: "white"
-                                    font.pointSize: rootWindow.font.pointSize * 1.05
-                                    textFormat: Text.RichText
+                                    font.pointSize: rootWindow.font.pointSize * 1.3
+                                    font.bold: true
                                     horizontalAlignment: Text.AlignHCenter
-
-                                    Layout.fillWidth: true
-
-                                    onLinkHovered: header.linkHovered(link)
-                                    onLinkActivated: Qt.openUrlExternally(link)
+                                    width: parent.width
+                                    elide: Text.ElideMiddle
                                 }
                             }
                         }
+                    }
 
-                        function linkHovered(link) {
-                            if (link !== "") {
-                                cursorShape.set(Qt.PointingHandCursor);
-                            } else {
-                                cursorShape.reset();
+                    SideBarItem {
+                        objectName: "recordings"
+                        icon: "qrc:/images/menu-recordings.svg"
+                        title: qsTr("Recordings")
+
+                        Layout.fillWidth: true
+
+                        ColumnLayout {
+                            anchors.fill: parent
+
+                            Button {
+                                text: qsTr("Review")
+                                Layout.fillWidth: true
+                                onClicked: {
+                                    // Use systemd-run --user to bypass snap confinement issues
+                                    ProcessLauncher.launch("systemd-run", [
+                                        "--user",
+                                        "--no-block",
+                                        "chromium-browser",
+                                        "--password-store=basic",
+                                        "--start-fullscreen",
+                                        "--app=http://localhost:5000/review"
+                                    ])
+                                }
                             }
                         }
                     }
@@ -216,6 +243,7 @@ FocusScope {
                         objectName: "tools"
                         icon: "qrc:/images/menu-tools.svg"
                         title: qsTr("Tools")
+                        locked: rootWindowSettings.lockToolsPanel
 
                         Layout.fillWidth: true
 
@@ -519,15 +547,6 @@ FocusScope {
                                         }
                                     }
 
-                                    Button {
-                                        text: qsTr("Full Screen")
-                                        highlighted: Context.config.fullScreen
-
-                                        Layout.columnSpan: 2
-                                        Layout.fillWidth: true
-
-                                        onClicked: Context.config.fullScreen = !Context.config.fullScreen
-                                    }
                                 }
                             }
 
@@ -557,6 +576,7 @@ FocusScope {
                         objectName: "viewport"
                         icon: "qrc:/images/menu-viewport.svg"
                         title: qsTr("Viewport%1").arg(currentViewportIndex >= 0 ? qsTr(" #%1").arg(currentViewportIndex + 1) : "")
+                        locked: rootWindowSettings.lockViewportPanel
 
                         Layout.fillWidth: true
 
@@ -723,6 +743,16 @@ FocusScope {
 
                                     onClicked: layoutsCollectionModel.append().size = Qt.size(3, 3)
                                 }
+
+                                Button {
+                                    text: qsTr("Full Screen")
+                                    highlighted: Context.config.fullScreen
+
+                                    Layout.columnSpan: 4
+                                    Layout.fillWidth: true
+
+                                    onClicked: Context.config.fullScreen = !Context.config.fullScreen
+                                }
                             }
                         }
 
@@ -747,6 +777,38 @@ FocusScope {
                         Layout.fillWidth: true
 
                         onClicked: settingsDialog.open()
+                    }
+                }
+
+                // Company logo above Collapse button
+                Item {
+                    id: logoContainer
+                    width: parent.width
+                    height: rootSideBar.state === SideBar.Compact ? 40 : 180
+                    anchors.bottom: footer.top
+                    anchors.bottomMargin: 5
+                    
+                    Image {
+                        id: companyLogo
+                        source: "qrc:/images/Astral-Node-Labs-Logo-Only.svg"
+                        anchors.centerIn: parent
+                        // Full width flush when expanded, mini when collapsed
+                        width: rootSideBar.state === SideBar.Compact ? 40 : parent.width
+                        height: rootSideBar.state === SideBar.Compact ? 40 : parent.height
+                        fillMode: Image.PreserveAspectFit
+                        smooth: true
+                        opacity: 0.5
+                        
+                        Behavior on width {
+                            NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                        }
+                        Behavior on height {
+                            NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                        }
+                    }
+                    
+                    Behavior on height {
+                        NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
                     }
                 }
 

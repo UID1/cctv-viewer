@@ -56,6 +56,8 @@ ApplicationWindow {
         property bool fullScreen
         property bool sidebarAutoCollapse: true
         property bool editMode: false  // When false, sidebar controls are locked
+        property bool lockToolsPanel: false  // When true, Tools panel stays collapsed
+        property bool lockViewportPanel: false  // When true, Viewport panel stays collapsed
 
         Component.onCompleted: {
             // Do not initialize "fullScreen" if option "-f" is set

@@ -16,6 +16,7 @@
         <file>images/menu-presets.svg</file>
         <file>images/menu.svg</file>
         <file>images/menu-collapse.svg</file>
+        <file>images/menu-recordings.svg</file>
         <file>images/menu-item-collapse.svg</file>
         <file>src/imports/CCTV_Viewer/Utils/qmldir</file>
         <file>src/imports/CCTV_Viewer/Utils/utils.js</file>
@@ -33,6 +34,8 @@
         <file>images/pause.svg</file>
         <file>images/loading.svg</file>
         <file>images/error.svg</file>
+        <file>images/default-avatar.svg</file>
+        <file>images/Astral-Node-Labs-Logo-Only.svg</file>
         <file>src/CursorShape.qml</file>
         <file>src/StreamPool.qml</file>
         <file>src/StreamPoolPlayer.qml</file>

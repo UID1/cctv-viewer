@@ -8,6 +8,8 @@
 #include "eventfilter.h"
 #include "clipboard.h"
 #include "singleapplication.h"
+#include "systeminfo.h"
+#include "processlauncher.h"
 #include "context.h"
 #include "viewportslayoutscollectionmodel.h"
 
@@ -27,6 +29,16 @@ void registerQmlTypes()
                                                 []([[maybe_unused]] QQmlEngine *engine,
                                                    [[maybe_unused]] QJSEngine *scriptEngine) -> QObject * {
         return new SingleApplication();
+    });
+    qmlRegisterSingletonType<SystemInfo>("CCTV_Viewer.Utils", 1, 0, "SystemInfo",
+                                         []([[maybe_unused]] QQmlEngine *engine,
+                                            [[maybe_unused]] QJSEngine *scriptEngine) -> QObject * {
+        return new SystemInfo();
+    });
+    qmlRegisterSingletonType<ProcessLauncher>("CCTV_Viewer.Utils", 1, 0, "ProcessLauncher",
+                                              []([[maybe_unused]] QQmlEngine *engine,
+                                                 [[maybe_unused]] QJSEngine *scriptEngine) -> QObject * {
+        return new ProcessLauncher();
     });
 
     qmlRegisterType<QmlAVPlayer>("CCTV_Viewer.Multimedia", 1, 0, "QmlAVPlayer");

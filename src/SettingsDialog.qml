@@ -45,6 +45,18 @@ Dialog {
 
                     text: qsTr("Enable edit mode (unlock layout settings in sidebar)")
                 }
+
+                CheckBox {
+                    id: lockToolsPanelCheckBox
+
+                    text: qsTr("Lock Tools panel (keep collapsed)")
+                }
+
+                CheckBox {
+                    id: lockViewportPanelCheckBox
+
+                    text: qsTr("Lock Viewport panel (keep collapsed)")
+                }
             }
         }
 
@@ -157,6 +169,8 @@ Dialog {
         
         sidebarAutoCollapseCheckBox.checked = rootWindowSettings.sidebarAutoCollapse;
         editModeCheckBox.checked = rootWindowSettings.editMode;
+        lockToolsPanelCheckBox.checked = rootWindowSettings.lockToolsPanel;
+        lockViewportPanelCheckBox.checked = rootWindowSettings.lockViewportPanel;
         
         presetIndicatorCheckBox.checked = layoutsCollectionSettings.presetIndicator;
 
@@ -183,6 +197,8 @@ Dialog {
         
         rootWindowSettings.sidebarAutoCollapse = sidebarAutoCollapseCheckBox.checked;
         rootWindowSettings.editMode = editModeCheckBox.checked;
+        rootWindowSettings.lockToolsPanel = lockToolsPanelCheckBox.checked;
+        rootWindowSettings.lockViewportPanel = lockViewportPanelCheckBox.checked;
         
         layoutsCollectionSettings.presetIndicator = presetIndicatorCheckBox.checked;
 

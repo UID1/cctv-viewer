@@ -1,3 +1,16 @@
+cctv-viewer (0.2.1-1) unstable; urgency=medium
+
+  * Added user avatar and username@hostname display in sidebar header
+  * Added company logo (Astral Node Labs) above Collapse button
+  * Changed expanded panel header color to burgundy (#5c1d37)
+  * Added Recordings panel with Review button to launch Chromium browser
+  * Added ProcessLauncher helper for launching external applications
+  * Added SystemInfo helper for system user information
+  * Enhanced viewport status overlays with icons and live log textbox
+  * Improved circular avatar cropping with OpacityMask
+
+ -- CCTV Viewer Maintainer <maintainer@example.com>  Mon, 14 Sep 2026 20:15:00 +0300
+
 cctv-viewer (0.2.0-1) unstable; urgency=medium
 
   * Multi-surface video distribution - shared decoders for duplicate streams
