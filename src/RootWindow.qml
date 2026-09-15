@@ -55,6 +55,7 @@ ApplicationWindow {
         property int height: 720
         property bool fullScreen
         property bool sidebarAutoCollapse: true
+        property bool sidebarPinned: true  // When true, sidebar is seated (takes space); when false, floats
         property bool editMode: false  // When false, sidebar controls are locked
         property bool lockToolsPanel: false  // When true, Tools panel stays collapsed
         property bool lockViewportPanel: false  // When true, Viewport panel stays collapsed

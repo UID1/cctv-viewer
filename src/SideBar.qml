@@ -64,7 +64,8 @@ FocusScope {
     Item {
         id: container
 
-        opacity: Context.config.fullScreen && rootSideBar.state === SideBar.Compact ? 0 : 1
+        opacity: Context.config.fullScreen && rootSideBar.state === SideBar.Compact ? 0 :
+                 rootSideBar.state === SideBar.Popup ? 0.6 : 1
         implicitWidth: rootSideBar.state === SideBar.Compact ? compactWidth : expandedWidth
         implicitHeight: rootSideBar.height
         anchors.right: parent.right
@@ -116,7 +117,8 @@ FocusScope {
                 interval: 30000  // 30 seconds before auto-collapse
 
                 onTriggered: {
-                    if (rootWindowSettings.sidebarAutoCollapse &&
+                    if (!rootWindowSettings.sidebarPinned &&
+                        rootWindowSettings.sidebarAutoCollapse &&
                         rootSideBar.state === SideBar.Popup) {
                         rootSideBar.state = SideBar.Compact;
                     }
@@ -143,6 +145,7 @@ FocusScope {
                     spacing: 0
 
                     width: parent.width
+                    height: Math.max(implicitHeight, parent.height - footerRow.height - verticalMargins * 2)
 
                     anchors.top: parent.top
                     anchors.topMargin: verticalMargins
@@ -153,7 +156,7 @@ FocusScope {
                         id: header
 
                         icon: "qrc:/images/menu.svg"
-                        title: Qt.application.name
+                        title: qsTr("Cameras")
 
                         Layout.fillWidth: true
 
@@ -679,7 +682,7 @@ FocusScope {
                     SideBarItem {
                         objectName: "presets"
                         icon: "qrc:/images/menu-presets.svg"
-                        title: qsTr("Presets")
+                        title: qsTr("Views")
 
                         Layout.fillWidth: true
 
@@ -778,57 +781,112 @@ FocusScope {
 
                         onClicked: settingsDialog.open()
                     }
-                }
 
-                // Company logo above Collapse button
-                Item {
-                    id: logoContainer
-                    width: parent.width
-                    height: rootSideBar.state === SideBar.Compact ? 40 : 180
-                    anchors.bottom: footer.top
-                    anchors.bottomMargin: 5
-                    
-                    Image {
-                        id: companyLogo
-                        source: "qrc:/images/Astral-Node-Labs-Logo-Only.svg"
-                        anchors.centerIn: parent
-                        // Full width flush when expanded, mini when collapsed
-                        width: rootSideBar.state === SideBar.Compact ? 40 : parent.width
-                        height: rootSideBar.state === SideBar.Compact ? 40 : parent.height
-                        fillMode: Image.PreserveAspectFit
-                        smooth: true
-                        opacity: 0.5
+                    // Flexible spacer - fills remaining space, pushes logo to bottom
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumHeight: 0
+                    }
+
+                    // Company logo - stays near footer, pushed down when panels expand
+                    Item {
+                        id: logoContainer
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: rootSideBar.state === SideBar.Compact ? 40 : 180
+                        Layout.bottomMargin: 5
                         
-                        Behavior on width {
-                            NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                        Image {
+                            id: companyLogo
+                            source: "qrc:/images/Astral-Node-Labs-Logo-Only.svg"
+                            anchors.centerIn: parent
+                            // Full width flush when expanded, mini when collapsed
+                            width: rootSideBar.state === SideBar.Compact ? 40 : parent.width
+                            height: rootSideBar.state === SideBar.Compact ? 40 : parent.height
+                            fillMode: Image.PreserveAspectFit
+                            smooth: true
+                            opacity: 0.5
+                            
+                            Behavior on width {
+                                NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                            }
+                            Behavior on height {
+                                NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                            }
                         }
+                        
                         Behavior on height {
                             NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
                         }
                     }
-                    
-                    Behavior on height {
-                        NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
-                    }
                 }
 
-                SideBarItem {
-                    id: footer
-
-                    icon: "qrc:/images/menu-collapse.svg"
-                    // Show collapse icon when sidebar is visible (Popup or Expanded), expand when Compact
-                    mirrorIcon: rootSideBar.state === SideBar.Compact ^ mirrored
-                    title: rootSideBar.state === SideBar.Compact ? qsTr("Expand") : qsTr("Collapse")
+                Row {
+                    id: footerRow
                     width: parent.width
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: layout.verticalMargins
+                    spacing: 0
 
-                    onClicked: {
-                        if (rootSideBar.state === SideBar.Compact) {
-                            rootSideBar.state = SideBar.Expanded
-                        } else {
-                            rootSideBar.state = SideBar.Compact
+                    SideBarItem {
+                        id: footer
+
+                        icon: "qrc:/images/menu-collapse.svg"
+                        // Show collapse icon when sidebar is visible (Popup or Expanded), expand when Compact
+                        mirrorIcon: rootSideBar.state === SideBar.Compact ^ mirrored
+                        title: rootSideBar.state === SideBar.Compact ? qsTr("Expand") : qsTr("Collapse")
+                        width: rootSideBar.state === SideBar.Compact ? parent.width : parent.width - pinButton.width
+
+                        onClicked: {
+                            if (rootSideBar.state === SideBar.Compact) {
+                                // When expanding, use Expanded if pinned, Popup if unpinned
+                                rootSideBar.state = rootWindowSettings.sidebarPinned ? SideBar.Expanded : SideBar.Popup
+                            } else {
+                                rootSideBar.state = SideBar.Compact
+                            }
                         }
+                    }
+
+                    // Pin button - only visible when sidebar is expanded
+                    Button {
+                        id: pinButton
+                        width: 40
+                        height: footer.height
+                        visible: rootSideBar.state !== SideBar.Compact
+                        highlighted: !rootWindowSettings.sidebarPinned
+
+                        Image {
+                            id: pinIcon
+                            source: "qrc:/images/menu-pin.svg"
+                            width: 24
+                            height: 24
+                            anchors.centerIn: parent
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        // Color overlay for the pin icon
+                        ColorOverlay {
+                            anchors.fill: pinIcon
+                            source: pinIcon
+                            color: rootWindowSettings.sidebarPinned ? "white" : "#cccccc"
+                        }
+
+                        onClicked: {
+                            rootWindowSettings.sidebarPinned = !rootWindowSettings.sidebarPinned
+                            // If we just pinned and we're in Popup state, switch to Expanded
+                            if (rootWindowSettings.sidebarPinned && rootSideBar.state === SideBar.Popup) {
+                                rootSideBar.state = SideBar.Expanded
+                            }
+                            // If we just unpinned and we're in Expanded state, switch to Popup
+                            else if (!rootWindowSettings.sidebarPinned && rootSideBar.state === SideBar.Expanded) {
+                                rootSideBar.state = SideBar.Popup
+                            }
+                        }
+
+                        ToolTip.delay: Compact.toolTipDelay
+                        ToolTip.timeout: Compact.toolTipTimeout
+                        ToolTip.visible: hovered
+                        ToolTip.text: rootWindowSettings.sidebarPinned ? qsTr("Unpin sidebar (floating mode)") : qsTr("Pin sidebar (seated mode)")
                     }
                 }
             }

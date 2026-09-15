@@ -16,6 +16,7 @@
         <file>images/menu-presets.svg</file>
         <file>images/menu.svg</file>
         <file>images/menu-collapse.svg</file>
+        <file>images/menu-pin.svg</file>
         <file>images/menu-recordings.svg</file>
         <file>images/menu-item-collapse.svg</file>
         <file>src/imports/CCTV_Viewer/Utils/qmldir</file>

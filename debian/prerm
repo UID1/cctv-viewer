@@ -3,13 +3,10 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-        # Stop any running cctv-viewer services
-        if [ -d /run/systemd/system ]; then
-            # Find and stop any cctv-viewer@* services
-            for service in $(systemctl list-units --type=service --state=running --no-legend 'cctv-viewer@*' 2>/dev/null | awk '{print $1}'); do
-                systemctl stop "$service" || true
-            done
-        fi
+        # Note: cctv-viewer is a user service, users should stop it with:
+        #   systemctl --user stop cctv-viewer.service
+        # We'll try to kill any running instances
+        pkill -f '/usr/bin/cctv-viewer' || true
         ;;
 esac
 

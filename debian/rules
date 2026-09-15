@@ -11,10 +11,10 @@ override_dh_auto_configure:
 
 override_dh_auto_install:
 	dh_auto_install --destdir=debian/cctv-viewer
-	# Install systemd service template (@ services require manual enabling)
+	# Install systemd user service (runs in user session, no sudo needed)
 	install -D -m 644 debian/cctv-viewer.service \
-		debian/cctv-viewer/usr/lib/systemd/system/cctv-viewer@.service
+		debian/cctv-viewer/usr/lib/systemd/user/cctv-viewer.service
 
-# Don't auto-enable/start the service - it's a template requiring a username
+# Don't auto-enable/start the service - user must enable it manually
 override_dh_installsystemd:
 	dh_installsystemd --no-enable --no-start

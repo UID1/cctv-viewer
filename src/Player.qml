@@ -343,13 +343,6 @@ FocusScope {
                 }
             }
             
-            function onErrorStringChanged() {
-                if (root._activePlayer && root._activePlayer.errorString) {
-                    var url = root.source.toString();
-                    root.addLogEntry("Error [" + url + "]: " + root._activePlayer.errorString);
-                }
-            }
-            
             function onBufferProgressChanged() {
                 if (root._activePlayer && root._activePlayer.status === MediaPlayer.Buffering) {
                     var percent = Math.round(root._activePlayer.bufferProgress * 100);

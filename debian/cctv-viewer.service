@@ -1,21 +1,19 @@
 [Unit]
-Description=CCTV Viewer - Video Stream Display (%i)
+Description=CCTV Viewer - Video Stream Display
 Documentation=https://github.com/iEvgeny/cctv-viewer
-After=display-manager.service
+After=graphical-session.target
 
 [Service]
 Type=simple
-User=%i
 
-# Environment for display (XDG_RUNTIME_DIR set by wrapper script)
-Environment=DISPLAY=:0
-Environment=QT_QPA_PLATFORM=xcb
+# Clean up stale lock files before starting
+ExecStartPre=-/bin/rm -f %t/cctv-viewer-%U.lock
+ExecStartPre=-/bin/rm -f /tmp/cctv-viewer-%U.lock
 
-# Wait for display to be ready
-ExecStartPre=/bin/sleep 5
+# Wait for display to be fully ready
+ExecStartPre=/bin/sleep 2
 
-# Use wrapper script to find XAUTHORITY and XDG_RUNTIME_DIR dynamically
-ExecStart=/usr/bin/cctv-viewer-launch --full-screen
+ExecStart=/usr/bin/cctv-viewer --full-screen
 
 # Restart policy - restart on crash
 Restart=on-failure
@@ -30,9 +28,6 @@ Nice=0
 
 # Security hardening
 NoNewPrivileges=true
-ProtectSystem=strict
-ProtectHome=read-only
-ReadWritePaths=/home/%i/.config
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical-session.target
