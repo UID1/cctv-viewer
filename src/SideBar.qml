@@ -646,10 +646,26 @@ FocusScope {
 
                                     TextField {
                                         id: ffmpegOptionsTextField
-                                        text: viewportLayout.enabled ? getOptionsString(Utils.currentModel().get(currentViewportIndex).avFormatOptions) : ""
                                         selectByMouse: true
 
                                         Layout.fillWidth: true
+                                        
+                                        // Update text when viewport changes (not bound to avoid loop)
+                                        Component.onCompleted: updateText()
+                                        Connections {
+                                            target: rootSideBar
+                                            function onCurrentViewportIndexChanged() {
+                                                ffmpegOptionsTextField.updateText();
+                                            }
+                                        }
+                                        
+                                        function updateText() {
+                                            if (viewportLayout.enabled && currentViewportIndex >= 0) {
+                                                text = getOptionsString(Utils.currentModel().get(currentViewportIndex).avFormatOptions);
+                                            } else {
+                                                text = "";
+                                            }
+                                        }
 
                                         onEditingFinished: {
                                             var options = Utils.parseOptions(text);

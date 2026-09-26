@@ -45234,3 +45234,383 @@ _**Agent (claude-opus-4-5)**_
 <summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/Player.qml</summary>
 
 </details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+I see the issue now. The status overlay visibility check is:
+```
+visible: root._activePlayer ? root._activePlayer.status !== MediaPlayer.Buffered : true
+```
+
+The problem is `MediaPlayer.Buffered` - in Qt6, the status enum values might be different. Let me check what status values QmlAVPlayer provides. Since it's a custom player wrapping FFmpeg, it likely has its own status values.
+
+Let me check the QmlAVPlayer implementation to see what status values it uses.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h",
+  "pattern": "status|Status|Buffered|Playing"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h",
+  "pattern": "status|Status|Buffered|Playing",
+  "topFiles": [
+    {
+      "matchCount": 5,
+      "uri": "src/qmlav/src/qmlavplayer.h"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 5
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The player uses `QMediaPlayer::MediaStatus`. In Qt6, the enum values may have changed. Let me check what the Qt6 MediaPlayer status values are and also look at what the player is actually setting.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp",
+  "pattern": "setStatus|MediaStatus"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.cpp",
+  "pattern": "setStatus|MediaStatus",
+  "topFiles": [
+    {
+      "matchCount": 3,
+      "uri": "src/qmlav/src/qmlavplayer.cpp"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 3
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The status is coming from the demuxer. Let me check what status values the demuxer emits.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.cpp",
+  "pattern": "mediaStatusChanged|MediaStatus|Buffered"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavdemuxer.cpp",
+  "pattern": "mediaStatusChanged|MediaStatus|Buffered",
+  "topFiles": [
+    {
+      "matchCount": 9,
+      "uri": "src/qmlav/src/qmlavdemuxer.cpp"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 9
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+I see the issue now. The demuxer emits `QMediaPlayer::BufferedMedia` but in the QML file we check for `MediaPlayer.Buffered`. 
+
+In Qt6, the enum value names changed slightly:
+- Qt5: `QMediaPlayer::BufferedMedia`
+- Qt6 QML: `MediaPlayer.BufferedMedia` (not just `Buffered`)
+
+Actually wait, let me check what the actual Qt6 enum names are in QML. The QML import `QtMultimedia` should expose these values.
+
+Looking at Qt6 documentation:
+- `MediaPlayer.NoMedia`
+- `MediaPlayer.Loading` (was `LoadingMedia`)
+- `MediaPlayer.Loaded` (was `LoadedMedia`) 
+- `MediaPlayer.Buffering` (was `BufferingMedia`)
+- `MediaPlayer.Buffered` (was `BufferedMedia`)
+- `MediaPlayer.Stalled` (was `StalledMedia`)
+- `MediaPlayer.EndOfMedia`
+- `MediaPlayer.InvalidMedia`
+
+So the QML side names are correct. The issue is that our C++ code emits `QMediaPlayer::BufferedMedia` which in Qt6 should be `QMediaPlayer::BufferedMedia` as well... Let me check if the enum names changed in Qt6 C++ side.
+
+Actually in Qt6, the enums are:
+```cpp
+enum MediaStatus {
+    NoMedia,
+    LoadingMedia,
+    LoadedMedia,
+    StalledMedia,
+    BufferingMedia,
+    BufferedMedia,
+    EndOfMedia,
+    InvalidMedia
+};
+```
+
+And in QML they're exposed as `MediaPlayer.NoMedia`, `MediaPlayer.LoadingMedia`, etc. But wait, the existing code uses `MediaPlayer.Buffered` which might be wrong. Let me check if Qt6 QML uses different names.
+
+Actually in Qt6 QML, the MediaStatus values are:
+- MediaPlayer.NoMedia
+- MediaPlayer.Loading (maps to LoadingMedia)
+- MediaPlayer.Loaded (maps to LoadedMedia)
+- MediaPlayer.Stalled (maps to StalledMedia)
+- MediaPlayer.Buffering (maps to BufferingMedia)
+- MediaPlayer.Buffered (maps to BufferedMedia)
+- MediaPlayer.EndOfMedia
+- MediaPlayer.InvalidMedia
+
+So these QML names seem right after all. Maybe the real problem is that QmlAVPlayer isn't registered properly for QML to see these enum values, or the status is simply never getting set to BufferedMedia in the first place.
+
+The QmlAVPlayer uses `QMediaPlayer::MediaStatus` internally, but it's a custom player, so I should check whether it exposes that enum to QML correctly. The visibility check compares `root._activePlayer.status !== MediaPlayer.Buffered`, but if `_activePlayer` is a `QmlAVPlayer` rather than Qt's native `MediaPlayer`, there could be a mismatch. The demuxer emits `BufferedMedia`, not `Buffered` - I need to verify the actual Qt6 enum value and see if there's a naming mismatch between the C++ and QML sides.
+
+Qt6's QtMultimedia QML enum uses full names like `MediaPlayer.BufferedMedia`, `MediaPlayer.LoadingMedia`, `MediaPlayer.StalledMedia`, etc., not the short forms. But the current QML code uses `MediaPlayer.Buffered` and `MediaPlayer.Loading` - these short names might not exist in Qt6, which would explain the bug.
+
+Actually, checking further - Qt 6.2+ introduced short names for the enum (Loading, Loaded, etc.), so `MediaPlayer.Buffered` should still be valid syntax. The C++ side sends `QMediaPlayer::BufferedMedia` which should map correctly to the QML enum.
+
+So the overlay staying visible despite playback likely isn't an enum naming mismatch. More probable causes: the status never actually transitions to Buffered, the property binding is broken, or `_activePlayer` isn't pointing to the correct player instance.
+
+With `usePool` false, `_activePlayer` resolves to `localPlayer`, a `QmlAVPlayer`. I need to verify its `status` property actually reflects the underlying `QMediaPlayer::MediaStatus` correctly, and that the comparison against `MediaPlayer.Buffered` in QML is evaluating as expected given the type registration.
+
+Checking the switch statement for statusText against the boolean visibility check, both reference status enums but I want to confirm the naming matches between Qt5 and Qt6 conventions—things like `LoadingMedia` vs `Loading` could differ, causing silent mismatches in comparisons.
+
+Numerically, `QMediaPlayer::MediaStatus` runs NoMedia=0 through InvalidMedia=7, so as long as QML's enum aliases map to the same integers this shouldn't matter. The real question is whether the status property update is even firing correctly, so I'm tracing back through the demuxer where it emits `LoadedMedia` followed immediately by `BufferedMedia`.
+
+Checking Qt6's property binding requirements - signals need to be emitted properly for QML bindings to pick up changes. Looking at `qmlavplayer.h`, the `QMLAV_PROPERTY_READONLY` macro wires up `status`/`statusChanged`, and the setter just guards against redundant sets before emitting `statusChanged()` with no arguments - which should still be fine for a Q_PROPERTY NOTIFY signal in QML.
+
+Let me pivot instead of digging further into status - maybe the playback itself is broken due to other Qt6 API changes, not just the status property.
+
+I also need to look at the SettingsDialog positioning issue. In Qt6, `Dialog` doesn't auto-position as a window, so I likely need `anchors.centerIn: parent` or proper popup handling. I'll fix that first since it's more straightforward.
+
+For the status overlay, I should also check whether `playbackState` is the property that actually needs watching rather than `status` alone, since Qt6 separates these more clearly.
+
+The overlay probably needs to hide on `playbackState === MediaPlayer.PlayingState` instead of `status === MediaPlayer.Buffered`, since a stream can be playing before full buffering. I need to check whether our QmlAVPlayer exposes this property at all.
+
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search"><details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+Parameters:
+
+```json
+{
+  "caseInsensitive": false,
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h",
+  "pattern": "playbackState|PlaybackState|playing"
+}
+```
+Additional data:
+
+```json
+{
+  "isPruned": true,
+  "outputMode": "content",
+  "path": "/home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavplayer.h",
+  "pattern": "playbackState|PlaybackState|playing",
+  "topFiles": [
+    {
+      "matchCount": 4,
+      "uri": "src/qmlav/src/qmlavplayer.h"
+    }
+  ],
+  "totalFiles": 1,
+  "totalMatches": 4
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The player has `playbackState`. The overlay should probably check `playbackState === MediaPlayer.PlayingState` instead of or in addition to the status check. But let me also look at what the QML switch statement does - it uses `Loading`, `Loaded`, etc. which might be Qt6 short names, but the C++ emits `LoadingMedia`, `LoadedMedia`, etc.
+
+Actually wait - in Qt6 QML, the MediaStatus enum values in the `MediaPlayer` type ARE the short names:
+- `MediaPlayer.Loading` (not `MediaPlayer.LoadingMedia`)
+- `MediaPlayer.Buffered` (not `MediaPlayer.BufferedMedia`)
+
+But in C++ they're still the long names:
+- `QMediaPlayer::LoadingMedia`
+- `QMediaPlayer::BufferedMedia`
+
+The values should be the same numerically, so comparisons should work. But let me double-check if there's a registration issue.
+
+Actually, I think I found the issue. The QML code uses `import QtMultimedia` and then references `MediaPlayer.Buffered`. But `MediaPlayer.Buffered` is specifically the enum value for the Qt6 `MediaPlayer` QML type. 
+
+Our custom `QmlAVPlayer` uses `QMediaPlayer::MediaStatus` from C++, which has values like `BufferedMedia`. These are the same enum but accessed differently.
+
+When QML compares `qmlavPlayer.status` (which is a C++ `QMediaPlayer::MediaStatus`) with `MediaPlayer.Buffered` (which is from the Qt QML MediaPlayer type), they SHOULD be the same numerical value.
+
+Let me verify by checking what Qt6 enum registration looks like and if there's a mismatch. But actually, the simplest fix might be to also check `playbackState` since that's more reliable for determining if video is actually playing.
+
+Let me fix both issues:
+1. Status overlay - also check playbackState for more reliable hide
+2. Settings dialog - center it properly for Qt6
+
+I'll start with the dialog centering fix.
+
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+I see two issues:
+
+1. **Status overlay**: Should check `playbackState` for reliable "playing" detection
+2. **SettingsDialog**: Qt6 Dialog needs explicit positioning
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2**</summary>
+The string to replace was not found in the file.
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+I see - the standardButtons line has a comment at the end. Let me fix that.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/SettingsDialog.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me fix the status overlay in Player.qml to check playbackState instead of just status.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Now fix the status overlay to check `playbackState`:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/src/Player.qml</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Good. Let me also update the isError check to still work with status:
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2"><details>
+<summary>Tool use: **run_terminal_command_v2** • Run command: cd /home/bot/developer_home/cctv-viewer &amp;&amp; git add -A &amp;&amp; git commit --trailer &#34;Co-authored-by: Cursor &lt;cursoragent@cursor.com&gt;&#34; -m &#34;Fix Qt6 status overlay and SettingsDialog positioning
+
+- Player.qml: Check playbackState instead of status for overlay visibility
+- SettingsDialog.qml: Add explicit positioning and sizing for Qt6 Dialog&#34;</summary>
+```bash
+cd /home/bot/developer_home/cctv-viewer && git add -A && git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "Fix Qt6 status overlay and SettingsDialog positioning
+
+- Player.qml: Check playbackState instead of status for overlay visibility
+- SettingsDialog.qml: Add explicit positioning and sizing for Qt6 Dialog"
+```
+
+```
+[qt6-migration 2fef41e] Fix Qt6 status overlay and SettingsDialog positioning
+ 4 files changed, 210 insertions(+), 7 deletions(-)
+
+```
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Done. Let me provide a summary.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Fixed both issues:
+
+1. **Status overlay**: Now checks `playbackState !== MediaPlayer.PlayingState` instead of `status !== MediaPlayer.Buffered` - more reliable for detecting when video is actually playing
+
+2. **SettingsDialog**: Added `anchors.centerIn: parent` and explicit width/height for proper Qt6 Dialog positioning
+
+Sync and rebuild to test.
+
+---
+
+_**User**_
+
+I have these messages in the output as well:
+qrc:/src/RootWindow.qml:187:5: QML Shortcut: Shortcut: Only binding to one of multiple key bindings associated with 65. Use 'sequences: [ <key> ]' to bind to all of them.
+...
+Ignoring dummy output: std::map(std::pair("client.id", "34"), std::pair("factory.id", "19"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "2853"))
+...
+qrc:/src/SideBar.qml:647:37: QML TextField: Binding loop detected for property "text":
+qrc:/src/SideBar.qml:649:41
+qrc:/src/SideBar.qml:647:37: QML TextField: Binding loop detected for property "text":
+qrc:/src/SideBar.qml:649:41
+
+are these something to worry about?

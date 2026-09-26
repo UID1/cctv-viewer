@@ -185,7 +185,7 @@ ApplicationWindow {
         }
     }
     Shortcut {
-        sequence: StandardKey.Quit
+        sequences: [StandardKey.Quit]  // Qt6: Use sequences for StandardKey
         onActivated: Qt.quit()
     }
 
