@@ -6,8 +6,8 @@ import CCTV_Viewer.Utils 1.0
 
 Dialog {
     title: qsTr("Settings")
-    modality: Qt.ApplicationModal
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
+    modal: true  // Qt6: replaces modality
+    standardButtons: Dialog.Ok | Dialog.Cancel  // Qt6: StandardButton -> Dialog
 
     onVisibleChanged: {
         if (visible) {

@@ -307,12 +307,11 @@ ApplicationWindow {
 
     MessageDialog {
         title: qsTr("Already running!")
-        icon: StandardIcon.Warning
-        text: qsTr("The application is already running!")
-        informativeText: qsTr("Go to the first instance and allow multiple instances of the app to run in Settings.")
-        standardButtons: MessageDialog.Ok
+        // Qt6: icon property removed, text replaces both text and informativeText
+        text: qsTr("The application is already running!\n\nGo to the first instance and allow multiple instances of the app to run in Settings.")
+        buttons: MessageDialog.Ok  // Qt6: standardButtons -> buttons
 
-        onVisibilityChanged: !visible && Qt.quit();
+        onVisibleChanged: !visible && Qt.quit();  // Qt6: onVisibilityChanged -> onVisibleChanged
         Component.onCompleted: {
             if (generalSettings.singleApplication && SingleApplication.isRunning()) {
                 open();

@@ -763,14 +763,18 @@ FocusScope {
                             id: presetDeleteDialog
 
                             title: qsTr("Are you sure?")
-                            icon: StandardIcon.Question
-                            text: qsTr("Are you sure you want to delete preset #%1?").arg(index + 1)
-                            informativeText: qsTr("It's an irreversible procedure. Be careful!")
-                            standardButtons: MessageDialog.Yes | MessageDialog.No
+                            // Qt6: icon removed, text replaces text+informativeText
+                            text: qsTr("Are you sure you want to delete preset #%1?\n\nIt's an irreversible procedure. Be careful!").arg(index + 1)
+                            buttons: MessageDialog.Yes | MessageDialog.No  // Qt6: standardButtons -> buttons
 
                             property int index: -1
 
-                            onYes: layoutsCollectionModel.remove(index)
+                            // Qt6: onYes -> onButtonClicked with role check
+                            onButtonClicked: function(button, role) {
+                                if (button === MessageDialog.Yes) {
+                                    layoutsCollectionModel.remove(index)
+                                }
+                            }
                         }
                     }
                     SideBarItem {
