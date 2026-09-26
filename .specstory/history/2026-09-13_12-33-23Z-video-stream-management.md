@@ -39512,6 +39512,18 @@ To-do's from the plan have already been created. Do not create them again. Mark 
 
 _**Agent (claude-opus-4-5)**_
 
+<think><details><summary>Thought Process</summary>
+The user wants me to implement the plan to modify the systemd timer to restart every 12 hours. Let me:
+
+1. Mark the todo as in_progress
+2. Make the change to the timer file
+3. Mark the todo as completed
+
+Let me do this now.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
 <tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
 <summary>Tool use: **todo_write**</summary>
 
@@ -39522,6 +39534,557 @@ Parameters:
   "merge": true
 }
 ```
-Status: **loading**
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Add second OnCalendar entry for 15:00:00 in cctv-viewer-restart.timer",
+      "id": "update-timer",
+      "status": "in_progress"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Add second OnCalendar entry for 15:00:00 in cctv-viewer-restart.timer",
+      "id": "update-timer",
+      "status": "pending"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
 
 </details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now let me modify the timer file.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2"><details>
+<summary>Tool use: **edit_file_v2** • Edit file: /home/bot/developer_home/cctv-viewer/systemd/user/cctv-viewer-restart.timer</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The change has been made. Let me mark the todo as completed.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="todo_write"><details>
+<summary>Tool use: **todo_write**</summary>
+
+Parameters:
+
+```json
+{
+  "merge": true
+}
+```
+Result:
+
+```json
+{
+  "finalTodos": [
+    {
+      "content": "Add second OnCalendar entry for 15:00:00 in cctv-viewer-restart.timer",
+      "id": "update-timer",
+      "status": "completed"
+    }
+  ],
+  "initialTodos": [
+    {
+      "content": "Add second OnCalendar entry for 15:00:00 in cctv-viewer-restart.timer",
+      "id": "update-timer",
+      "status": "in_progress"
+    }
+  ],
+  "success": true,
+  "wasMerge": true
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Done! The timer has been updated to restart every 12 hours. Let me provide a summary.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Done! The timer has been updated to restart every 12 hours.
+
+**Changed file:** `systemd/user/cctv-viewer-restart.timer`
+
+```ini
+[Unit]
+Description=Restart CCTV Viewer every 12 hours
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+OnCalendar=*-*-* 15:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+**On the production device**, run:
+```bash
+systemctl --user daemon-reload
+systemctl --user restart cctv-viewer-restart.timer
+```
+
+This keeps peak memory under ~1 GB, safely within your 1.5 GB allocation.
+
+---
+
+_**User**_
+
+I would like to implement a multiprocess architecture that runs each camera stream in a separate process and manages the memory allocation from there.
+
+I would also like to migrate this to a Qt6 native application.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is asking for two major changes:
+1. Multi-process architecture where each camera stream runs in a separate process
+2. Migration to Qt6
+
+These are both significant undertakings. Let me ask some clarifying questions before creating a plan, as there are multiple ways to approach this.
+
+For multi-process architecture:
+- How would the processes communicate? (shared memory, pipes, sockets?)
+- How would video frames be passed to the main UI? (shared memory textures, IPC?)
+- Should the main UI remain a single process that just displays frames from workers?
+
+For Qt6 migration:
+- This requires rewriting the qmlav multimedia integration since QAbstractVideoSurface → QVideoSink
+- Should we keep qmlav or consider alternatives like Qt6's built-in MediaPlayer?
+
+These are big projects. I should ask clarifying questions about scope and priorities.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+These are both significant architectural changes. Before I create a plan, I need to clarify a few things:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="ask_question"><details>
+<summary>Tool use: **ask_question**</summary>
+
+Parameters:
+
+```json
+{
+  "questions": [
+    {
+      "id": "scope",
+      "options": [
+        {
+          "id": "qt6-first",
+          "label": "Qt6 migration first, then multi-process (Recommended) - Multi-process is easier to design correctly on the new Qt6 APIs"
+        },
+        {
+          "id": "multiprocess-first",
+          "label": "Multi-process first on Qt5, then migrate to Qt6 - Get memory isolation sooner, but will need to redo IPC for Qt6"
+        },
+        {
+          "id": "both-together",
+          "label": "Design both together - More complex but single rewrite"
+        }
+      ],
+      "prompt": "These are two major projects. How would you like to approach them?"
+    },
+    {
+      "id": "video-backend",
+      "options": [
+        {
+          "id": "port-qmlav",
+          "label": "Port qmlav to Qt6 - Keep FFmpeg control, significant work on QVideoSink integration"
+        },
+        {
+          "id": "qt6-native",
+          "label": "Use Qt6's native MediaPlayer - Less control but simpler, may not support all RTSP/RTMP features"
+        },
+        {
+          "id": "evaluate",
+          "label": "Evaluate Qt6 MediaPlayer first, fall back to qmlav port if needed"
+        }
+      ],
+      "prompt": "For Qt6, should we keep qmlav (requires significant porting) or consider alternatives?"
+    },
+    {
+      "id": "timeline",
+      "options": [
+        {
+          "id": "future-project",
+          "label": "This is for a future version - Current 12-hour restart solution is fine for now"
+        },
+        {
+          "id": "before-deploy",
+          "label": "Need this before production deployment"
+        },
+        {
+          "id": "parallel-track",
+          "label": "Deploy current version, develop this in parallel for update"
+        }
+      ],
+      "prompt": "What's the timeline constraint? You mentioned production deployment soon."
+    }
+  ],
+  "title": "Multi-Process Architecture + Qt6 Migration"
+}
+```
+Additional data:
+
+```json
+{
+  "completionDelivered": true,
+  "skipReason": "user",
+  "status": "cancelled"
+}
+```
+User decision: **rejected**
+
+Status: **completed**
+
+</details></tool-use>
+
+---
+
+_**User**_
+
+We could try the Qt6 migration first. So Qt6 has a built-in media player for video? I'm not sure what to do here but something tells me that the ffmpeg is probably the more reliable option.
+
+I'm going to deploy current version and try to roll out future developments later. I will try to keep a connection to the machine as it is out on the field so that I can roll out releases over ssh. The issue is that it is the only machine with AMD CPU and on-chip GPU like that, the other machines I have are Intel GPU or nVidia, and I'm not sure these hardware/driver stacks have the same memleak issues as the AMD one. 
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user cancelled the questionnaire. Let me wait for them to provide more context or clarify what they want.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+No problem - let me know when you're ready to discuss the approach, or if you'd like to proceed differently.
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user is providing more context:
+
+1. They want to try Qt6 migration first
+2. They're uncertain about Qt6's native MediaPlayer vs FFmpeg (qmlav)
+3. They're deploying the current version now and will work on Qt6 migration as a future project
+4. They can SSH into the production machine for updates
+5. The memory leak might be AMD-specific (they have Intel and Nvidia machines that might not have the same issue)
+
+This is good context. The memory leak being AMD/Mesa specific is an important detail - it might not affect Intel or Nvidia drivers the same way.
+
+Let me provide some guidance on Qt6's MediaPlayer vs FFmpeg/qmlav, and then suggest a practical path forward.
+
+Since they're in plan mode and seem to want information/discussion rather than immediate implementation, I should provide helpful context about the options.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Good thinking. Let me give you the context you need to make this decision:
+
+## Qt6 MediaPlayer vs FFmpeg (qmlav)
+
+| Aspect | Qt6 Native MediaPlayer | FFmpeg via qmlav |
+|--------|------------------------|------------------|
+| **RTSP support** | Depends on GStreamer/platform backend | Direct, full control |
+| **RTMP support** | Limited/platform-dependent | Full FFmpeg support |
+| **Low-latency** | Backend-dependent | Tunable (analyzeduration, probesize) |
+| **Codec control** | Abstracted away | Direct access |
+| **Maintenance** | Qt maintains it | You maintain qmlav port |
+| **GPU memory** | Uses Qt6's new RHI (different codepath) | Same FFmpeg, new Qt6 rendering |
+
+**My assessment**: For RTSP/RTMP camera streams with low-latency requirements, FFmpeg gives you more control. Qt6's MediaPlayer relies on platform backends (GStreamer on Linux) which adds another layer and may not handle all RTSP edge cases.
+
+## The AMD-Specific Leak
+
+This is an important observation. The leak could be:
+- **Mesa-specific** (AMD uses Mesa's radeon/amdgpu drivers)
+- **Qt5 + Mesa interaction** (might be fixed in Qt6's new RHI)
+- Intel uses Mesa too (i915), so might have similar issues
+- Nvidia uses proprietary drivers (different codepath entirely)
+
+Testing on your Intel machine with Qt5 could tell you if it's AMD-specific or Mesa-general.
+
+## Suggested Path Forward
+
+```
+Now:     Deploy current Qt5 version with 12-hour restart
+         ↓
+Test:    Run on Intel machine to see if leak exists there
+         ↓
+Future:  Port qmlav to Qt6 (QVideoSink API)
+         - Qt6's RHI may fix the GPU memory leak
+         - Keep FFmpeg for reliable RTSP/RTMP
+         ↓
+Longer:  Consider multi-process if Qt6 still leaks
+```
+
+Would you like me to create a detailed plan for the Qt6 migration of qmlav? It would document:
+- Files that need changes
+- Qt5 → Qt6 API mappings
+- Testing strategy
+
+This would be a reference document for when you're ready to tackle it.
+
+---
+
+_**User**_
+
+We can use multiple branches and keep the Qt5 branch alive at least until that bug is fixed. In the future, I may want to add functionality to crop the video frame to fit the viewport and perhaps add some overlay graphics. I feel that with the Qt6 media player, I may lose control over such features.
+
+---
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+The user makes excellent points:
+
+1. They want to maintain a Qt5 branch while developing Qt6 - smart branching strategy
+2. They want future features like:
+   - Cropping video frames to fit viewport
+   - Overlay graphics on video
+
+These features are very relevant to the FFmpeg vs Qt6 MediaPlayer decision:
+
+- **Frame cropping**: With qmlav/FFmpeg, you have access to raw frames and can use FFmpeg's libavfilter for cropping, or do it in the rendering pipeline. With Qt6's MediaPlayer, you're more limited.
+
+- **Overlay graphics**: Both can do this via Qt Quick overlays on top of VideoOutput, but qmlav gives you more control over frame timing for synchronized overlays.
+
+This confirms that keeping qmlav (porting it to Qt6) is the right choice for their use case. Qt6's native MediaPlayer would limit their flexibility.
+
+Let me create a comprehensive plan for the Qt6 migration of qmlav. This will serve as a reference document for the future work.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+Those are exactly the right reasons to keep qmlav with FFmpeg:
+
+| Feature | Qt6 Native MediaPlayer | qmlav + FFmpeg |
+|---------|------------------------|----------------|
+| **Frame cropping** | Limited (CSS-like viewport clipping only) | Full control via libavfilter or manual crop |
+| **Overlay graphics** | QML overlay on top of VideoOutput | Same, plus access to frame data for synchronized overlays |
+| **Frame manipulation** | Not possible | Direct access to decoded frames |
+| **Custom rendering** | No | Can modify frames before display |
+
+Your branching strategy is sound - maintain Qt5 for production stability while developing Qt6 in parallel.
+
+Let me create a comprehensive Qt6 migration plan that you can reference when ready:
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavframe.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavformat.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="search" data-tool-name="glob_file_search"><details>
+<summary>Tool use: **glob_file_search** • Searched codebase "" • **17** results in **1** directory</summary>
+
+Directory: **``** (17 files)
+
+| File |
+|------|
+| `./src/qmlav/src/qmlavplayer.h` |
+| `./src/qmlav/src/qmlavwaitingqueue.h` |
+| `./src/qmlav/src/qmlavvideobuffer.h` |
+| `./src/qmlav/src/qmlavutils.h` |
+| `./src/qmlav/src/qmlavthread.h` |
+| `./src/qmlav/src/qmlavresampler.h` |
+| `./src/qmlav/src/qmlavpropertyhelpers.h` |
+| `./src/qmlav/src/qmlavoptions.h` |
+| `./src/qmlav/src/qmlavmediacontextholder.h` |
+| `./src/qmlav/src/qmlavhwoutput_vaapi_glx.h` |
+| `./src/qmlav/src/qmlavhwoutput_vaapi_egl.h` |
+| `./src/qmlav/src/qmlavhwoutput.h` |
+| `./src/qmlav/src/qmlavframe.h` |
+| `./src/qmlav/src/qmlavformat.h` |
+| `./src/qmlav/src/qmlavdemuxer.h` |
+| `./src/qmlav/src/qmlavdecoder.h` |
+| `./src/qmlav/src/qmlavaudioiodevice.h` |
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I have a good picture of the qmlav structure. Let me check a few more files to understand the full scope, then create a comprehensive migration plan.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavvideobuffer.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2"><details>
+<summary>Tool use: **read_file_v2** • Read file: /home/bot/developer_home/cctv-viewer/src/qmlav/src/qmlavhwoutput.h</summary>
+
+</details></tool-use>
+
+_**Agent (claude-opus-4-5)**_
+
+<think><details><summary>Thought Process</summary>
+Now I have a complete picture. Let me create a comprehensive Qt6 migration plan. The key changes needed are:
+
+1. **QAbstractVideoSurface → QVideoSink**
+   - `QmlAVPlayer` needs to change from managing `QList<QAbstractVideoSurface*>` to `QList<QVideoSink*>`
+   - Frame delivery changes from `surface->present(frame)` to `sink->setVideoFrame(frame)`
+
+2. **QVideoSurfaceFormat → QVideoFrameFormat**
+   - Rename and adjust API
+
+3. **QAbstractPlanarVideoBuffer → QVideoFrameFormat + custom buffer handling**
+   - Qt6 has a different approach to video buffers
+
+4. **QAudioOutput → QAudioSink**
+   - Different API
+
+5. **QVideoFrame::PixelFormat → QVideoFrameFormat::PixelFormat**
+   - Enum values may differ
+
+6. **QML imports**
+   - Update all QML files
+
+7. **CMake**
+   - Already has Qt6 detection, needs minor adjustments
+
+Let me create a detailed plan.
+</details></think>
+
+_**Agent (claude-opus-4-5)**_
+
+<tool-use data-tool-type="unknown" data-tool-name="create_plan"><details>
+<summary>Tool use: **create_plan**</summary>
+
+Parameters:
+
+````json
+{
+  "name": "Qt6 Migration Plan",
+  "overview": "Comprehensive plan to migrate cctv-viewer and qmlav from Qt5 to Qt6, maintaining FFmpeg integration while adapting to Qt6's new multimedia APIs.",
+  "plan": "# Qt6 Migration Plan for cctv-viewer\n\n## Overview\n\nThis plan documents the migration of cctv-viewer from Qt5 to Qt6. The primary challenge is adapting qmlav's FFmpeg integration to Qt6's completely redesigned multimedia subsystem.\n\n## Branch Strategy\n\n```\nmain (Qt5) ─────────────────────────────► production\n     │\n     └──► qt6-migration ──► testing ──► merge when stable\n```\n\n## Phase 1: Core API Changes (qmlav)\n\n### 1.1 Video Surface to Video Sink\n\n**Qt5 (current):**\n```cpp\nQList\u003cQAbstractVideoSurface*\u003e m_videoSurfaces;\nsurface-\u003epresent(qvf);  // Push frame to surface\n```\n\n**Qt6 (new):**\n```cpp\nQList\u003cQVideoSink*\u003e m_videoSinks;\nsink-\u003esetVideoFrame(qvf);  // Set frame on sink\n```\n\n**Files to modify:**\n- [`src/qmlav/src/qmlavplayer.h`](src/qmlav/src/qmlavplayer.h) - Change property type and member\n- [`src/qmlav/src/qmlavplayer.cpp`](src/qmlav/src/qmlavplayer.cpp) - Change frame delivery logic\n\n### 1.2 Video Format Classes\n\n| Qt5 Class | Qt6 Class | Notes |\n|-----------|-----------|-------|\n| `QVideoSurfaceFormat` | `QVideoFrameFormat` | Renamed, API similar |\n| `QVideoFrame::PixelFormat` | `QVideoFrameFormat::PixelFormat` | Enum values changed |\n| `QAbstractVideoSurface::supportedPixelFormats()` | N/A | Qt6 handles format negotiation internally |\n\n**Files to modify:**\n- [`src/qmlav/src/qmlavformat.h`](src/qmlav/src/qmlavformat.h) - Update `QmlAVPixelFormat` mapping\n- [`src/qmlav/src/qmlavformat.cpp`](src/qmlav/src/qmlavformat.cpp) - Update pixel format conversion table\n- [`src/qmlav/src/qmlavdemuxer.h`](src/qmlav/src/qmlavdemuxer.h) - Update format references\n- [`src/qmlav/src/qmlavdecoder.h`](src/qmlav/src/qmlavdecoder.h) - Update format references\n\n### 1.3 Video Buffer Rewrite\n\n**Qt5:** Uses `QAbstractPlanarVideoBuffer` with `map()`/`unmap()` pattern.\n\n**Qt6:** Uses `QVideoFrame` directly with `QVideoFrameFormat`. Buffer handling is simplified but different.\n\n**Files to modify:**\n- [`src/qmlav/src/qmlavvideobuffer.h`](src/qmlav/src/qmlavvideobuffer.h) - Complete rewrite\n- [`src/qmlav/src/qmlavvideobuffer.cpp`](src/qmlav/src/qmlavvideobuffer.cpp) - Complete rewrite\n\n**Qt6 approach:**\n```cpp\n// Qt6 uses QVideoFrame constructor with format + data\nQVideoFrameFormat format(QSize(width, height), QVideoFrameFormat::Format_YUV420P);\nQVideoFrame frame(format);\nframe.map(QVideoFrame::WriteOnly);\n// Copy FFmpeg frame data to frame.bits()\nframe.unmap();\nsink-\u003esetVideoFrame(frame);\n```\n\n### 1.4 Audio Output\n\n| Qt5 | Qt6 |\n|-----|-----|\n| `QAudioOutput` | `QAudioSink` |\n| `QAudioDeviceInfo::defaultOutputDevice()` | `QMediaDevices::defaultAudioOutput()` |\n| `QAudio::convertVolume()` | Same |\n\n**Files to modify:**\n- [`src/qmlav/src/qmlavplayer.h`](src/qmlav/src/qmlavplayer.h) - Change `QAudioOutput*` to `QAudioSink*`\n- [`src/qmlav/src/qmlavplayer.cpp`](src/qmlav/src/qmlavplayer.cpp) - Update audio initialization\n\n---\n\n## Phase 2: Hardware Acceleration\n\n### 2.1 VAAPI/EGL Changes\n\nQt6's RHI (Rendering Hardware Interface) replaces direct OpenGL. VAAPI integration needs updating.\n\n**Files to review:**\n- [`src/qmlav/src/qmlavhwoutput_vaapi_egl.h`](src/qmlav/src/qmlavhwoutput_vaapi_egl.h)\n- [`src/qmlav/src/qmlavhwoutput_vaapi_glx.h`](src/qmlav/src/qmlavhwoutput_vaapi_glx.h)\n\n**Note:** Qt6's RHI may improve GPU memory management - this could fix the memory leak.\n\n---\n\n## Phase 3: Main Application\n\n### 3.1 main.cpp Changes\n\n```cpp\n// Remove (not needed in Qt6):\nQCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);\n\n// Update registration (optional, prefer QML_ELEMENT):\nqmlRegisterType\u003cQmlAVPlayer\u003e(...);  // Still works\n```\n\n**File:** [`src/main.cpp`](src/main.cpp)\n\n### 3.2 QML Import Updates\n\nAll 17 QML files need import updates:\n\n| Qt5 Import | Qt6 Import |\n|------------|------------|\n| `import QtQuick 2.12` | `import QtQuick` |\n| `import QtQuick.Controls 2.12` | `import QtQuick.Controls` |\n| `import QtMultimedia 5.12` | `import QtMultimedia` |\n| `import QtGraphicalEffects 1.12` | `import Qt5Compat.GraphicalEffects` |\n| `import QtQuick.Dialogs 1.3` | `import QtQuick.Dialogs` |\n\n**Files:**\n- [`src/RootWindow.qml`](src/RootWindow.qml)\n- [`src/Player.qml`](src/Player.qml)\n- [`src/StreamPool.qml`](src/StreamPool.qml)\n- [`src/StreamPoolPlayer.qml`](src/StreamPoolPlayer.qml)\n- All files in [`src/imports/`](src/imports/)\n\n### 3.3 VideoOutput Changes\n\n**Qt5:**\n```qml\nVideoOutput {\n    source: player  // QmlAVPlayer with videoSurface property\n}\n```\n\n**Qt6:**\n```qml\nVideoOutput {\n    id: videoOutput\n}\n// In QmlAVPlayer, set videoSink property:\nplayer.videoSink: videoOutput.videoSink\n```\n\n**File:** [`src/Player.qml`](src/Player.qml)\n\n---\n\n## Phase 4: Build System\n\n### 4.1 CMake Updates\n\n[`CMakeLists.txt`](CMakeLists.txt) already has Qt6 detection. Updates needed:\n\n```cmake\n# Add Qt5Compat for GraphicalEffects\nfind_package(Qt6 COMPONENTS ... Qt5Compat)\n\n# Link Qt5Compat\ntarget_link_libraries(cctv-viewer PRIVATE Qt6::Qt5Compat)\n```\n\n### 4.2 Dependencies\n\nEnsure Qt6 development packages:\n```bash\nsudo apt install qt6-base-dev qt6-multimedia-dev qt6-declarative-dev \\\n                 qt6-5compat-dev qml6-module-qtquick-controls\n```\n\n---\n\n## Migration Checklist\n\n1. Create `qt6-migration` branch\n2. Update CMakeLists.txt for Qt6\n3. Rewrite `QmlAVVideoBuffer` for Qt6\n4. Update `QmlAVPixelFormat` mapping\n5. Change `QmlAVPlayer` from `QAbstractVideoSurface` to `QVideoSink`\n6. Update audio from `QAudioOutput` to `QAudioSink`\n7. Update all QML imports\n8. Update `Player.qml` VideoOutput binding\n9. Test with RTMP streams\n10. Test memory behavior (verify leak is fixed)\n11. Test hardware acceleration (VAAPI)\n\n---\n\n## Risk Assessment\n\n| Risk | Mitigation |\n|------|------------|\n| VAAPI/hardware accel may not work initially | Start with software decoding, add HW accel later |\n| Pixel format mapping may be incomplete | Test with various streams, add formats as needed |\n| Memory leak may persist in Qt6 | Still better architecture; if persists, we have multi-process fallback |\n| Some QML APIs changed | Qt provides migration guides |\n\n---\n\n## Future Enhancements (Post-Migration)\n\nOnce on Qt6, these become easier to implement:\n\n- **Frame cropping**: Access decoded frames in qmlav, apply crop before `sink-\u003esetVideoFrame()`\n- **Overlay graphics**: Qt6's scene graph is more efficient for overlays\n- **Multi-process**: Qt6's IPC primitives are better suited\n",
+  "todos": [
+    {
+      "content": "Create qt6-migration branch from main",
+      "id": "create-branch",
+      "status": "pending"
+    },
+    {
+      "content": "Update CMakeLists.txt for Qt6 build",
+      "id": "cmake-qt6",
+      "status": "pending"
+    },
+    {
+      "content": "Rewrite QmlAVVideoBuffer for Qt6 QVideoFrame API",
+      "id": "rewrite-videobuffer",
+      "status": "pending"
+    },
+    {
+      "content": "Update QmlAVPixelFormat mapping for Qt6",
+      "id": "update-pixelformat",
+      "status": "pending"
+    },
+    {
+      "content": "Change QmlAVPlayer from QAbstractVideoSurface to QVideoSink",
+      "id": "player-videosink",
+      "status": "pending"
+    },
+    {
+      "content": "Update audio from QAudioOutput to QAudioSink",
+      "id": "audio-audiosink",
+      "status": "pending"
+    },
+    {
+      "content": "Update all QML file imports for Qt6",
+      "id": "qml-imports",
+      "status": "pending"
+    },
+    {
+      "content": "Update Player.qml VideoOutput binding for Qt6",
+      "id": "player-qml-binding",
+      "status": "pending"
+    },
+    {
+      "content": "Test with RTMP streams",
+      "id": "test-streams",
+      "status": "pending"
+    },
+    {
+      "content": "Test memory behavior to verify leak is fixed",
+      "id": "test-memory",
+      "status": "pending"
+    }
+  ]
+}
+````
+Additional data:
+
+```json
+{
+  "hasOpenedEditor": true,
+  "planId": "qt6_migration_plan_ec657b80",
+  "planUri": "vscode-remote://wsl%2Bubuntu/home/bot/.cursor/plans/qt6_migration_plan_ec657b80.plan.md",
+  "reviewData": {
+    "isShowingInput": false,
+    "selectedOption": "none",
+    "status": "Requested"
+  }
+}
+```
+Result:
+
+```json
+{
+  "rejected": {}
+}
+```
+Status: **completed**
+
+</details></tool-use>
+
+---
+
+_**User**_
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
