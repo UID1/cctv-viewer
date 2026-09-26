@@ -1,8 +1,8 @@
-import QtQml 2.12
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtMultimedia 5.12
-import QtGraphicalEffects 1.12
+import QtQml
+import QtQuick
+import QtQuick.Controls
+import QtMultimedia
+import Qt5Compat.GraphicalEffects  // Qt6: GraphicalEffects moved to Qt5Compat
 import CCTV_Viewer.Multimedia 1.0
 
 FocusScope {
@@ -140,9 +140,16 @@ FocusScope {
 
         VideoOutput {
             id: videoOutput
-            // Source is either the pooled player's mediaObject or local player
-            source: root._activePlayer ? (root.usePool ? root._activePlayer.mediaObject : root._activePlayer) : null
+            // Qt6: No source property - we bind player's videoSink to this output's videoSink
             anchors.fill: parent
+        }
+        
+        // Qt6: Bind pooled player's videoSink to VideoOutput when pool is active
+        Binding {
+            target: root._pooledPlayer ? root._pooledPlayer.mediaObject : null
+            property: "videoSink"
+            value: root.usePool && root.visible ? videoOutput.videoSink : null
+            when: root.usePool && root._pooledPlayer && root._pooledPlayer.mediaObject
         }
 
         // Status overlay - visible when not playing
@@ -300,6 +307,9 @@ FocusScope {
             loops: root.loops
             muted: root.muted
             volume: root.volume
+            
+            // Qt6: Bind videoSink to VideoOutput's videoSink when this player is active
+            videoSink: (!root.usePool && root.visible) ? videoOutput.videoSink : null
 
             avOptions: {
                 var opts = root.avOptions;

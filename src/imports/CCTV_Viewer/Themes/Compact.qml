@@ -1,7 +1,7 @@
 pragma Singleton
 
-import QtQml 2.12
-import QtQuick 2.12
+import QtQml
+import QtQuick
 
 QtObject {
     readonly property real radius: 4

@@ -51,7 +51,7 @@ void registerQmlTypes()
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    // Qt6: AA_EnableHighDpiScaling is always enabled, no need to set it
 
 #if defined(APP_NAME)
     QCoreApplication::setApplicationName(QLatin1String(APP_NAME));

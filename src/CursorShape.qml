@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import CCTV_Viewer.Utils 1.0
 
 MouseArea {

@@ -1,6 +1,6 @@
-import QtQml 2.12
-import QtQuick 2.12
-import QtMultimedia 5.12
+import QtQml
+import QtQuick
+import QtMultimedia
 import CCTV_Viewer.Multimedia 1.0
 
 // StreamPool manages a collection of persistent video streams that remain active

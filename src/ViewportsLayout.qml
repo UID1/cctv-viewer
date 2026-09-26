@@ -1,7 +1,7 @@
-import QtQml 2.12
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtMultimedia 5.12
+import QtQml
+import QtQuick
+import QtQuick.Layouts
+import QtMultimedia
 import CCTV_Viewer.Core 1.0
 import CCTV_Viewer.Utils 1.0
 import CCTV_Viewer.Models 1.0

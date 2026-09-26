@@ -93,8 +93,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT ANDROID)
     )
 endif()
 
-# Disable use of C++ API deprecated in Qt 5.15
-add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
+# Disable use of C++ API deprecated in Qt 6.0
+add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x060000)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
 # Check https://doc.qt.io/qt/deployment-android.html for more information.
@@ -110,6 +110,9 @@ add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
 #endif()
 
 set(QT_LINK_DEPENDENCIES Core Quick Multimedia)
+
+# Qt6 specific dependencies
+set(QT6_EXTRA_DEPENDENCIES Qt5Compat)
 
 if (ANDROID)
     list(APPEND QT_LINK_DEPENDENCIES Svg)
@@ -136,12 +139,14 @@ else()
     include_directories(${LIBAV_INCLUDE_DIRS})
 endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS ${QT_LINK_DEPENDENCIES} LinguistTools REQUIRED)
+# Qt6 migration branch - force Qt6
+find_package(QT NAMES Qt6 COMPONENTS ${QT_LINK_DEPENDENCIES} LinguistTools REQUIRED)
 if (${QT_VERSION_MAJOR} GREATER 5)
     # Qt6 doesn't have QuickCompiler as a separate component
-    find_package(Qt${QT_VERSION_MAJOR} 6.2 COMPONENTS ${QT_LINK_DEPENDENCIES} LinguistTools REQUIRED)
+    # Add Qt5Compat for GraphicalEffects compatibility
+    find_package(Qt${QT_VERSION_MAJOR} 6.2 COMPONENTS ${QT_LINK_DEPENDENCIES} ${QT6_EXTRA_DEPENDENCIES} LinguistTools REQUIRED)
 else()
-    find_package(Qt${QT_VERSION_MAJOR} 5.12 COMPONENTS ${QT_LINK_DEPENDENCIES} QuickCompiler LinguistTools REQUIRED)
+    message(FATAL_ERROR "Qt6 is required for this branch. Please install Qt6 development packages.")
 endif()
 
 file(GLOB TS_FILES "${CMAKE_SOURCE_DIR}/translations/*.ts")
@@ -191,6 +196,12 @@ target_compile_definitions(cctv-viewer
 foreach (ITEM ${QT_LINK_DEPENDENCIES})
     target_link_libraries(cctv-viewer PRIVATE Qt${QT_VERSION_MAJOR}::${ITEM})
 endforeach()
+# Link Qt6 extra dependencies (Qt5Compat for GraphicalEffects)
+if (${QT_VERSION_MAJOR} GREATER 5)
+    foreach (ITEM ${QT6_EXTRA_DEPENDENCIES})
+        target_link_libraries(cctv-viewer PRIVATE Qt${QT_VERSION_MAJOR}::${ITEM})
+    endforeach()
+endif()
 target_link_libraries(cctv-viewer PRIVATE ${QMLAV_LINK_DEPENDENCIES})
 
 set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM true)

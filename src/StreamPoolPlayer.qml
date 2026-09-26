@@ -1,6 +1,6 @@
-import QtQml 2.12
-import QtQuick 2.12
-import QtMultimedia 5.12
+import QtQml
+import QtQuick
+import QtMultimedia
 import CCTV_Viewer.Multimedia 1.0
 
 // A wrapper component for QmlAVPlayer used by StreamPool.
@@ -23,12 +23,12 @@ Item {
     property alias status: player.status
     property alias bufferProgress: player.bufferProgress
 
-    // The actual player - with multi-surface mode for shared usage
+    // The actual player - with multi-sink mode for shared usage
     QmlAVPlayer {
         id: player
 
         autoLoad: false  // Don't auto-load, we control this via timer
-        multiSurfaceMode: true  // Enable multi-surface support for pool sharing
+        multiSinkMode: true  // Qt6: Enable multi-sink support for pool sharing
 
         onStatusChanged: {
             // Auto-restart on errors after a delay
@@ -37,8 +37,8 @@ Item {
             }
         }
         
-        onVideoSurfaceCountChanged: {
-            console.log("StreamPoolPlayer: Surface count changed to", videoSurfaceCount, "for", source);
+        onVideoSinkCountChanged: {
+            console.log("StreamPoolPlayer: Sink count changed to", videoSinkCount, "for", source);
         }
     }
 

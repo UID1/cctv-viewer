@@ -1,10 +1,10 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
-import QtQml 2.15
-import QtQuick.Dialogs 1.3
-import Qt.labs.settings 1.0
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQml
+import QtQuick.Dialogs
+import QtCore  // Qt6: Settings moved from Qt.labs.settings to QtCore
 import CCTV_Viewer.Core 1.0
 import CCTV_Viewer.Models 1.0
 import CCTV_Viewer.Utils 1.0
