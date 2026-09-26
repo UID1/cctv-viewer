@@ -112,7 +112,7 @@ add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x060000)
 set(QT_LINK_DEPENDENCIES Core Quick Multimedia)
 
 # Qt6 specific dependencies
-set(QT6_EXTRA_DEPENDENCIES Qt5Compat)
+set(QT6_EXTRA_DEPENDENCIES Core5Compat)
 
 if (ANDROID)
     list(APPEND QT_LINK_DEPENDENCIES Svg)
@@ -143,7 +143,7 @@ endif()
 find_package(QT NAMES Qt6 COMPONENTS ${QT_LINK_DEPENDENCIES} LinguistTools REQUIRED)
 if (${QT_VERSION_MAJOR} GREATER 5)
     # Qt6 doesn't have QuickCompiler as a separate component
-    # Add Qt5Compat for GraphicalEffects compatibility
+    # Add Core5Compat for GraphicalEffects compatibility
     find_package(Qt${QT_VERSION_MAJOR} 6.2 COMPONENTS ${QT_LINK_DEPENDENCIES} ${QT6_EXTRA_DEPENDENCIES} LinguistTools REQUIRED)
 else()
     message(FATAL_ERROR "Qt6 is required for this branch. Please install Qt6 development packages.")
@@ -196,7 +196,7 @@ target_compile_definitions(cctv-viewer
 foreach (ITEM ${QT_LINK_DEPENDENCIES})
     target_link_libraries(cctv-viewer PRIVATE Qt${QT_VERSION_MAJOR}::${ITEM})
 endforeach()
-# Link Qt6 extra dependencies (Qt5Compat for GraphicalEffects)
+# Link Qt6 extra dependencies (Core5Compat for GraphicalEffects)
 if (${QT_VERSION_MAJOR} GREATER 5)
     foreach (ITEM ${QT6_EXTRA_DEPENDENCIES})
         target_link_libraries(cctv-viewer PRIVATE Qt${QT_VERSION_MAJOR}::${ITEM})
