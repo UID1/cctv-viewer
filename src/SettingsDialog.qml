@@ -1,66 +1,78 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Dialogs
+import QtQuick.Window
 import CCTV_Viewer.Utils 1.0
 
-Dialog {
-    id: settingsDialog
+// Qt6: QtQuick.Controls Dialog is an in-window popup. Use a real Window
+// so Settings is a separate, draggable dialog like Qt5 QtQuick.Dialogs.Dialog.
+Window {
+    id: root
     title: qsTr("Settings")
-    modal: true  // Qt6: replaces modality
-    standardButtons: Dialog.Ok | Dialog.Cancel  // Qt6: StandardButton -> Dialog
-    
-    // Qt6: Dialog needs explicit positioning and sizing
-    anchors.centerIn: parent
-    width: Math.min(parent.width * 0.8, 500)
-    height: Math.min(parent.height * 0.9, 600)
+    flags: Qt.Dialog
+    modality: Qt.ApplicationModal
+    color: palette.window
+    visible: false
+
+    width: 520
+    minimumWidth: 420
+    minimumHeight: 360
+    height: contentColumn.implicitHeight + buttonBar.implicitHeight + 36
+
+    function open() {
+        loadSettings();
+        if (typeof rootWindow !== "undefined") {
+            x = rootWindow.x + Math.max(0, (rootWindow.width - width) / 2);
+            y = rootWindow.y + Math.max(0, (rootWindow.height - height) / 2);
+        }
+        visible = true;
+        raise();
+        requestActivate();
+    }
 
     onVisibleChanged: {
         if (visible) {
             loadSettings();
         }
     }
-    onAccepted: saveSettings()
 
     ColumnLayout {
-        anchors.fill: parent
+        id: contentColumn
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 12
+        spacing: 8
 
         GroupBox {
             title: qsTr("General")
-
             Layout.fillWidth: true
 
             ColumnLayout {
-
                 width: parent.width
 
                 CheckBox {
                     id: singleApplicationCheckBox
-
                     text: qsTr("Allow running multiple application instances")
                 }
 
                 CheckBox {
                     id: sidebarAutoCollapseCheckBox
-
-                    text: qsTr("Automatically collapse sidebar") 
+                    text: qsTr("Automatically collapse sidebar")
                 }
 
                 CheckBox {
                     id: editModeCheckBox
-
                     text: qsTr("Enable edit mode (unlock layout settings in sidebar)")
                 }
 
                 CheckBox {
                     id: lockToolsPanelCheckBox
-
                     text: qsTr("Lock Tools panel (keep collapsed)")
                 }
 
                 CheckBox {
                     id: lockViewportPanelCheckBox
-
                     text: qsTr("Lock Viewport panel (keep collapsed)")
                 }
             }
@@ -68,7 +80,6 @@ Dialog {
 
         GroupBox {
             title: qsTr("View")
-
             Layout.fillWidth: true
 
             ColumnLayout {
@@ -76,13 +87,11 @@ Dialog {
 
                 CheckBox {
                     id: presetIndicatorCheckBox
-
                     text: qsTr("Show preset indicator")
                 }
 
                 CheckBox {
                     id: hideCursorWhenFullScreenCheckBox
-
                     text: qsTr("Hide cursor in full screen mode")
                 }
             }
@@ -90,7 +99,6 @@ Dialog {
 
         GroupBox {
             title: qsTr("Viewport")
-
             Layout.fillWidth: true
 
             ColumnLayout {
@@ -98,13 +106,11 @@ Dialog {
 
                 CheckBox {
                     id: unmuteWhenFullScreenCheckBox
-
                     text: qsTr("Unmute when the viewport is in full screen mode")
                 }
 
                 CheckBox {
                     id: persistentStreamsCheckBox
-
                     text: qsTr("Keep streams running between preset switches")
                 }
 
@@ -114,9 +120,7 @@ Dialog {
 
                 TextField {
                     id: defaultAVFormatOptions
-
                     selectByMouse: true
-
                     Layout.fillWidth: true
                 }
             }
@@ -124,20 +128,17 @@ Dialog {
 
         GroupBox {
             title: qsTr("Presets")
-
             Layout.fillWidth: true
 
             ColumnLayout {
                 width: parent.width
 
-                RowLayout  {
+                RowLayout {
                     width: parent.width
 
                     CheckBox {
                         id: carouselRunningCheckBox
-
                         text: qsTr("Run presets carousel with interval (sec.):")
-
                         Layout.fillWidth: true
                     }
 
@@ -156,7 +157,7 @@ Dialog {
                         validator: DoubleValidator {
                             decimals: 2
                             bottom: Math.min(carouselIntervalSpinBox.from, carouselIntervalSpinBox.to)
-                            top:  Math.max(carouselIntervalSpinBox.from, carouselIntervalSpinBox.to)
+                            top: Math.max(carouselIntervalSpinBox.from, carouselIntervalSpinBox.to)
                         }
                         textFromValue: function(value, locale) {
                             return Number(value / valueFactor).toLocaleString(locale, 'f', validator.decimals)
@@ -170,14 +171,38 @@ Dialog {
         }
     }
 
+    RowLayout {
+        id: buttonBar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 12
+        spacing: 8
+
+        Item { Layout.fillWidth: true }
+
+        Button {
+            text: qsTr("Cancel")
+            onClicked: root.close()
+        }
+
+        Button {
+            text: qsTr("OK")
+            onClicked: {
+                saveSettings();
+                root.close();
+            }
+        }
+    }
+
     function loadSettings() {
         singleApplicationCheckBox.checked = !generalSettings.singleApplication;
-        
+
         sidebarAutoCollapseCheckBox.checked = rootWindowSettings.sidebarAutoCollapse;
         editModeCheckBox.checked = rootWindowSettings.editMode;
         lockToolsPanelCheckBox.checked = rootWindowSettings.lockToolsPanel;
         lockViewportPanelCheckBox.checked = rootWindowSettings.lockViewportPanel;
-        
+
         presetIndicatorCheckBox.checked = layoutsCollectionSettings.presetIndicator;
 
         hideCursorWhenFullScreenCheckBox.checked = viewSettings.hideCursorWhenFullScreen;
@@ -200,12 +225,12 @@ Dialog {
 
     function saveSettings() {
         generalSettings.singleApplication = !singleApplicationCheckBox.checked;
-        
+
         rootWindowSettings.sidebarAutoCollapse = sidebarAutoCollapseCheckBox.checked;
         rootWindowSettings.editMode = editModeCheckBox.checked;
         rootWindowSettings.lockToolsPanel = lockToolsPanelCheckBox.checked;
         rootWindowSettings.lockViewportPanel = lockViewportPanelCheckBox.checked;
-        
+
         layoutsCollectionSettings.presetIndicator = presetIndicatorCheckBox.checked;
 
         viewSettings.hideCursorWhenFullScreen = hideCursorWhenFullScreenCheckBox.checked;

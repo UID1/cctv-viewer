@@ -20,7 +20,9 @@ Item {
     property alias muted: player.muted
     property alias volume: player.volume
     property alias hasAudio: player.hasAudio
+    property alias hasVideo: player.hasVideo
     property alias status: player.status
+    property alias playbackState: player.playbackState
     property alias bufferProgress: player.bufferProgress
 
     // The actual player - with multi-sink mode for shared usage
@@ -31,8 +33,8 @@ Item {
         multiSinkMode: true  // Qt6: Enable multi-sink support for pool sharing
 
         onStatusChanged: {
-            // Auto-restart on errors after a delay
-            if (status === MediaPlayer.InvalidMedia || status === MediaPlayer.Stalled) {
+            // Qt6: InvalidMedia=7, StalledMedia=3
+            if (status === 7 || status === 3) {
                 restartTimer.start();
             }
         }

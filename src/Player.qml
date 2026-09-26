@@ -48,6 +48,16 @@ FocusScope {
     property bool muted: false
     property real volume: 1.0
     readonly property bool hasAudio: _activePlayer ? _activePlayer.hasAudio : false
+    readonly property bool _videoVisible: {
+        if (!root._activePlayer)
+            return false;
+        if (root._activePlayer.hasVideo)
+            return true;
+        if (root._activePlayer.mediaObject && root._activePlayer.mediaObject.hasVideo)
+            return true;
+        return root._hasPresentedFrame;
+    }
+    property bool _hasPresentedFrame: false
     
     // Internal: the active player (either pooled or local)
     property var _activePlayer: usePool ? _pooledPlayer : localPlayer
@@ -57,6 +67,7 @@ FocusScope {
 
     // Acquire pooled player when source changes and pool is enabled
     onSourceChanged: {
+        _hasPresentedFrame = false;
         if (source.toString() !== "") {
             addLogEntry("Source set: " + source.toString());
         }
@@ -152,41 +163,32 @@ FocusScope {
             when: root.usePool && root._pooledPlayer && root._pooledPlayer.mediaObject
         }
 
-        // Status overlay - visible when not playing
+        // Status overlay - hide once the first video frame is on screen
         Item {
             id: statusOverlay
             anchors.fill: parent
-            // Qt6: Check playbackState for reliable "is playing" detection
-            visible: root._activePlayer ? root._activePlayer.playbackState !== MediaPlayer.PlayingState : true
+            visible: !root._videoVisible
             
-            // Determine if this is an error state
-            readonly property bool isError: root._activePlayer && 
-                root._activePlayer.status === MediaPlayer.InvalidMedia
+            // Qt6 MediaStatus values (QMediaPlayer): NoMedia=0, LoadingMedia=1,
+            // LoadedMedia=2, StalledMedia=3, BufferingMedia=4, BufferedMedia=5,
+            // EndOfMedia=6, InvalidMedia=7
+            readonly property int statusValue: root._activePlayer ? root._activePlayer.status : 0
+            readonly property bool isError: statusValue === 7
             
-            // Buffer progress for display
             readonly property int bufferPercent: root._activePlayer ? 
                 Math.round(root._activePlayer.bufferProgress * 100) : 0
             
-            // Status message text
             readonly property string statusText: {
-                if (!root._activePlayer) return qsTr("No media");
-                switch (root._activePlayer.status) {
-                case MediaPlayer.NoMedia:
-                    return qsTr("No media");
-                case MediaPlayer.Loading:
-                    return qsTr("Opening stream");
-                case MediaPlayer.Loaded:
-                    return qsTr("Loaded");
-                case MediaPlayer.Buffering:
-                    return qsTr("Buffering %1%").arg(statusOverlay.bufferPercent);
-                case MediaPlayer.Stalled:
-                    return qsTr("Stalled");
-                case MediaPlayer.EndOfMedia:
-                    return qsTr("End of media");
-                case MediaPlayer.InvalidMedia:
-                    return qsTr("Error");
-                default:
-                    return "";
+                switch (statusOverlay.statusValue) {
+                case 0: return qsTr("No media");
+                case 1: return qsTr("Opening stream");
+                case 2: return qsTr("Loaded");
+                case 3: return qsTr("Stalled");
+                case 4: return qsTr("Buffering %1%").arg(statusOverlay.bufferPercent);
+                case 5: return qsTr("Playing");
+                case 6: return qsTr("End of media");
+                case 7: return qsTr("Error");
+                default: return "";
                 }
             }
             
@@ -321,42 +323,55 @@ FocusScope {
         
         // Player event connections for logging
         Connections {
-            target: root._activePlayer
+            target: root._activePlayer && root._activePlayer.mediaObject
+                    ? root._activePlayer.mediaObject : root._activePlayer
             
             function onStatusChanged() {
                 if (!root._activePlayer) return;
-                var status = root._activePlayer.status;
+                var status = target.status;
                 var url = root.source.toString();
                 
                 switch (status) {
-                case MediaPlayer.Loading:
+                case 1: // LoadingMedia
+                    root._hasPresentedFrame = false;
                     root.addLogEntry("Connecting: " + url);
                     break;
-                case MediaPlayer.Loaded:
+                case 2: // LoadedMedia
                     root.addLogEntry("Stream loaded: " + url);
                     break;
-                case MediaPlayer.Buffered:
+                case 5: // BufferedMedia
                     root.addLogEntry("Playing: " + url);
                     break;
-                case MediaPlayer.Stalled:
+                case 3: // StalledMedia
                     root.addLogEntry("Stream stalled: " + url);
                     break;
-                case MediaPlayer.EndOfMedia:
+                case 6: // EndOfMedia
                     root.addLogEntry("End of stream: " + url);
                     break;
-                case MediaPlayer.InvalidMedia:
+                case 7: // InvalidMedia
+                    root._hasPresentedFrame = false;
                     root.addLogEntry("Invalid media: " + url);
                     break;
-                case MediaPlayer.NoMedia:
+                case 0: // NoMedia
+                    root._hasPresentedFrame = false;
                     root.addLogEntry("No media source configured");
                     break;
                 }
             }
+
+            function onHasVideoChanged() {
+                if (target && target.hasVideo)
+                    root._hasPresentedFrame = true;
+            }
+
+            function onVideoFramePresented() {
+                root._hasPresentedFrame = true;
+            }
             
             function onBufferProgressChanged() {
-                if (root._activePlayer && root._activePlayer.status === MediaPlayer.Buffering) {
-                    var percent = Math.round(root._activePlayer.bufferProgress * 100);
-                    if (percent % 25 === 0 && percent > 0) {  // Log at 25%, 50%, 75%, 100%
+                if (target && target.status === 4) { // BufferingMedia
+                    var percent = Math.round(target.bufferProgress * 100);
+                    if (percent % 25 === 0 && percent > 0) {
                         root.addLogEntry("Buffering: " + percent + "%");
                     }
                 }
