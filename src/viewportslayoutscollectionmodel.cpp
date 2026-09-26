@@ -139,14 +139,15 @@ void ViewportsLayoutsCollectionModel::appendModel(QQmlListProperty<ViewportsLayo
     reinterpret_cast<ViewportsLayoutsCollectionModel *>(list->data)->append(p);
 }
 
-int ViewportsLayoutsCollectionModel::modelsCount(QQmlListProperty<ViewportsLayoutModel> *list)
+// Qt6: QQmlListProperty uses qsizetype instead of int
+qsizetype ViewportsLayoutsCollectionModel::modelsCount(QQmlListProperty<ViewportsLayoutModel> *list)
 {
     return reinterpret_cast<ViewportsLayoutsCollectionModel *>(list->data)->count();
 }
 
-ViewportsLayoutModel *ViewportsLayoutsCollectionModel::model(QQmlListProperty<ViewportsLayoutModel> *list, int index)
+ViewportsLayoutModel *ViewportsLayoutsCollectionModel::model(QQmlListProperty<ViewportsLayoutModel> *list, qsizetype index)
 {
-    QObject *obj = reinterpret_cast<ViewportsLayoutsCollectionModel *>(list->data)->get(index);
+    QObject *obj = reinterpret_cast<ViewportsLayoutsCollectionModel *>(list->data)->get(static_cast<int>(index));
     return reinterpret_cast<ViewportsLayoutModel *>(obj);
 }
 

@@ -185,7 +185,8 @@ void ViewportsLayoutModel::fromJSValue(const QVariantMap &model)
 
     if (model.contains("size")) {
         val = model.value("size");
-        if (val.canConvert(QMetaType::QVariantMap)) {
+        // Qt6: Use template form of canConvert
+        if (val.canConvert<QVariantMap>()) {
             int width = val.toMap().value("width").toInt();
             int height = val.toMap().value("height").toInt();
             setSize(QSize(width, height));
@@ -194,7 +195,8 @@ void ViewportsLayoutModel::fromJSValue(const QVariantMap &model)
 
     if (model.contains("aspectRatio")) {
         val = model.value("aspectRatio");
-        if (val.canConvert(QMetaType::QVariantMap)) {
+        // Qt6: Use template form of canConvert
+        if (val.canConvert<QVariantMap>()) {
             int width = val.toMap().value("width").toInt();
             int height = val.toMap().value("height").toInt();
             setAspectRatio(QSize(width, height));
@@ -204,7 +206,8 @@ void ViewportsLayoutModel::fromJSValue(const QVariantMap &model)
     if (model.contains("items")) {
         val = model.value("items");
     }
-    if (val.canConvert(QMetaType::QVariantList)) {
+    // Qt6: Use template form of canConvert
+    if (val.canConvert<QVariantList>()) {
         QVariantList items = val.toList();
         for (int i = 0; i < std::min(m_items.size(), items.size()); ++i) {
             QHashIterator<int, QByteArray> role(m_roleNames);

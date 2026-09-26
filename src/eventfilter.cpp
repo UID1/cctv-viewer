@@ -28,8 +28,9 @@ bool EventFilter::eventFilter([[maybe_unused]] QObject *watched, QEvent *event)
             case QEvent::MouseButtonPress:
             case QEvent::MouseButtonRelease: {
                 QMouseEvent *e = static_cast<QMouseEvent *>(event);
-                properties.insert("x", e->x());
-                properties.insert("y", e->y());
+                // Qt6: Use position() instead of x()/y()
+                properties.insert("x", e->position().x());
+                properties.insert("y", e->position().y());
                 // TODO: Extend properties
                 break;
             }

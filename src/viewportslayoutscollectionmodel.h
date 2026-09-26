@@ -45,8 +45,9 @@ public:
     QQmlListProperty<ViewportsLayoutModel> models();
 private:
     static void appendModel(QQmlListProperty<ViewportsLayoutModel> *list, ViewportsLayoutModel *p);
-    static int modelsCount(QQmlListProperty<ViewportsLayoutModel> *list);
-    static ViewportsLayoutModel *model(QQmlListProperty<ViewportsLayoutModel> *list, int index);
+    // Qt6: QQmlListProperty uses qsizetype instead of int
+    static qsizetype modelsCount(QQmlListProperty<ViewportsLayoutModel> *list);
+    static ViewportsLayoutModel *model(QQmlListProperty<ViewportsLayoutModel> *list, qsizetype index);
     static void clearModels(QQmlListProperty<ViewportsLayoutModel> *list);
 
 signals:
