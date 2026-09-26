@@ -50,7 +50,7 @@ FocusScope {
     Settings {
         id: sideBarSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         category: "SideBar"
 
         property bool compact: true

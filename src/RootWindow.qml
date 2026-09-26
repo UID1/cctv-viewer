@@ -42,14 +42,14 @@ ApplicationWindow {
     Settings {
         id: generalSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         property bool singleApplication: true
     }
 
     Settings {
         id: rootWindowSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         category: "RootWindow"
         property int width: 1280 + 48 // SideBar compact width
         property int height: 720
@@ -73,7 +73,7 @@ ApplicationWindow {
     Settings {
         id: layoutsCollectionSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         category: "ViewportsLayoutsCollection"
 
         property int currentIndex
@@ -102,7 +102,7 @@ ApplicationWindow {
     Settings {
         id: viewSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         category: "View"
 
         property bool hideCursorWhenFullScreen: true
@@ -111,7 +111,7 @@ ApplicationWindow {
     Settings {
         id: viewportSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         category: "Viewport"
 
         property bool unmuteWhenFullScreen: false
@@ -127,7 +127,7 @@ ApplicationWindow {
     Settings {
         id: presetsSettings
 
-        fileName: Context.config.fileName
+        location: Context.config.fileName  // Qt6: fileName -> location
         category: "Presets"
 
         property bool carouselRunning: false
