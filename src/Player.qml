@@ -17,20 +17,23 @@ FocusScope {
     property color logTextColor: "#666666"      // Dark grey for log text
     property color scrollbarColor: "#444444"    // Dark grey for scrollbar
     
-    // Log buffer for this viewport
-    property var logBuffer: []
+    // Log buffer for this viewport (using ListModel to avoid memory leaks)
     property int maxLogLines: 100
+    
+    ListModel {
+        id: logModel
+    }
     
     function addLogEntry(message) {
         var timestamp = Qt.formatTime(new Date(), "hh:mm:ss");
-        logBuffer = logBuffer.concat([timestamp + " " + message]);
-        if (logBuffer.length > maxLogLines) {
-            logBuffer = logBuffer.slice(logBuffer.length - maxLogLines);
+        logModel.append({"text": timestamp + " " + message});
+        while (logModel.count > maxLogLines) {
+            logModel.remove(0);  // Remove oldest entry
         }
     }
     
     function clearLog() {
-        logBuffer = [];
+        logModel.clear();
     }
 
     // Stream pool support - when enabled, uses shared players from pool
@@ -217,7 +220,7 @@ FocusScope {
                 // Spacer
                 Item { width: 1; height: 8 }
                 
-                // Log textbox
+                // Log textbox (using ListView with ListModel for memory efficiency)
                 Rectangle {
                     id: logContainer
                     width: parent.width
@@ -226,35 +229,31 @@ FocusScope {
                     border.color: root.scrollbarColor
                     border.width: 1
                     anchors.horizontalCenter: parent.horizontalCenter
-                    visible: root.logBuffer.length > 0
+                    visible: logModel.count > 0
                     
-                    Flickable {
-                        id: logFlickable
+                    ListView {
+                        id: logListView
                         anchors.fill: parent
                         anchors.margins: 6
                         anchors.leftMargin: 16  // Space for scrollbar
-                        contentWidth: width
-                        contentHeight: logText.height
                         clip: true
+                        model: logModel
                         boundsBehavior: Flickable.StopAtBounds
                         
-                        Text {
-                            id: logText
-                            width: logFlickable.width
+                        delegate: Text {
+                            width: logListView.width
                             wrapMode: Text.Wrap
                             color: root.logTextColor
                             font.family: "monospace"
                             font.pixelSize: 10
-                            text: root.logBuffer.join("\n")
-                            
-                            onTextChanged: {
-                                // Auto-scroll to bottom
-                                Qt.callLater(function() {
-                                    if (logFlickable.contentHeight > logFlickable.height) {
-                                        logFlickable.contentY = logFlickable.contentHeight - logFlickable.height;
-                                    }
-                                });
-                            }
+                            text: model.text
+                        }
+                        
+                        // Auto-scroll to bottom when new items added
+                        onCountChanged: {
+                            Qt.callLater(function() {
+                                logListView.positionViewAtEnd();
+                            });
                         }
                     }
                     
@@ -277,14 +276,14 @@ FocusScope {
                             color: root.scrollbarColor
                             
                             // Calculate handle height proportional to visible area
-                            property real contentRatio: (logFlickable.contentHeight > 0) 
-                                ? Math.min(1, logFlickable.height / logFlickable.contentHeight) 
+                            property real contentRatio: (logListView.contentHeight > 0) 
+                                ? Math.min(1, logListView.height / logListView.contentHeight) 
                                 : 1
                             height: Math.max(20, (parent.height - 4) * contentRatio)
                             
                             // Calculate handle position  
-                            property real scrollRange: Math.max(1, logFlickable.contentHeight - logFlickable.height)
-                            property real posRatio: logFlickable.contentY / scrollRange
+                            property real scrollRange: Math.max(1, logListView.contentHeight - logListView.height)
+                            property real posRatio: logListView.contentY / scrollRange
                             y: 2 + (parent.height - height - 4) * Math.min(1, Math.max(0, posRatio))
                         }
                     }

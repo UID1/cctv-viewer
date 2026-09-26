@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart CCTV Viewer service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl --user restart cctv-viewer.service
