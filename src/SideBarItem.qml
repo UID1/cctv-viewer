@@ -3,7 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Templates as T
-import QtGraphicalEffects 1.12
+import Qt5Compat.GraphicalEffects  // Qt6: moved from QtGraphicalEffects
 import CCTV_Viewer.Themes 1.0
 import CCTV_Viewer.Utils 1.0
 

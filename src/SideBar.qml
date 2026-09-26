@@ -3,8 +3,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Dialogs
-import QtGraphicalEffects 1.12
-import Qt.labs.settings 1.0
+import Qt5Compat.GraphicalEffects  // Qt6: moved from QtGraphicalEffects
+import QtCore  // Qt6: Settings moved from Qt.labs.settings
 import CCTV_Viewer.Core 1.0
 import CCTV_Viewer.Themes 1.0
 import CCTV_Viewer.Utils 1.0
