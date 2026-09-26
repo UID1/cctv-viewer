@@ -156,7 +156,8 @@ FocusScope {
         Item {
             id: statusOverlay
             anchors.fill: parent
-            visible: root._activePlayer ? root._activePlayer.status !== MediaPlayer.Buffered : true
+            // Qt6: Check playbackState for reliable "is playing" detection
+            visible: root._activePlayer ? root._activePlayer.playbackState !== MediaPlayer.PlayingState : true
             
             // Determine if this is an error state
             readonly property bool isError: root._activePlayer && 

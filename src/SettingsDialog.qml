@@ -5,9 +5,15 @@ import QtQuick.Dialogs
 import CCTV_Viewer.Utils 1.0
 
 Dialog {
+    id: settingsDialog
     title: qsTr("Settings")
     modal: true  // Qt6: replaces modality
     standardButtons: Dialog.Ok | Dialog.Cancel  // Qt6: StandardButton -> Dialog
+    
+    // Qt6: Dialog needs explicit positioning and sizing
+    anchors.centerIn: parent
+    width: Math.min(parent.width * 0.8, 500)
+    height: Math.min(parent.height * 0.9, 600)
 
     onVisibleChanged: {
         if (visible) {
