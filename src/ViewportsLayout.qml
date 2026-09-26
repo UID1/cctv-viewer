@@ -277,7 +277,7 @@ FocusScope {
                         panY = 0;
                     }
 
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         var fullScreenKey = QT_TR_NOOP("F", "Shortcut");
                         if (event.text.toUpperCase() === fullScreenKey ||
                             event.text.toUpperCase() === qsTr(fullScreenKey)) {
@@ -523,7 +523,7 @@ FocusScope {
                         onMouseYChanged: mouseMoveHandler()
                         
                         // Handle mousewheel zoom when in fullscreen (requires CTRL modifier)
-                        onWheel: {
+                        onWheel: function(wheel) {
                             if (wheel.modifiers & Qt.ControlModifier) {
                                 if (!viewport.fullScreen && root.size.width > 1 && root.size.height > 1) {
                                     viewport.fullScreen = true;
@@ -603,7 +603,7 @@ FocusScope {
         }
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         d.keyModifiers = event.modifiers;
 
         switch (event.key) {
@@ -618,7 +618,7 @@ FocusScope {
             break;
         }
     }
-    Keys.onReleased: d.keyModifiers = event.modifiers
+    Keys.onReleased: function(event) { d.keyModifiers = event.modifiers }
 
     function get(index) {
         if (index >= 0 && index < repeater.count) {

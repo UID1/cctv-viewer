@@ -34,7 +34,7 @@ FocusScope {
             rootSideBar.forceActiveFocus();
         }
     }
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         if (event.key === Qt.Key_Escape && state === SideBar.Popup) {
             state = SideBar.Compact;
         }
@@ -328,11 +328,11 @@ FocusScope {
 
                                             Layout.fillWidth: true
 
-                                            Keys.onEscapePressed: {
+                                            Keys.onEscapePressed: function(event) {
                                                 event.accepted = divisionTextField.visible;
                                                 divisionTextField.cancel();
                                             }
-                                            Keys.onPressed: {
+                                            Keys.onPressed: function(event) {
                                                 if (event.key === Qt.Key_F2) {
                                                     divisionTextField.edit();
                                                 }
@@ -469,11 +469,11 @@ FocusScope {
 
                                             Layout.fillWidth: true
 
-                                            Keys.onEscapePressed: {
+                                            Keys.onEscapePressed: function(event) {
                                                 event.accepted = aspectRatioTextField.visible;
                                                 aspectRatioTextField.cancel();
                                             }
-                                            Keys.onPressed: {
+                                            Keys.onPressed: function(event) {
                                                 if (event.key === Qt.Key_F2 && rootWindowSettings.editMode) {
                                                     aspectRatioTextField.edit();
                                                 }
