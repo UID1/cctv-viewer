@@ -24,6 +24,10 @@ FocusScope {
 
     property int state: SideBar.Compact
     property int currentViewportIndex: Utils.currentLayout().focusIndex
+    // Unlocked panels are editable. editMode remains an extra global override.
+    readonly property bool layoutEditable: rootWindowSettings.editMode
+                                           || !rootWindowSettings.lockToolsPanel
+                                           || !rootWindowSettings.lockViewportPanel
 
     // Constants
     readonly property real compactWidth: 48
@@ -258,8 +262,8 @@ FocusScope {
                                 palette.windowText: "white"
                                 opacity: enabled ? 1.0 : 0.5
 
-                                // Disable controls when edit mode is off or when one of the viewports is in full-screen mode.
-                                enabled: rootWindowSettings.editMode && !(Utils.currentLayout().fullScreenIndex >= 0)
+                                // Interactive when the Tools panel is unlocked and no viewport is full-screen.
+                                enabled: rootSideBar.layoutEditable && !(Utils.currentLayout().fullScreenIndex >= 0)
 
                                 Layout.fillWidth: true
 
@@ -474,14 +478,14 @@ FocusScope {
                                                 aspectRatioTextField.cancel();
                                             }
                                             Keys.onPressed: function(event) {
-                                                if (event.key === Qt.Key_F2 && rootWindowSettings.editMode) {
+                                                if (event.key === Qt.Key_F2 && rootSideBar.layoutEditable) {
                                                     aspectRatioTextField.edit();
                                                 }
                                             }
 
                                             Button {
                                                 text: ratio
-                                                enabled: rootWindowSettings.editMode
+                                                enabled: rootSideBar.layoutEditable
                                                 opacity: enabled ? 1.0 : 0.5
                                                 highlighted: {
                                                     Utils.currentModel().aspectRatio === str2ratio(ratio);
@@ -496,7 +500,7 @@ FocusScope {
                                                     }
                                                 }
                                                 onPressAndHold: {
-                                                    if (rootWindowSettings.editMode) {
+                                                    if (rootSideBar.layoutEditable) {
                                                         aspectRatioTextField.edit();
                                                     }
                                                 }
@@ -504,7 +508,7 @@ FocusScope {
                                                 ToolTip.delay: Compact.toolTipDelay
                                                 ToolTip.timeout: Compact.toolTipTimeout
                                                 ToolTip.visible: hovered
-                                                ToolTip.text: rootWindowSettings.editMode ? qsTr("Press and hold to enter edit mode") : qsTr("Enable edit mode in Settings to modify")
+                                                ToolTip.text: rootSideBar.layoutEditable ? qsTr("Press and hold to enter edit mode") : qsTr("Unlock the Tools panel in Settings to modify")
                                             }
 
                                             TextField {
@@ -564,8 +568,8 @@ FocusScope {
 
                                     Button {
                                         text: qsTr("Merging cells")
-                                        enabled: rootWindowSettings.editMode && Utils.currentLayout().mergeCells(true)
-                                        opacity: rootWindowSettings.editMode ? 1.0 : 0.5
+                                        enabled: rootSideBar.layoutEditable && Utils.currentLayout().mergeCells(true)
+                                        opacity: rootSideBar.layoutEditable ? 1.0 : 0.5
 
                                         Layout.fillWidth: true
 
@@ -607,7 +611,7 @@ FocusScope {
                                     text: viewportLayout.enabled ? Utils.currentModel().get(currentViewportIndex).url : ""
                                     placeholderText: qsTr("Url")
                                     selectByMouse: true
-                                    enabled: rootWindowSettings.editMode
+                                    enabled: rootSideBar.layoutEditable
                                     opacity: enabled ? 1.0 : 0.5
 
                                     Layout.fillWidth: true
@@ -635,7 +639,7 @@ FocusScope {
 
                                 ColumnLayout {
                                     Layout.fillWidth: true
-                                    enabled: rootWindowSettings.editMode
+                                    enabled: rootSideBar.layoutEditable
                                     opacity: enabled ? 1.0 : 0.5
 
                                     Text {
@@ -722,7 +726,7 @@ FocusScope {
                                             deleteMode = false;
                                         }
                                         Keys.onDeletePressed: {
-                                            if (rootWindowSettings.editMode) {
+                                            if (rootSideBar.layoutEditable) {
                                                 deleteMode = true;
                                             }
                                         }
@@ -738,7 +742,7 @@ FocusScope {
                                             }
                                         }
                                         onPressAndHold: {
-                                            if (rootWindowSettings.editMode && layoutsCollectionModel.count > 1) {
+                                            if (rootSideBar.layoutEditable && layoutsCollectionModel.count > 1) {
                                                 deleteMode = !deleteMode;
                                             }
                                         }
@@ -747,7 +751,7 @@ FocusScope {
                                         ToolTip.timeout: Compact.toolTipTimeout
                                         ToolTip.visible: hovered
                                         ToolTip.text: deleteMode ? qsTr("Press and hold to exit delete mode") : 
-                                                      (rootWindowSettings.editMode ? qsTr("Press and hold to enter delete mode") : "")
+                                                      (rootSideBar.layoutEditable ? qsTr("Press and hold to enter delete mode") : "")
                                     }
                                 }
 
@@ -755,7 +759,7 @@ FocusScope {
                                     id: addButton
 
                                     text: "➕"
-                                    enabled: rootWindowSettings.editMode
+                                    enabled: rootSideBar.layoutEditable
                                     opacity: enabled ? 1.0 : 0.5
 
                                     Layout.fillWidth: true
