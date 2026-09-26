@@ -74,8 +74,11 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     QTranslator translator;
     const QString locale = QLocale::system().name();
-    translator.load(QLatin1String("cctv-viewer_") + locale, QLatin1String(":/translations/"));
-    app.installTranslator(&translator);
+    if (translator.load(QLatin1String("cctv-viewer_") + locale, QLatin1String(":/translations/"))) {
+        app.installTranslator(&translator);
+    } else {
+        qDebug() << "No translation found for locale:" << locale;
+    }
     app.setWindowIcon(QIcon(QLatin1String(":/images/cctv-viewer.svg")));
 
     Context::init();
