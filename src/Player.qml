@@ -76,27 +76,44 @@ FocusScope {
     onAvOptionsChanged: _updatePooledPlayer()
     onUsePoolChanged: _updatePooledPlayer()
 
+    function _poolMedia() {
+        return (_pooledPlayer && _pooledPlayer.mediaObject) ? _pooledPlayer.mediaObject : null;
+    }
+
+    function _attachViewportSink() {
+        var player = _poolMedia();
+        if (player && videoOutput.videoSink)
+            player.addVideoSink(videoOutput.videoSink);
+    }
+
+    function _detachViewportSink() {
+        var player = _poolMedia();
+        if (player && videoOutput.videoSink)
+            player.removeVideoSink(videoOutput.videoSink);
+    }
+
     function _updatePooledPlayer() {
         if (usePool && source.toString() !== "") {
-            // Release previous pooled player if source changed
             if (_pooledPlayer && (_lastPooledSource.toString() !== source.toString())) {
+                _detachViewportSink();
                 streamPool.releasePlayer(_lastPooledSource, _lastPooledOptions);
                 _pooledPlayer = null;
             }
-            
-            // Acquire new player from pool
+
             if (!_pooledPlayer) {
                 var defaultOpts = layoutsCollectionSettings.toJSValue("defaultAVFormatOptions");
                 _pooledPlayer = streamPool.acquirePlayer(source, avOptions, defaultOpts);
                 _lastPooledSource = source;
                 _lastPooledOptions = avOptions;
-                
+
                 if (_pooledPlayer) {
                     console.log("Player: Using pooled player for", source);
+                    if (root.visible)
+                        _attachViewportSink();
                 }
             }
         } else if (_pooledPlayer) {
-            // Pool disabled or no source - release pooled player
+            _detachViewportSink();
             streamPool.releasePlayer(_lastPooledSource, _lastPooledOptions);
             _pooledPlayer = null;
             _lastPooledSource = "";
@@ -105,33 +122,33 @@ FocusScope {
     }
 
     onVisibleChanged: {
-        if (!usePool) {
-            // Local player mode - original behavior
-            if (visible) {
-                if (!timer.running) {
-                    timer.start();
-                }
-            } else {
-                timer.stop();
-                localPlayer.autoPlay = false;
-                localPlayer.stop();
-            }
+        if (usePool) {
+            if (visible)
+                _attachViewportSink();
+            else
+                _detachViewportSink();
+        } else if (visible) {
+            if (!timer.running)
+                timer.start();
+        } else {
+            timer.stop();
+            localPlayer.autoPlay = false;
+            localPlayer.stop();
         }
-        // In pool mode, visibility doesn't affect playback - pool manages it
     }
 
     Component.onCompleted: {
         _updatePooledPlayer();
-        if (visible && !usePool) {
+        if (usePool && visible)
+            _attachViewportSink();
+        else if (visible && !usePool)
             timer.start();
-        }
     }
-    
+
     Component.onDestruction: {
-        // Release pooled player on destruction
-        if (_pooledPlayer && streamPool) {
+        _detachViewportSink();
+        if (_pooledPlayer && streamPool)
             streamPool.releasePlayer(_lastPooledSource, _lastPooledOptions);
-        }
     }
 
     Timer {
@@ -151,16 +168,7 @@ FocusScope {
 
         VideoOutput {
             id: videoOutput
-            // Qt6: No source property - we bind player's videoSink to this output's videoSink
             anchors.fill: parent
-        }
-        
-        // Qt6: Bind pooled player's videoSink to VideoOutput when pool is active
-        Binding {
-            target: root._pooledPlayer ? root._pooledPlayer.mediaObject : null
-            property: "videoSink"
-            value: root.usePool && root.visible ? videoOutput.videoSink : null
-            when: root.usePool && root._pooledPlayer && root._pooledPlayer.mediaObject
         }
 
         // Status overlay - hide once the first video frame is on screen

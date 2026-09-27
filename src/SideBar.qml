@@ -873,7 +873,9 @@ FocusScope {
                         width: 40
                         height: footer.height
                         visible: rootSideBar.state !== SideBar.Compact
-                        highlighted: !rootWindowSettings.sidebarPinned
+                        flat: true
+                        focusPolicy: Qt.NoFocus
+                        highlighted: rootWindowSettings.sidebarPinned
 
                         Image {
                             id: pinIcon
@@ -884,7 +886,6 @@ FocusScope {
                             fillMode: Image.PreserveAspectFit
                         }
 
-                        // Color overlay for the pin icon
                         ColorOverlay {
                             anchors.fill: pinIcon
                             source: pinIcon
