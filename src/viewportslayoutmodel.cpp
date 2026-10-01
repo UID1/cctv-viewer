@@ -25,6 +25,7 @@ ViewportsLayoutModel::ViewportsLayoutModel(QObject *parent)
 
     connect(this, &ViewportsLayoutModel::dataChanged, this, &ViewportsLayoutModel::changed);
     connect(this, &ViewportsLayoutModel::sizeChanged, this, &ViewportsLayoutModel::changed);
+    connect(this, &ViewportsLayoutModel::aspectRatioChanged, this, &ViewportsLayoutModel::changed);
 }
 
 int ViewportsLayoutModel::rowCount(const QModelIndex &parent) const
