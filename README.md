@@ -6,6 +6,10 @@ This is a fork of [CCTV Viewer](https://github.com/iEvgeny/cctv-viewer) by iEvge
 
 The fork adds a stream pool so carousel switches reuse an open connection which makes videostream switches seamless without having to wait for cameras to reconnect, custom aspect ratios, panel locks, a graphical per-viewport status overlay with useful information for troubleshooting, a Debian package, and a systemd user service that restarts the process after a crash for reliable 24/7 operation. It builds with Qt 6 and jemalloc with improved memory management. The feature list and the items left out of this release are in [CHANGELOG.md](CHANGELOG.md).
 
+## Trademark
+
+The Astral Node Labs name and logo are trademarks of their owner. GPL-3 covers the copyright in the logo drawing and does not grant any right to use that name or logo to identify another product or company.
+
 ## Build
 
 Install the compiler, Qt 6, FFmpeg, and jemalloc development packages:

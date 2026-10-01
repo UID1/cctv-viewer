@@ -7,6 +7,14 @@ Files: *
 Copyright: 2020-2026 iEvgeny and contributors
 License: GPL-3.0+
 
+Files: images/Astral-Node-Labs-Logo-Only.svg
+Copyright: Astral Node Labs
+License: GPL-3.0+
+Comment:
+ The Astral Node Labs name and logo are trademarks of their owner.
+ GPL-3 covers the copyright in this drawing and does not grant any
+ right to use that name or logo to identify another product or company.
+
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
