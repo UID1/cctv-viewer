@@ -136,6 +136,7 @@ else()
         libswresample
         libavdevice
     )
+    pkg_check_modules(JEMALLOC REQUIRED jemalloc)
     include_directories(${LIBAV_INCLUDE_DIRS})
 endif()
 
@@ -203,6 +204,16 @@ if (${QT_VERSION_MAJOR} GREATER 5)
     endforeach()
 endif()
 target_link_libraries(cctv-viewer PRIVATE ${QMLAV_LINK_DEPENDENCIES})
+if (JEMALLOC_FOUND)
+    target_include_directories(cctv-viewer PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+    target_compile_definitions(cctv-viewer PRIVATE CCTV_HAVE_JEMALLOC)
+    # --no-as-needed keeps libjemalloc on the link line so its malloc interposes
+    # glibc for this process, including Qt and FFmpeg.
+    target_link_libraries(cctv-viewer PRIVATE
+        "-Wl,--push-state,--no-as-needed"
+        ${JEMALLOC_LIBRARIES}
+        "-Wl,--pop-state")
+endif()
 
 set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM true)
 set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "${CMAKE_SOURCE_DIR}/translations")
@@ -216,7 +227,7 @@ if (UNIX AND NOT ANDROID)
     include(GNUInstallDirs)
     set(CMAKE_INSTALL_PREFIX "/usr")
     install(TARGETS cctv-viewer DESTINATION "${CMAKE_INSTALL_BINDIR}")
-    install(FILES "images/cctv-viewer.svg" DESTINATION "/usr/share/pixmaps")
+    install(FILES "images/cctv-viewer.png" DESTINATION "/usr/share/pixmaps")
     install(FILES "cctv-viewer.desktop" DESTINATION "/usr/share/applications")
     install(PROGRAMS "scripts/cctv-viewer-launch" DESTINATION "${CMAKE_INSTALL_BINDIR}")
 endif()

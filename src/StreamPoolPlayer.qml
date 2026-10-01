@@ -32,16 +32,7 @@ Item {
         autoLoad: false  // Don't auto-load, we control this via timer
         multiSinkMode: true  // Qt6: Enable multi-sink support for pool sharing
 
-        onStatusChanged: {
-            // Qt6: InvalidMedia=7, StalledMedia=3
-            if (status === 7 || status === 3) {
-                restartTimer.start();
-            }
-        }
-        
-        onVideoSinkCountChanged: {
-            console.log("StreamPoolPlayer: Sink count changed to", videoSinkCount, "for", source);
-        }
+        // InvalidMedia / stall reconnect is owned by QmlAVPlayer loops: Infinite
     }
 
     // Delay autoPlay to allow proper initialization (same pattern as original Player.qml)
@@ -57,22 +48,10 @@ Item {
         }
     }
 
-    Timer {
-        id: restartTimer
-        interval: 5000
-        repeat: false
-        onTriggered: {
-            if (player.source.toString() !== "") {
-                console.log("StreamPoolPlayer: Attempting to restart stream", player.source);
-                player.stop();
-                player.play();
-            }
-        }
-    }
-
     function play() { player.play(); }
     function stop() { player.stop(); }
     function pause() { player.pause(); }
+    function restartPlayback() { player.restartPlayback(); }
 
     // Expose the player for VideoOutput source binding
     readonly property alias mediaObject: player

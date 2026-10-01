@@ -51,6 +51,8 @@ void registerQmlTypes()
 
 int main(int argc, char *argv[])
 {
+    SystemInfo::configureHeap();
+
     // Qt6: AA_EnableHighDpiScaling is always enabled, no need to set it
 
 #if defined(APP_NAME)
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
     } else {
         qDebug() << "No translation found for locale:" << locale;
     }
-    app.setWindowIcon(QIcon(QLatin1String(":/images/cctv-viewer.svg")));
+    app.setWindowIcon(QIcon(QLatin1String(":/images/cctv-viewer.png")));
 
     Context::init();
 

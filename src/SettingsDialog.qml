@@ -114,6 +114,12 @@ Window {
                     text: qsTr("Keep streams running between preset switches")
                 }
 
+                CheckBox {
+                    id: memoryWatchdogCheckBox
+                    enabled: persistentStreamsCheckBox.checked
+                    text: qsTr("Log when anonymous memory exceeds the budget")
+                }
+
                 Label {
                     text: qsTr("Default FFmpeg options")
                 }
@@ -209,6 +215,7 @@ Window {
 
         unmuteWhenFullScreenCheckBox.checked = viewportSettings.unmuteWhenFullScreen;
         persistentStreamsCheckBox.checked = viewportSettings.persistentStreams;
+        memoryWatchdogCheckBox.checked = viewportSettings.memoryWatchdogEnabled;
 
         carouselRunningCheckBox.checked = presetsSettings.carouselRunning;
         carouselIntervalSpinBox.value = presetsSettings.carouselInterval;
@@ -237,6 +244,7 @@ Window {
 
         viewportSettings.unmuteWhenFullScreen = unmuteWhenFullScreenCheckBox.checked;
         viewportSettings.persistentStreams = persistentStreamsCheckBox.checked;
+        viewportSettings.memoryWatchdogEnabled = memoryWatchdogCheckBox.checked;
 
         presetsSettings.carouselRunning = carouselRunningCheckBox.checked;
         presetsSettings.carouselInterval = carouselIntervalSpinBox.value;

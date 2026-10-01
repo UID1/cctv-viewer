@@ -176,6 +176,11 @@ FocusScope {
             id: statusOverlay
             anchors.fill: parent
             visible: !root._videoVisible
+
+            Rectangle {
+                anchors.fill: parent
+                color: Qt.rgba(0, 0, 0, 0.5)
+            }
             
             // Qt6 MediaStatus values (QMediaPlayer): NoMedia=0, LoadingMedia=1,
             // LoadedMedia=2, StalledMedia=3, BufferingMedia=4, BufferedMedia=5,
@@ -243,7 +248,7 @@ FocusScope {
                     id: logContainer
                     width: parent.width
                     height: Math.min(parent.parent.height * 0.4, 150)
-                    color: "black"
+                    color: Qt.rgba(0, 0, 0, 0.75)
                     border.color: root.scrollbarColor
                     border.width: 1
                     anchors.horizontalCenter: parent.horizontalCenter

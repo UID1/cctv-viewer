@@ -8,7 +8,7 @@
         <file>src/ViewportsLayout.qml</file>
         <file>src/SideBar.qml</file>
         <file>src/SideBarItem.qml</file>
-        <file>images/cctv-viewer.svg</file>
+        <file>images/cctv-viewer.png</file>
         <file>images/cctv-viewer.ico</file>
         <file>images/menu-viewport.svg</file>
         <file>images/menu-tools.svg</file>

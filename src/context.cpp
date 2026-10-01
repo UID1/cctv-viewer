@@ -12,12 +12,18 @@ void Context::init()
     QCommandLineOption presetOption({{"p", "preset"}, tr("Index of the current preset."), "preset"});
     QCommandLineOption fullScreenOption({{"f", "full-screen"}, tr("Force full-screen mode.")});
     QCommandLineOption kioskModeOption({{"k", "kiosk"}, tr("Kiosk mode functionality.")});
+    QCommandLineOption exitOnMemoryTripOption(QStringLiteral("exit-on-memory-trip"),
+        tr("Exit with status 75 when anonymous RSS exceeds the memory budget (for systemd Restart=on-failure)."));
+    QCommandLineOption memoryLogOption(QStringLiteral("memory-log"),
+        tr("Log RssAnon and jemalloc heap stats once a minute."));
     QCommandLineOption logOption({{"l", "log"}, tr("Log level [%1...%2].").arg(Config::LogBeginRange).arg(Config::LogEndRange), "level"});
 
     parseCommandLineOptions({configOption,
                             presetOption,
                             fullScreenOption,
                             kioskModeOption,
+                            exitOnMemoryTripOption,
+                            memoryLogOption,
                             logOption});
 
     if (m_commandLineParser.isSet(configOption)) {
@@ -30,6 +36,8 @@ void Context::init()
     }
     m_config->setFullScreen(m_commandLineParser.isSet(fullScreenOption));
     m_config->setKioskMode(m_commandLineParser.isSet(kioskModeOption));
+    m_config->setExitOnMemoryTrip(m_commandLineParser.isSet(exitOnMemoryTripOption));
+    m_config->setMemoryLog(m_commandLineParser.isSet(memoryLogOption));
     if (m_commandLineParser.isSet(logOption)) {
         auto level = std::clamp(m_commandLineParser.value(logOption).toInt(),
                                 static_cast<int>(Config::LogBeginRange),

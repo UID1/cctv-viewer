@@ -24,6 +24,10 @@ public:
     QMLAV_PROPERTY(int, currentIndex, setCurrentIndex, currentIndexChanged) = -1;
     QMLAV_PROPERTY(bool, fullScreen, setFullScreen, fullScreenChanged) = false;
     QMLAV_PROPERTY(bool, kioskMode, setKioskMode, kioskModeChanged) = false;
+    // Desktop: false (tripwire logs only). systemd unit passes --exit-on-memory-trip.
+    QMLAV_PROPERTY(bool, exitOnMemoryTrip, setExitOnMemoryTrip, exitOnMemoryTripChanged) = false;
+    // Desktop: false. systemd unit passes --memory-log so the per-minute samples stay in the journal.
+    QMLAV_PROPERTY(bool, memoryLog, setMemoryLog, memoryLogChanged) = false;
     QMLAV_PROPERTY(Config::LogLevel, logLevel, setLogLevel, logLevelChanged) = Config::LogInfo;
 
 public:

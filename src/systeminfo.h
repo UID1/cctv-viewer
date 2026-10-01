@@ -28,6 +28,17 @@ public:
     QString customAvatarPath() const { return m_customAvatarPath; }
     void setCustomAvatarPath(const QString &path);
 
+    // Process anonymous / total RSS from /proc/self/status, in KiB. 0 if unavailable.
+    Q_INVOKABLE qint64 rssAnonKb() const;
+    Q_INVOKABLE qint64 vmRssKb() const;
+    // Apply jemalloc dirty/muzzy decay to arenas already created. Call once at startup.
+    static void configureHeap();
+
+    // Purge unused jemalloc pages. 1 if the purge ran, 0 otherwise.
+    Q_INVOKABLE int trimMallocHeap();
+    // jemalloc stats in bytes: allocated, active, resident, retained, mapped.
+    Q_INVOKABLE QString mallocHeapInfo() const;
+
 signals:
     void userAvatarChanged();
     void customAvatarPathChanged();

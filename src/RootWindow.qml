@@ -116,12 +116,18 @@ ApplicationWindow {
 
         property bool unmuteWhenFullScreen: false
         property bool persistentStreams: false
+        property bool memoryWatchdogEnabled: true
+        property int memoryBudgetAnonKb: 49152
+        property int memoryWatchdogIntervalMs: 60000
     }
 
     // Stream pool for persistent video streams across preset switches
     StreamPool {
         id: globalStreamPool
         enabled: viewportSettings.persistentStreams
+        memoryWatchdogEnabled: viewportSettings.memoryWatchdogEnabled
+        memoryBudgetAnonKb: viewportSettings.memoryBudgetAnonKb
+        memoryWatchdogIntervalMs: viewportSettings.memoryWatchdogIntervalMs
     }
 
     Settings {

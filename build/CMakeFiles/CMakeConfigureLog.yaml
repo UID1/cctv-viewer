@@ -564,3 +564,48 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/Qt6/FindWrapAtomic.cmake:33 (check_cxx_source_compiles)"
+      - "/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/Qt6/QtPublicDependencyHelpers.cmake:33 (find_dependency)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreDependencies.cmake:30 (_qt_internal_find_third_party_dependencies)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfig.cmake:50 (include)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6Config.cmake:167 (find_package)"
+      - "CMakeLists.txt:147 (find_package)"
+    checks:
+      - "Performing Test HAVE_STDATOMIC"
+    directories:
+      source: "/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD"
+      binary: "/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -pthread"
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/usr/lib/x86_64-linux-gnu/cmake/Qt6;/usr/lib/x86_64-linux-gnu/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/usr/lib/x86_64-linux-gnu/cmake/Qt6/3rdparty/kwin;/usr/lib/x86_64-linux-gnu/cmake/Qt6;/usr/lib/x86_64-linux-gnu/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/usr/lib/x86_64-linux-gnu/cmake/Qt6/3rdparty/kwin"
+    buildResult:
+      variable: "HAVE_STDATOMIC"
+      cached: true
+      stdout: |
+        Change Dir: '/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_0e031/fast
+        gmake[1]: Entering directory '/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD'
+        /usr/bin/gmake  -f CMakeFiles/cmTC_0e031.dir/build.make CMakeFiles/cmTC_0e031.dir/build
+        gmake[2]: Entering directory '/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD'
+        Building CXX object CMakeFiles/cmTC_0e031.dir/src.cxx.o
+        /usr/bin/c++ -DHAVE_STDATOMIC  -pthread  -std=gnu++17 -o CMakeFiles/cmTC_0e031.dir/src.cxx.o -c /home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD/src.cxx
+        Linking CXX executable cmTC_0e031
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0e031.dir/link.txt --verbose=1
+        /usr/bin/c++  -pthread  CMakeFiles/cmTC_0e031.dir/src.cxx.o -o cmTC_0e031 
+        gmake[2]: Leaving directory '/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD'
+        gmake[1]: Leaving directory '/home/bot/developer_home/cctv-viewer/build/CMakeFiles/CMakeScratch/TryCompile-2EK3mD'
+        
+      exitCode: 0
+...

@@ -13,9 +13,12 @@ ExecStartPre=-/bin/rm -f /tmp/cctv-viewer-%U.lock
 # Wait for display to be fully ready
 ExecStartPre=/bin/sleep 2
 
-ExecStart=/usr/bin/cctv-viewer --full-screen
+# Return freed jemalloc pages about a second after free. The tripwire purge is the backstop.
+Environment=MALLOC_CONF=dirty_decay_ms:1000,muzzy_decay_ms:1000
 
-# Restart policy - restart on crash
+ExecStart=/usr/bin/cctv-viewer --full-screen --exit-on-memory-trip --memory-log
+
+# Restart on crash or memory-tripwire exit (status 75)
 Restart=on-failure
 RestartSec=5
 

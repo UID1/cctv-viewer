@@ -717,7 +717,7 @@ FocusScope {
 
                                         property bool deleteMode: false
 
-                                        Keys.onEscapePressed: {
+                                        Keys.onEscapePressed: function(event) {
                                             event.accepted = deleteMode;
                                             deleteMode = false;
                                         }
