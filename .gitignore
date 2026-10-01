@@ -50,3 +50,11 @@ compile_commands.json
 
 # QtCreator local machine specific files for imported projects
 *creator.user*
+
+# Files used for troubleshooting an deprecated files
+/memleak-logs/
+*:Zone.Identifier
+*.ai
+/images/1x/
+/images/cctv-viewer-big.png
+/images/cctv-viewer-old.ico
