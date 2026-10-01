@@ -612,7 +612,11 @@ FocusScope {
 
                                     Layout.fillWidth: true
 
-                                    onEditingFinished: Utils.currentModel().get(currentViewportIndex).url = text
+                                    onEditingFinished: {
+                                        var cleaned = text.trim()
+                                        text = cleaned
+                                        Utils.currentModel().get(currentViewportIndex).url = cleaned
+                                    }
                                 }
 
                                 Button {
