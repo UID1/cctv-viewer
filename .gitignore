@@ -58,3 +58,6 @@ compile_commands.json
 /images/1x/
 /images/cctv-viewer-big.png
 /images/cctv-viewer-old.ico
+
+# Files maintained by other repos
+/.specstory/
