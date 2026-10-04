@@ -30,8 +30,11 @@ FocusScope {
     readonly property real expandedWidth: 230
 
     onCurrentViewportIndexChanged: {
-        if (rootSideBar.currentViewportIndex < 0  && state === SideBar.Popup) {
-            rootSideBar.forceActiveFocus();
+        if (rootSideBar.currentViewportIndex < 0 && state === SideBar.Popup) {
+            Qt.callLater(function() {
+                if (rootSideBar.currentViewportIndex < 0 && rootSideBar.state === SideBar.Popup)
+                    rootSideBar.forceActiveFocus();
+            });
         }
     }
     Keys.onPressed: function(event) {

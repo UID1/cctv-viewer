@@ -259,7 +259,8 @@ FocusScope {
                         }
                     }
                     onFocusChanged: {
-                        d2.setCurrentIndex("focusIndex", focus);
+                        if (focus)
+                            d2.setCurrentIndex("focusIndex", true);
                         d2.setCurrentIndex("pressAndHoldIndex", false);
                         fullScreen = false;
                     }
@@ -297,6 +298,7 @@ FocusScope {
 
                         switch (event.key) {
                         case Qt.Key_Escape:
+                            d.focusIndex = -1;
                             focus = false;
                             fullScreen = false;
                             break;
@@ -509,6 +511,7 @@ FocusScope {
                             if (d.activeFocusIndex >= 0 && d.keyModifiers & Qt.ShiftModifier) {
                                 d.selectionIndex2 = model.index;
                             } else {
+                                d.focusIndex = model.index;
                                 viewport.forceActiveFocus();
                                 d.selectionReset();
                             }
