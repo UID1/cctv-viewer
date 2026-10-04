@@ -48,6 +48,12 @@ FocusScope {
     property bool muted: false
     property real volume: 1.0
     readonly property bool hasAudio: _activePlayer ? _activePlayer.hasAudio : false
+    readonly property real displayAspect: {
+        if (!root._activePlayer)
+            return 0
+        var media = root._activePlayer.mediaObject ? root._activePlayer.mediaObject : root._activePlayer
+        return media.displayAspect > 0 ? media.displayAspect : 0
+    }
     readonly property bool _videoVisible: {
         if (!root._activePlayer)
             return false;
@@ -168,7 +174,22 @@ FocusScope {
 
         VideoOutput {
             id: videoOutput
-            anchors.fill: parent
+            // Qt before 6.8 cannot store a pixel aspect on the frame. Stretch the
+            // square-pixel image into a box already shaped to the stream's display aspect.
+            fillMode: root.displayAspect > 0 ? VideoOutput.Stretch : VideoOutput.PreserveAspectFit
+            anchors.centerIn: parent
+            width: {
+                if (root.displayAspect <= 0 || parent.height <= 0)
+                    return parent.width
+                var tile = parent.width / parent.height
+                return tile > root.displayAspect ? parent.height * root.displayAspect : parent.width
+            }
+            height: {
+                if (root.displayAspect <= 0 || parent.width <= 0)
+                    return parent.height
+                var tile = parent.width / parent.height
+                return tile > root.displayAspect ? parent.height : parent.width / root.displayAspect
+            }
         }
 
         // Status overlay - hide once the first video frame is on screen

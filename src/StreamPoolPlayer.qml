@@ -21,6 +21,7 @@ Item {
     property alias volume: player.volume
     property alias hasAudio: player.hasAudio
     property alias hasVideo: player.hasVideo
+    property alias displayAspect: player.displayAspect
     property alias status: player.status
     property alias playbackState: player.playbackState
     property alias bufferProgress: player.bufferProgress
