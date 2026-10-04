@@ -24,6 +24,7 @@ FocusScope {
 
     property int state: SideBar.Compact
     property int currentViewportIndex: Utils.currentLayout().focusIndex
+    property int currentPresetIndex: stackLayout.currentIndex
 
     // Constants
     readonly property real compactWidth: 48
@@ -605,9 +606,27 @@ FocusScope {
                                 enabled: rootSideBar.currentViewportIndex >= 0
                                 anchors.fill: parent
 
+                                // Save a draft to the viewport it was typed for, then show the newly selected one.
+                                property bool syncing: false
+                                function syncFromSelection() {
+                                    if (syncing)
+                                        return
+                                    syncing = true
+                                    urlTextField.commit()
+                                    ffmpegOptionsTextField.commit()
+                                    urlTextField.loadCurrent()
+                                    ffmpegOptionsTextField.loadCurrent()
+                                    syncing = false
+                                }
+
+                                Connections {
+                                    target: rootSideBar
+                                    function onCurrentViewportIndexChanged() { viewportLayout.syncFromSelection() }
+                                    function onCurrentPresetIndexChanged() { viewportLayout.syncFromSelection() }
+                                }
+
                                 TextField {
                                     id: urlTextField
-                                    text: viewportLayout.enabled ? Utils.currentModel().get(currentViewportIndex).url : ""
                                     placeholderText: qsTr("Url")
                                     selectByMouse: true
                                     enabled: rootWindowSettings.editMode
@@ -615,11 +634,41 @@ FocusScope {
 
                                     Layout.fillWidth: true
 
-                                    onEditingFinished: {
-                                        var cleaned = text.trim()
-                                        text = cleaned
-                                        Utils.currentModel().get(currentViewportIndex).url = cleaned
+                                    property int savedPreset: -1
+                                    property int savedIndex: -1
+                                    property bool dirty: false
+
+                                    function captureTarget() {
+                                        savedPreset = rootSideBar.currentPresetIndex
+                                        savedIndex = rootSideBar.currentViewportIndex
                                     }
+
+                                    function loadCurrent() {
+                                        if (rootSideBar.currentViewportIndex >= 0)
+                                            text = Utils.currentModel().get(rootSideBar.currentViewportIndex).url
+                                        else
+                                            text = ""
+                                        dirty = false
+                                        captureTarget()
+                                    }
+
+                                    function commit() {
+                                        if (!dirty || savedPreset < 0 || savedIndex < 0)
+                                            return
+                                        var model = layoutsCollectionModel.get(savedPreset)
+                                        var target = model ? model.get(savedIndex) : null
+                                        if (!target)
+                                            return
+                                        var cleaned = text.trim()
+                                        target.url = cleaned
+                                        dirty = false
+                                        if (savedPreset === rootSideBar.currentPresetIndex && savedIndex === rootSideBar.currentViewportIndex)
+                                            text = cleaned
+                                    }
+
+                                    Component.onCompleted: loadCurrent()
+                                    onTextEdited: dirty = true
+                                    onEditingFinished: commit()
                                 }
 
                                 Button {
@@ -656,41 +705,52 @@ FocusScope {
                                         selectByMouse: true
 
                                         Layout.fillWidth: true
-                                        
-                                        // Update text when viewport changes (not bound to avoid loop)
-                                        Component.onCompleted: updateText()
-                                        Connections {
-                                            target: rootSideBar
-                                            function onCurrentViewportIndexChanged() {
-                                                ffmpegOptionsTextField.updateText();
-                                            }
-                                        }
-                                        
-                                        function updateText() {
-                                            if (viewportLayout.enabled && currentViewportIndex >= 0) {
-                                                text = getOptionsString(Utils.currentModel().get(currentViewportIndex).avFormatOptions);
-                                            } else {
-                                                text = "";
-                                            }
+
+                                        property int savedPreset: -1
+                                        property int savedIndex: -1
+                                        property bool dirty: false
+
+                                        function captureTarget() {
+                                            savedPreset = rootSideBar.currentPresetIndex
+                                            savedIndex = rootSideBar.currentViewportIndex
                                         }
 
-                                        onEditingFinished: {
-                                            var options = Utils.parseOptions(text);
-                                            var defaultAVFormatOptions = layoutsCollectionSettings.toJSValue("defaultAVFormatOptions");
+                                        function loadCurrent() {
+                                            if (rootSideBar.currentViewportIndex >= 0)
+                                                text = getOptionsString(Utils.currentModel().get(rootSideBar.currentViewportIndex).avFormatOptions)
+                                            else
+                                                text = ""
+                                            dirty = false
+                                            captureTarget()
+                                        }
 
-                                            if (Object.keys(options).length == Object.keys(defaultAVFormatOptions).length) {
+                                        function commit() {
+                                            if (!dirty || savedPreset < 0 || savedIndex < 0)
+                                                return
+                                            var model = layoutsCollectionModel.get(savedPreset)
+                                            var target = model ? model.get(savedIndex) : null
+                                            if (!target)
+                                                return
+                                            var options = Utils.parseOptions(text)
+                                            var defaultAVFormatOptions = layoutsCollectionSettings.toJSValue("defaultAVFormatOptions")
+                                            var matchesDefault = Object.keys(options).length == Object.keys(defaultAVFormatOptions).length
+
+                                            if (matchesDefault) {
                                                 for (var key in options) {
                                                     if (defaultAVFormatOptions[key] === undefined || String(defaultAVFormatOptions[key]) !== String(options[key])) {
-                                                        Utils.currentModel().get(currentViewportIndex).avFormatOptions = options;
-                                                        return;
+                                                        matchesDefault = false
+                                                        break
                                                     }
                                                 }
-
-                                                Utils.currentModel().get(currentViewportIndex).avFormatOptions = {};
-                                            } else {
-                                                Utils.currentModel().get(currentViewportIndex).avFormatOptions = options;
                                             }
+
+                                            target.avFormatOptions = matchesDefault ? {} : options
+                                            dirty = false
                                         }
+
+                                        Component.onCompleted: loadCurrent()
+                                        onTextEdited: dirty = true
+                                        onEditingFinished: commit()
 
                                         function getOptionsString(options) {
                                             Object.assignDefault(options, layoutsCollectionSettings.toJSValue("defaultAVFormatOptions"));
